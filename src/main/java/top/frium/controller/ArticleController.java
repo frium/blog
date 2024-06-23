@@ -2,6 +2,7 @@ package top.frium.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.frium.common.R;
@@ -26,6 +27,7 @@ public class ArticleController {
 
     @ApiOperation("上传文章")
     @PostMapping("/admin/loadArticle")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public String loadArticle(@RequestBody ArticleDTO articleDTO) {
         return null;
     }

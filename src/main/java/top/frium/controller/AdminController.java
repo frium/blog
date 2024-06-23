@@ -2,14 +2,15 @@ package top.frium.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.frium.common.R;
 import top.frium.context.BaseContext;
 import top.frium.mapper.UserMapper;
-import top.frium.pojo.dto.AdminDTO;
+import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.PageDTO;
-import top.frium.service.AdminService;
+import top.frium.service.UserService;
 
 /**
  *
@@ -19,16 +20,19 @@ import top.frium.service.AdminService;
 @Validated
 @RestController("AdminController")
 @RequestMapping("/admin")
+@PreAuthorize("hasAnyAuthority('admin')")
 public class AdminController {
-    @Autowired
-    AdminService adminService;
+
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserService userService;
 
     @ApiOperation("管理员登录")
     @PostMapping("/login")
-    public R<?> login(@RequestBody AdminDTO adminDTO){
-        adminService.login(adminDTO);
+    @PreAuthorize("permitAll()")
+    public R<?> login(@RequestBody LoginEmailDTO loginEmailDTO){
+        userService.loginByEmail(loginEmailDTO);
         return R.success();
     }
 
@@ -38,6 +42,7 @@ public class AdminController {
         BaseContext.removeCurrentId();
         return R.success();
     }
+
 
     @ApiOperation("分页查询用户")
     @PostMapping("/findAllUsers")

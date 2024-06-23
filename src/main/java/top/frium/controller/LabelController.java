@@ -2,6 +2,7 @@ package top.frium.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class LabelController {
 
     @ApiOperation("添加标签")
     @PostMapping("/admin/addLabel")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public R<?> addLabel(String labelName) {
         labelService.addLabel(labelName);
         return R.success();
@@ -35,6 +37,7 @@ public class LabelController {
 
     @ApiOperation("删除标签")
     @PostMapping("/admin/deleteLabel")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public R<?> deleteLabel(Label label) {
         labelService.deleteLabel(label);
         return R.success();

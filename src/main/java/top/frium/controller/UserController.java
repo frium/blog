@@ -8,7 +8,7 @@ import top.frium.common.R;
 import top.frium.context.BaseContext;
 import top.frium.pojo.dto.CommentDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
-import top.frium.pojo.dto.LoginPhoneDTO;
+import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.service.UserService;
 
 /**
@@ -23,23 +23,18 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @ApiOperation("手机号登录")
-    @PostMapping("/loginByPhone")
-    public R<?> loginByPhone(@RequestBody LoginPhoneDTO loginPhoneDTO) {
-        return null;
-    }
-
-    @ApiOperation("获取手机短信")
-    @GetMapping("/getPhoneSMS")
-    public R<?>getPhoneSMS(){
-        return null;
+    @ApiOperation("邮箱注册")
+    @PostMapping("/registerByEmail")
+    public R<?> registerByEmail(@RequestBody RegisterEmailDTO registerEmailDTO) {
+        userService.registerByEmail(registerEmailDTO);
+        return R.success();
     }
 
     @ApiOperation("邮箱登录")
     @PostMapping("/loginByEmail")
     public R<?> loginByEmail(@RequestBody LoginEmailDTO loginEmailDTO) {
         userService.loginByEmail(loginEmailDTO);
-        return null;
+        return R.success();
     }
 
     @ApiOperation("获取邮箱短信")
@@ -59,7 +54,7 @@ public class UserController {
     @ApiOperation("修改信息")
     @PostMapping("/updateInfo")
     public R<?> updateInfo(){
-        return null;
+        return R.success();
     }
 
 

@@ -1,9 +1,7 @@
 package top.frium.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import top.frium.pojo.dto.CommentDTO;
-import top.frium.pojo.dto.LoginEmailDTO;
-import top.frium.pojo.dto.LoginPhoneDTO;
+import top.frium.pojo.dto.*;
 import top.frium.pojo.entity.User;
 
 /**
@@ -13,12 +11,10 @@ import top.frium.pojo.entity.User;
  */
 public interface UserService extends IService<User> {
 
-     void loginByPhone(LoginPhoneDTO loginPhoneDTO) ;
+    void loginByEmail(LoginEmailDTO loginEmailDTO) ;
 
-     void getPhoneSMS();
+     void registerByEmail(RegisterEmailDTO registerEmailDTO);
 
-
-     void loginByEmail(LoginEmailDTO loginEmailDTO) ;
 
      void getEmailSMS(String email);
 

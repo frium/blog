@@ -11,4 +11,6 @@ import top.frium.pojo.entity.User;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
+    void  addUserPower(Long userId,Long roleTypeId);
+    String  getUserPower(Long userId);
 }

@@ -2,6 +2,7 @@ package top.frium.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,8 @@ public class ImageController {
     FileUtil fileUtil;
 
     @ApiOperation("上传图片")
-    @PostMapping("/loadImage")
+    @PostMapping("/admin/loadImage")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public R<String> loadImage(@RequestParam("image") MultipartFile image) {
         //将图片写入本地并返回地址
         return R.success(fileUtil.saveUploadedFile(image));

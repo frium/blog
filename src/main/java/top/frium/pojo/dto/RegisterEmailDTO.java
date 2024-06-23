@@ -9,12 +9,12 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  *
- * @date 2024-06-19 19:11:15
+ * @date 2024-06-23 16:08:24
  * @description
  */
 @Data
-@ApiModel("邮箱登录")
-public class LoginEmailDTO {
+@ApiModel("邮箱注册")
+public class RegisterEmailDTO {
     @Email(message = "邮箱格式有误")
     @ApiModelProperty("邮箱")
     String email;
@@ -23,4 +23,8 @@ public class LoginEmailDTO {
     @Length(min = 6, max = 18, message = "密码长度应在6~18位之间")
     @ApiModelProperty(value = "密码", required = true)
     String password;
+
+    @NotEmpty(message = "验证码不能为空")
+    @ApiModelProperty(value = "验证码", required = true)
+    String verify;
 }
