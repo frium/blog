@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.frium.mapper.UserMapper">
+    <select id="getUserPermission">
+        select perm_key
+        from user_role
+                 join role on user_role.role_id = role.id
+                 join role_menu on role.id = role_menu.role_id
+                 join menu on role_menu.menu_id = menu.id
+        where user_role.user_id = #{id}
+    </select>
+    <insert id="addUserPermission">
+        insert into user_role (role_id, user_id)
+        values (1,#{id})
+    </insert>
+</mapper>
