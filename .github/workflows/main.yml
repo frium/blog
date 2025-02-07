@@ -34,6 +34,7 @@ jobs:
       - name: Build Spring Boot
         run: |
           cd blog-boot
+          chmod +x mvnw  # 添加执行权限
           ./mvnw clean package -DskipTests
           mv target/*.jar blog-boot.jar  # 统一命名 JAR 文件，方便上传
 
@@ -71,4 +72,5 @@ jobs:
           port: 22
           script: |
             cd /home/java/blog
+            chmod +x blog-boot.sh
             ./blog-boot.sh
