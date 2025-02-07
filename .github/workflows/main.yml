@@ -1,0 +1,73 @@
+name: Build and Deploy Boot & Vue
+
+on:
+  push:
+    branches: [ "main" ] 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ----------------------- 构建 Vue 前端 -----------------------
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+
+      - name: Install dependencies and build Vue
+        run: |
+          npm install
+          npm run build
+
+      # ----------------------- 构建 Spring Boot 后端 -----------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build Spring Boot
+        run: |
+          cd boot
+          ./mvnw clean package -DskipTests
+          mv target/*.jar blog-boot.jar  # 统一命名 JAR 文件，方便上传
+
+       # ----------------------- 部署 Vue 到指定目录 -----------------------
+      - name: Deploy Vue to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "vue/dist/*" # Vue 构建后的静态资源
+          target: "/opt/1panel/apps/openresty/openresty/html/blog"
+          rm: true # 删除旧文件，确保更新
+
+      # ----------------------- 部署 Spring Boot 到指定目录 -----------------------
+      - name: Deploy Spring Boot to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "boot/blog-boot.jar" # Spring Boot JAR 包
+          target: "/home/java/blog"
+          rm: true # 清理旧版本 JAR，确保更新
+
+      # ----------------------- 远程启动 Spring Boot -----------------------
+      - name: Start Spring Boot on Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /home/java/blog
+            ./blog-boot.sh
