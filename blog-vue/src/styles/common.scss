@@ -1,0 +1,108 @@
+/* 全局重置 & 盒模型 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* HTML & Body 基础设置 */
+html,
+body {
+  height: 100%;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  background-color: #fff;
+  color: #333;
+}
+
+/* 超链接默认样式 */
+a {
+  text-decoration: none;
+  color: inherit;
+  outline: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #007bff;
+}
+
+/* 表单元素 */
+input,
+textarea,
+button,
+select {
+  font: inherit;
+  outline: none;
+  border: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #ccc;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 列表 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 图片 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 滚动条优化 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* 选中文本样式 */
+::selection {
+  background: #007bff;
+  color: #fff;
+}
+
+/* 根变量 */
+:root {
+  --primary-color: #007bff;
+  --text-color: #333;
+  --bg-color: #fff;
+}
+
+/* 额外优化 */
+#app {
+  user-select: none;
+}
+
+i {
+  font-style: normal;
+}
