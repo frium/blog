@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies and build Vue
         run: |
+          cd blog-vue
           npm install
           npm run build
 
@@ -32,7 +33,7 @@ jobs:
 
       - name: Build Spring Boot
         run: |
-          cd boot
+          cd blog-boot
           ./mvnw clean package -DskipTests
           mv target/*.jar blog-boot.jar  # 统一命名 JAR 文件，方便上传
 
@@ -44,7 +45,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "vue/dist/*" # Vue 构建后的静态资源
+          source: "blog-vue/dist/*" # Vue 构建后的静态资源
           target: "/opt/1panel/apps/openresty/openresty/html/blog"
           rm: true # 删除旧文件，确保更新
 
@@ -56,7 +57,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "boot/blog-boot.jar" # Spring Boot JAR 包
+          source: "blog-boot/blog-boot.jar" # Spring Boot JAR 包
           target: "/home/java/blog"
           rm: true # 清理旧版本 JAR，确保更新
 
