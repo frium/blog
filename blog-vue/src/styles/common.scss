@@ -13,7 +13,13 @@ body {
   font-family: Arial, sans-serif;
   line-height: 1.5;
   background-color: #fff;
-  color: #333;
+  color: #c4c4c4;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('https://blog.frium.top/upload/flowes.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
 }
 
 /* 超链接默认样式 */
@@ -25,7 +31,7 @@ a {
 }
 
 a:hover {
-  color: #007bff;
+  color: #f6cac9;
 }
 
 /* 表单元素 */
@@ -87,13 +93,13 @@ img {
 
 /* 选中文本样式 */
 ::selection {
-  background: #007bff;
+  background: #f6cac9;
   color: #fff;
 }
 
 /* 根变量 */
 :root {
-  --primary-color: #007bff;
+  --primary-color: #f6cac9;
   --text-color: #333;
   --bg-color: #fff;
 }

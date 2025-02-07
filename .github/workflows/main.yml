@@ -59,8 +59,8 @@ jobs:
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           source: "blog-boot/blog-boot.jar" # Spring Boot JAR 包
-          target: "/home/java/blog"
-          rm: true # 清理旧版本 JAR，确保更新
+          target: "/home/java/blog/blog-boot/blog-boot.jar"
+          rm: false # 清理旧版本 JAR，确保更新
 
       # ----------------------- 远程启动 Spring Boot -----------------------
       - name: Start Spring Boot on Server
