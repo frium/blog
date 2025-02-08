@@ -2,7 +2,7 @@ name: Build and Deploy Boot & Vue
 
 on:
   push:
-    branches: [ "main" ] 
+    branches: [ "main" ]
 
 jobs:
   build-and-deploy:
@@ -16,12 +16,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' 
+          node-version: '20'
 
       - name: Install dependencies and build Vue
         run: |
           cd blog-vue
-          npm install
+          npm ci --prefer-offline
           npm run build
 
       # ----------------------- 构建 Spring Boot 后端 -----------------------
@@ -34,36 +34,37 @@ jobs:
       - name: Build Spring Boot
         run: |
           cd blog-boot
-          chmod +x mvnw  # 添加执行权限
-          ./mvnw clean package -DskipTests
-          mv target/*.jar blog-boot.jar  # 统一命名 JAR 文件，方便上传
+          chmod +x mvnw
+          ./mvnw clean package -DskipTests -DfinalName=blog-boot
+          ls -l target/ # 验证构建产物
 
-       # ----------------------- 部署 Vue 到指定目录 -----------------------
-      - name: Deploy Vue to Server
+      # ----------------------- 部署 Vue 到服务器 -----------------------
+      - name: Deploy Vue
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PRIVATE_KEY }} 
           port: 22
-          source: "blog-vue/dist/*" # Vue 构建后的静态资源
+          source: "blog-vue/dist/"
           target: "/opt/1panel/apps/openresty/openresty/html/blog"
-          rm: true # 删除旧文件，确保更新
+          rm: true
+          strip_components: 1
 
-      # ----------------------- 部署 Spring Boot 到指定目录 -----------------------
-      - name: Deploy Spring Boot to Server
+      # ----------------------- 部署 Spring Boot 到服务器 -----------------------
+      - name: Deploy Spring Boot
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          source: "blog-boot/blog-boot.jar" # Spring Boot JAR 包
-          target: "/home/java/blog/blog-boot/blog-boot.jar"
-          rm: false # 清理旧版本 JAR，确保更新
+          source: "blog-boot/target/blog-boot.jar"
+          target: "/home/java/blog/blog-boot/"
+          rm: true
 
-      # ----------------------- 远程启动 Spring Boot -----------------------
-      - name: Start Spring Boot on Server
+      # ----------------------- 重启 Spring Boot 服务 -----------------------
+      - name: Restart Spring Boot
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -71,6 +72,8 @@ jobs:
           password: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd /home/java/blog
+            cd /home/java/blog/blog-boot
             chmod +x blog-boot.sh
             ./blog-boot.sh
+            sleep 5
+            pgrep -f blog-boot.jar || echo "Process start failed"
