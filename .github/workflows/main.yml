@@ -60,7 +60,7 @@ jobs:
           port: 22
           source: "blog-boot/blog-boot.jar" # Spring Boot JAR 包
           target: "/home/java/blog"
-          strip_components: 0
+          strip_components: 1
           rm: false 
 
       # ----------------------- 远程启动 Spring Boot -----------------------
