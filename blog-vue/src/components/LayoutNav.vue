@@ -1,5 +1,5 @@
 <script setup>
-
+import { Search } from '@element-plus/icons-vue'
 </script>
 
 <template>
@@ -31,7 +31,7 @@
           </li>
         </ul>
       </div>
-      <button>查询</button>
+      <el-button :icon="Search" round color="#f6cac9" style="color: white; width: 50px; font-size: 18px;" />
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@
   padding: 10px 100px;
   display: flex;
   justify-content: center;
-  background: rgba(131, 127, 127, 0.1);
+  background: rgba(40, 44, 52, 0.6);
   min-width: 900px;
   align-items: center;
   text-align: center;
