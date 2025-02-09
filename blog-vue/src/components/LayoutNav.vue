@@ -38,6 +38,10 @@ import { Search } from '@element-plus/icons-vue'
 
 <style scoped lang="scss">
 .container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   padding: 10px 100px;
   display: flex;
   justify-content: center;

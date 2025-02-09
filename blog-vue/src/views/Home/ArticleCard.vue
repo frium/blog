@@ -52,12 +52,13 @@ span {
   background: rgba(40, 44, 52, 0.6);
   border-radius: 10px;
   transition: 0.5s;
+  margin-bottom: 24px;
 
   &:hover {
     background: rgba(44, 47, 54, 0.7);
 
     .right-div img {
-      transform: scale(1.1)
+      transform: scale(1.1);
     }
   }
 
@@ -112,12 +113,12 @@ span {
     height: 100%;
     width: 100%;
     overflow: hidden;
+    border-radius: 10px;
 
     img {
       height: 100%;
       width: 100%;
       object-fit: cover;
-      border-radius: 0 10px 10px 0;
       transition: 0.5s;
     }
   }

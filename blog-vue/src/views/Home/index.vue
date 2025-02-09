@@ -6,6 +6,9 @@ import ArticleCard from './ArticleCard.vue';
 <template>
   <div class="article-card">
     <ArticleCard></ArticleCard>
+    <ArticleCard></ArticleCard>
+    <ArticleCard></ArticleCard>
+    <ArticleCard></ArticleCard>
   </div>
 </template>
 
