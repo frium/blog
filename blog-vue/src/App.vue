@@ -7,12 +7,13 @@ import PersonalCard from "./components/PersonalCard.vue";
 <template>
   <div class="app">
     <LayoutNav></LayoutNav>
-    <div class="right">
-      <PersonalCard></PersonalCard>
-    </div>
-    <div class="router-view">
-      <router-view></router-view>
-
+    <div class="out-container">
+      <div>
+        <PersonalCard class="left"></PersonalCard>
+      </div>
+      <div class="router-view">
+        <router-view></router-view>
+      </div>
     </div>
     <LayoutFooter></LayoutFooter>
   </div>
@@ -20,16 +21,25 @@ import PersonalCard from "./components/PersonalCard.vue";
 
 <style scoped lang="scss">
 .app {
-  position: relative;
 
-  .right {
-    position: absolute;
-    top: 100px;
-    right: 45px;
-  }
+  .out-container {
+    display: flex;
+    gap: 0 60px;
 
-  .router-view {
-    min-height: 100vh;
+    padding: 0 90px;
+
+    .left {
+      position: sticky;
+      top: 76px;
+    }
+
+    .router-view {
+      min-height: 100vh;
+      width: 100%;
+      min-width: 800px;
+      margin-top: 24px;
+
+    }
   }
 }
 </style>
