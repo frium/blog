@@ -49,6 +49,7 @@ import { Search } from '@element-plus/icons-vue'
   min-width: 900px;
   align-items: center;
   text-align: center;
+  z-index: 1;
 
   .title {
     white-space: nowrap;

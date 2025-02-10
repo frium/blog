@@ -27,14 +27,17 @@ onUnmounted(() => {
 
 <template>
   <div class="app">
-    <LayoutNav :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)',transition: 'transform 0.8s ease'  }" id="nav" ></LayoutNav>
+    <LayoutNav
+      :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }"
+      id="nav"></LayoutNav>
     <div class="selection">
-      <div class="left">
-        <PersonalCard class="personal-card" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }"></PersonalCard>
-      </div>
-      <div class="router-view" >
+      <div class="router-view">
         <div id="trigger" style="height: 1px; width: 100%;"></div>
         <router-view></router-view>
+      </div>
+      <div class="right">
+        <PersonalCard class="personal-card" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
+        </PersonalCard>
       </div>
     </div>
     <LayoutFooter></LayoutFooter>
@@ -49,12 +52,14 @@ onUnmounted(() => {
     gap: 0 60px;
     padding: 80px 90px 40px 90px;
     min-height: 120vh;
-    .left {
+
+    .right {
       .personal-card {
         position: sticky;
         top: 80px;
       }
     }
+
     .router-view {
       min-height: 0px;
       width: 100%;
