@@ -44,9 +44,12 @@ setInterval(getTime, 1000);
 
 <style scoped lang="scss">
 .container {
-  padding: 10px 100px;
   display: flex;
+  align-items: center;
   background: rgba(40, 44, 52, 0.6);
+  width: 100%;
+  height: 75px;
+  padding: 10px 100px;
   min-width: 900px;
   gap: 40px;
 

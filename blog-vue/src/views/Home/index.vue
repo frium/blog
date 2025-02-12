@@ -9,6 +9,8 @@ import ArticleCard from './ArticleCard.vue';
     <ArticleCard></ArticleCard>
     <ArticleCard></ArticleCard>
     <ArticleCard></ArticleCard>
+    <ArticleCard></ArticleCard>
+    <ArticleCard></ArticleCard>
   </div>
 </template>
 

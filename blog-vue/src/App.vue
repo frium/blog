@@ -2,9 +2,13 @@
 import LayoutNav from "./components/LayoutNav.vue";
 import LayoutFooter from "./components/LayoutFooter.vue";
 import PersonalCard from "./components/PersonalCard.vue";
+import NavBall from "./components/NavBall.vue";
+import BackToTop from './components/BackToTop.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 const isHidden = ref(false);
 const observer = ref(null);
+
+
 
 onMounted(() => {
   observer.value = new IntersectionObserver(
@@ -26,7 +30,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app">
+  <div id="app">
     <LayoutNav
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }"
       id="nav"></LayoutNav>
@@ -40,18 +44,22 @@ onUnmounted(() => {
         </PersonalCard>
       </div>
     </div>
+    <BackToTop class="back-to-top"></BackToTop>
+    <NavBall class="nav-ball"></NavBall>
     <LayoutFooter></LayoutFooter>
   </div>
 </template>
 
 <style scoped lang="scss">
-.app {
+#app {
   .selection {
     position: relative;
     display: flex;
+    justify-content: flex-end;
     gap: 0 60px;
     padding: 80px 90px 40px 90px;
     min-height: 120vh;
+    width: 100%;
 
     .right {
       .personal-card {
@@ -63,8 +71,22 @@ onUnmounted(() => {
     .router-view {
       min-height: 0px;
       width: 100%;
-      min-width: 800px;
+      max-width: 1200px;
     }
+
+  }
+
+
+  .back-to-top {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+  }
+
+  .nav-ball {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
   }
 }
 </style>
