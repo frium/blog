@@ -35,9 +35,7 @@ const checkScroll = () => {
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
     document.body.classList.remove('scrolling');
-    console.log(23222);
-
-  }, 500); // 500ms 后隐藏
+  }, 500);
 }
 const throttledCheckScroll = throttle(checkScroll, 200);
 onMounted(() => {
@@ -51,7 +49,9 @@ onUnmounted(() => {
 
 <template>
   <div class="back-to-top" :style="{ opacity: isVisible ? 1 : 0 }" ref="backToTop" @click="scrollToTop">
-    <img src="@/assets/icons/rocket.svg">
+    <button>
+      <img src="@/assets/icons/rocket.svg">
+    </button>
   </div>
 
 </template>
