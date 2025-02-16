@@ -1,9 +1,13 @@
 import axios from "axios";
 
 
-const request = axios.create({
+export const request = axios.create({
   baseURL: 'http://',
   timeout: 5000
+})
+
+export const musicRequest = axios.create({
+  baseURL: 'https://api.i-meto.com/meting/api',
 })
 
 
@@ -20,4 +24,3 @@ request.interceptors.response.use(res => res.data, e => {
   });
   return Promise.reject(e);
 })
-export default httpInstance;

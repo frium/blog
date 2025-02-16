@@ -31,6 +31,9 @@ const router = createRouter({
       name: 'Other',
       path: '/other',
       component: () => import('@/views/Home/index.vue')
+    }, {
+      path: '/music',
+      component: () => import('@/components/MusicPlayerStrip.vue')
     }
 
 

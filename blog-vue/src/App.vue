@@ -4,6 +4,8 @@ import LayoutFooter from "./components/LayoutFooter.vue";
 import PersonalCard from "./components/PersonalCard.vue";
 import NavBall from "./components/NavBall.vue";
 import BackToTop from './components/BackToTop.vue';
+import MusicPlayerStrip from './components/MusicPlayerStrip.vue';
+import LyricStrip from './components/LyricStrip.vue';
 import { ref, onMounted, onUnmounted } from 'vue';
 const isHidden = ref(false);
 const observer = ref(null);
@@ -46,6 +48,7 @@ onUnmounted(() => {
     </div>
     <BackToTop class="back-to-top"></BackToTop>
     <NavBall class="nav-ball"></NavBall>
+    <MusicPlayerStrip class="music-player-strip"></MusicPlayerStrip>
     <LayoutFooter></LayoutFooter>
   </div>
 </template>
@@ -87,6 +90,19 @@ onUnmounted(() => {
     position: fixed;
     bottom: 30px;
     right: 20px;
+  }
+
+  .music-player-strip {
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+  }
+
+  .lyc-strip {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 </style>
