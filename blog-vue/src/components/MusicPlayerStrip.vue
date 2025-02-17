@@ -11,8 +11,7 @@ const musicStore = useMusicStore();
 const lrcContainer = ref(null);
 const currentLrc = ref('');
 const currentIndex = ref(0);
-const lrcData = ref([]);
-const isShow = ref(false);
+const isShowStrip = ref(false);
 const getMusicList = async () => {
   await musicStore.getMusicList(13049118006);
   musics.value = musicStore.musics;
@@ -28,7 +27,8 @@ const initPlayer = () => {
   player.value = new APlayer({
     container: container.value,
     audio: musics.value,
-    lrcType: 0,
+    lrcType: 1,
+    fixed: true,
     lrcContainer: lrcContainer.value,
     autoplay: false,
     loop: "all",
@@ -36,7 +36,8 @@ const initPlayer = () => {
     preload: "auto",
     listFolded: true,
     listMaxHeight: "200px",
-    theme: "#352d2d"
+    theme: '#54565c'
+
   });
   player.value.on('loadstart', async () => {
     const audio = player.value.audio;
@@ -47,9 +48,37 @@ const initPlayer = () => {
       return;
     }
     const lrcText = await fetchLrcContent(currentMusic.lrc);
-    lrcData.value = parseLRC(lrcText);
-    console.log(lrcData.value);
-  })
+    musicStore.playMusicLrc = parseLRC(lrcText);    //将歌词传递给LyricStrip.vue
+  });
+  player.value.on('listswitch', (index) => {
+    currentIndex.value = parseInt(index.index);
+  });
+  player.value.on('lrcshow', () => {
+    musicStore.showLrc = true;
+  });
+
+  player.value.on('lrchide', () => {
+    musicStore.showLrc = false;
+  });
+  player.value.on('timeupdate', () => {
+    musicStore.lrcIndex = findLrcIndex();
+  });
+  const aplayerElement = document.querySelector('.aplayer');
+  if (aplayerElement) {
+    aplayerElement.style.transition = 'transform 0.3s ease';
+    const observer = new MutationObserver(() => {
+      const isNarrow = aplayerElement.classList.contains('aplayer-narrow');
+      console.log(isNarrow);
+      if (!isNarrow) {
+        aplayerElement.style.transform = 'translateX(0px)';
+      } else {
+        aplayerElement.style.transform = 'translateX(-67px)';
+      }
+    });
+    observer.observe(aplayerElement, { attributes: true, attributeFilter: ['class'] });
+  }
+
+
 };
 const fetchLrcContent = async (url) => {
   const response = await fetch(url);
@@ -70,11 +99,19 @@ const parseLRC = (lrcText) => {
     }
   });
   return lrcData;
+};
+
+const findLrcIndex = () => {
+  const currentTime = player.value.audio.currentTime;
+  const playMusicLrc = musicStore.playMusicLrc
+  for (let i = 0; i < playMusicLrc.length; i++) {
+    if (currentTime < playMusicLrc[i].time) {
+      return i - 1;
+    }
+  }
+  return playMusicLrc.length - 1;
 }
 
-const changeState = () => {
-  isShow.value = !isShow.value;
-}
 onMounted(() => {
   getMusicList();
 });
@@ -82,126 +119,37 @@ onMounted(() => {
 
 <template>
   <div class="player">
-    <div class="aplayer-body" :style="{ transform: !isShow ? ' translateX(-378px)' : 'translateX(0px)' }">
-      <div ref="container"></div>
-      <div class="aplayer-miniswitcher">
-        <button class="aplayer-icon" @click="changeState">
-          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 32 32"
-            :style="{ transform: isShow ? 'rotate(180deg)' : 'rotate(0deg)' }">
-            <path d="M22 16l-10.105-10.6-1.895 1.987 8.211 8.613-8.211 8.612 1.895 1.988 8.211-8.613z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-    <div v-if="false" class="custom-lrc">
-      <div v-for="(music, index) in musicStore.musics" :key="index" class="lrc-wrapper">
-        <template v-if="music.lrc">
-          <div v-for="line in lrcData" :key="line.time" :class="{ active: currentLrc === line.text }" class="lrc-line">
-            {{ line.text }}
-          </div>
-        </template>
-      </div>
-    </div>
+    <div ref="container"></div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .player {
-  width: 400px;
+  width: 300px;
   height: auto;
+}
 
-  .aplayer-body {
-    width: 100%;
-    position: relative;
-    transition: 0.25s;
-
-    .aplayer-miniswitcher {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      width: 22px;
-      height: 100%;
-      background-color: #171717;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-
-      button {
-        cursor: pointer;
-        color: #f6cac9;
-      }
-
-      svg {
-        width: 22px;
-        fill: currentColor;
-        transition: 0.1s;
-      }
-    }
-  }
-
-
-  .custom-lrc {
-    height: 200px;
-    overflow-y: auto;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 8px;
-    padding: 15px;
-    margin-top: 20px;
-
-    .lrc-wrapper {
-      display: none;
-
-      &:first-child {
-        display: block;
-      }
-    }
-
-    .lrc-line {
-      color: #ffffff99;
-      font-size: 16px;
-      line-height: 2;
-      transition: all 0.3s ease;
-      transform-origin: left center;
-
-      &.active {
-        color: #ff6b6b;
-        font-weight: bold;
-        transform: scale(1.05);
-        text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
-      }
-    }
-  }
+:deep(.aplayer-body) {
+  width: 366px !important;
+  background-color: rgb(32, 33, 35, 0.6) !important;
 }
 
 :deep(.aplayer) {
-  background: rgba(40, 44, 52, 0.6) !important;
-}
-
-:deep(.aplayer .aplayer-lrc p) {
-  color: rgba(1, 1, 1, 0) !important;
-}
-
-:deep(.aplayer .aplayer-lrc p.aplayer-lrc-current) {
-  color: #f6cac9 !important;
+  background-color: transparent !important;
+  max-width: 366px !important;
+  transform: translateX(-67px);
 }
 
 :deep(.aplayer.aplayer-withlist .aplayer-info) {
-  border-bottom: 0px !important;
+  border: 0px !important;
   width: 300px !important;
-}
-
-:deep(.aplayer .aplayer-lrc:after, .aplayer .aplayer-lrc:before) {
-  background: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 0, hsla(0, 0%, 100%, .8));
-}
-
-:deep(.aplayer .aplayer-played) {
-  background: #290902 !important;
+  background-color: rgba(39, 42, 48, 0.8) !important;
+  color: #d7d7d7 !important;
 }
 
 :deep(.aplayer-list) {
-  background-color: rgba(40, 44, 52, 0.6) !important;
-  /* 播放列表背景（深色） */
+  background-color: rgba(40, 44, 52, 0.8) !important;
+  border: 0 !important;
 }
 
 :deep(.aplayer-list li) {
@@ -210,7 +158,14 @@ onMounted(() => {
 }
 
 :deep(.aplayer-list li.aplayer-list-light) {
-  background: rgba(1, 1, 1, 0) !important;
-  /* 选中的歌曲颜色 */
+  background: rgba(40, 44, 52, 0.4) !important;
+}
+
+:deep(.aplayer-list li:hover) {
+  background: rgba(70, 75, 86, 0.7) !important;
+}
+
+:deep(.aplayer .aplayer-miniswitcher) {
+  background: rgba(69, 69, 73, 0.8) !important;
 }
 </style>

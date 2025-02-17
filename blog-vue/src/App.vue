@@ -49,6 +49,7 @@ onUnmounted(() => {
     <BackToTop class="back-to-top"></BackToTop>
     <NavBall class="nav-ball"></NavBall>
     <MusicPlayerStrip class="music-player-strip"></MusicPlayerStrip>
+    <LyricStrip class="lrc-strip"></LyricStrip>
     <LayoutFooter></LayoutFooter>
   </div>
 </template>
@@ -92,17 +93,8 @@ onUnmounted(() => {
     right: 20px;
   }
 
-  .music-player-strip {
-    position: absolute;
-    bottom: 2px;
-    left: 0;
-  }
 
-  .lyc-strip {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+
+
 }
 </style>

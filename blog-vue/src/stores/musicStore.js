@@ -4,6 +4,9 @@ import { defineStore } from 'pinia'
 
 export const useMusicStore = defineStore('music', () => {
   const musics = ref([]);
+  const playMusicLrc = ref([]);
+  const lrcIndex = ref(0);
+  const showLrc = ref(true);
   const getMusicList = async (id) => {
     const res = await getMusicAPI("netease", "playlist", id)
     musics.value = res.data.map((song) => ({
@@ -12,13 +15,17 @@ export const useMusicStore = defineStore('music', () => {
       url: song.url,
       cover: song.pic,
       lrc: song.lrc,
-      theme: '#ff5733'
     }));
   }
 
+
   return {
     musics,
-    getMusicList
+    playMusicLrc,
+    lrcIndex,
+    showLrc,
+    getMusicList,
+
   }
 }, {
   persist: true
