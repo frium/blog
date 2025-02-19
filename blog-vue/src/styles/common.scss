@@ -90,12 +90,11 @@ img {
 /* 滚动条优化 */
 ::-webkit-scrollbar {
   width: 5px;
-
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
   background: transparent;
-
 }
 
 ::-webkit-scrollbar-thumb {

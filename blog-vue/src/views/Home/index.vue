@@ -1,6 +1,6 @@
 <script setup>
 import CardPaginator from '@/components/CardPaginator.vue';
-import ArticleCard from './ArticleCard.vue';
+import ArticleCard from './components/ArticleCard.vue';
 </script>
 
 <template>

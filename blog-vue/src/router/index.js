@@ -16,9 +16,9 @@ const router = createRouter({
       ]
     },
     {
-      name: 'Categories',
-      path: '/categories',
-      component: () => import('@/views/Home/index.vue')
+      name: 'Article',
+      path: '/article/:articleId',
+      component: () => import('@/views/Article/index.vue')
     }, {
       name: 'Time',
       path: '/time',
