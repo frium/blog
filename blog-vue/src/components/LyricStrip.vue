@@ -82,7 +82,7 @@ const startDrag = (event) => {
 .lyc-box {
   position: fixed;
   bottom: 2px;
-  right: -20px;
+  right: -6vw;
   overflow: hidden;
   width: 666px;
   height: 50px;

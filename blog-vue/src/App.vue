@@ -37,13 +37,18 @@ onUnmounted(() => {
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }"
       id="nav"></LayoutNav>
     <div class="selection">
-      <div class="router-view">
-        <div id="trigger" style="height: 1px; width: 100%;"></div>
-        <router-view></router-view>
-      </div>
-      <div class="right">
-        <PersonalCard class="personal-card" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
-        </PersonalCard>
+      <div class="container">
+        <div class="cloumns">
+          <div class="router-view">
+            <div id="trigger" style="height: 1px; width: 100%;"></div>
+            <router-view></router-view>
+          </div>
+          <div class="right">
+            <PersonalCard class="personal-card"
+              :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
+            </PersonalCard>
+          </div>
+        </div>
       </div>
     </div>
     <BackToTop class="back-to-top"></BackToTop>
@@ -58,28 +63,70 @@ onUnmounted(() => {
 #app {
   .selection {
     position: relative;
-    display: flex;
-    justify-content: flex-end;
-    gap: 0 60px;
-    padding: 80px 90px 40px 90px;
-    min-height: 120vh;
+    padding: 80px 5vw 40px 5vw;
+    min-height: 100vh;
     width: 100%;
 
-    .right {
-      .personal-card {
-        position: sticky;
-        top: 80px;
+    .container {
+      margin: 0 auto;
+
+      .cloumns {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+
+        .right {
+          .personal-card {
+            position: sticky;
+
+            @media (max-width: 1440px) {
+              & {
+                transform: scale(0.8);
+                transform-origin: top;
+              }
+            }
+
+            @media (max-width: 1180px) {
+              & {
+                transform: scale(0.7);
+                transform-origin: top;
+              }
+            }
+
+            @media (max-width: 500px) {
+              & {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .router-view {
+          margin-left: 1vw;
+          width: 76%;
+
+          @media (min-width: 1920px) {
+            & {
+              width: 80%;
+            }
+          }
+
+          @media (max-width: 1440px) {
+            & {
+              width: 80%
+            }
+          }
+
+          @media (max-width: 500px) {
+            & {
+              width: 400px;
+            }
+          }
+        }
       }
-    }
 
-    .router-view {
-      min-height: 0px;
-      width: 100%;
-      max-width: 1200px;
     }
-
   }
-
 
   .back-to-top {
     position: fixed;
@@ -92,9 +139,5 @@ onUnmounted(() => {
     bottom: 30px;
     right: 20px;
   }
-
-
-
-
 }
 </style>

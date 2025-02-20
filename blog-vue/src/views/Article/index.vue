@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="article">
     <div class="img"></div>
     <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true" />
   </div>
@@ -119,13 +119,14 @@ public static void main(String[] args) {
 `)
 </script>
 <style scoped lang="scss">
-.container {
-  width: 1000px;
+.article {
+  width: 100%;
   background: rgba(40, 44, 52, 0.6);
   padding: 10px 20px;
 
   .markdown {
     width: 100%;
+    border-radius: 100px;
   }
 }
 </style>

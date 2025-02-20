@@ -10,11 +10,11 @@ const text = ref('单看外形似乎只是个古灵精怪的快乐少女，实�
 <template>
   <div class="container">
     <div class="left-div">
-      <a href="/">
+      <RouterLink to="/article/1">
         <span class="title">
           胡桃万岁
         </span>
-      </a>
+      </RouterLink>
       <div style="flex-basis: 70%;">
         <div class="label">#胡桃 #原神 #好看</div>
         <div style="text-indent: 2em;

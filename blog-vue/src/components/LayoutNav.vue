@@ -42,7 +42,7 @@ import { Search } from '@element-plus/icons-vue'
   top: 0;
   left: 0;
   width: 100%;
-  padding: 10px 100px;
+  padding: 10px 5vw 10px 6vw;
   display: flex;
   justify-content: center;
   background: rgba(40, 44, 52, 0.6);
