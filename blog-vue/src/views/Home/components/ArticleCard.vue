@@ -8,7 +8,7 @@ const text = ref('单看外形似乎只是个古灵精怪的快乐少女，实�
 </script>
 
 <template>
-  <div class="container">
+  <div class="article-card">
     <div class="left-div">
       <RouterLink to="/article/1">
         <span class="title">
@@ -45,7 +45,7 @@ span {
   user-select: text;
 }
 
-.container {
+.article-card {
   display: flex;
   width: 100%;
   height: 250px;

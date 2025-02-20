@@ -1,12 +1,6 @@
-<template>
-  <div class="article">
-    <div class="img"></div>
-    <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true" />
-  </div>
-</template>
-
 <script setup>
 import MarkdownViewer from './components/MarkdownViewer.vue'
+import TopArticleCard from '@/views/Home/components/TopArticleCard.vue';
 import { ref } from 'vue'
 
 const mdContent = ref(`
@@ -118,15 +112,23 @@ public static void main(String[] args) {
 - [ ] 编写文档
 `)
 </script>
+
+<template>
+  <div class="article">
+    <TopArticleCard :isTop="false"></TopArticleCard>
+    <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true" />
+  </div>
+</template>
+
 <style scoped lang="scss">
 .article {
   width: 100%;
-  background: rgba(40, 44, 52, 0.6);
-  padding: 10px 20px;
 
   .markdown {
+    background: rgba(40, 44, 52, 0.6);
+    padding: 6px 25px;
     width: 100%;
-    border-radius: 100px;
+    border-radius: 10px;
   }
 }
 </style>

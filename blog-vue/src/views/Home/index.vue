@@ -1,10 +1,12 @@
 <script setup>
 import CardPaginator from '@/components/CardPaginator.vue';
 import ArticleCard from './components/ArticleCard.vue';
+import TopArticleCard from './components/TopArticleCard.vue';
 </script>
 
 <template>
-  <div class="article-card">
+  <div class="article-cards">
+    <TopArticleCard></TopArticleCard>
     <ArticleCard></ArticleCard>
     <ArticleCard></ArticleCard>
     <ArticleCard></ArticleCard>
@@ -16,7 +18,7 @@ import ArticleCard from './components/ArticleCard.vue';
 </template>
 
 <style scoped lang="scss">
-.article-card {
+.article-cards {
   width: 100%;
 }
 </style>

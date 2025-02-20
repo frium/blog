@@ -8,6 +8,7 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.min.css'
 import multimdTable from 'markdown-it-multimd-table'
+import { mapState } from 'pinia'
 
 
 const props = defineProps({
@@ -90,14 +91,16 @@ const handleShowCode = (event) => {
 
   if (targetCode.style.maxHeight === '0px') {
     targetCode.style.maxHeight = '1000px';
-    targetCode.style.overflow = 'auto';
-    targetCode.style.paddingBottom = '15px';
     svg.style.transform = 'rotate(0deg)';
+    targetCode.style.paddingBottom = '15px';
+    setTimeout(() => {
+      targetCode.style.overflow = 'auto';
+    }, 200)
   } else {
     targetCode.style.maxHeight = '0px';
-    targetCode.style.overflow = 'hidden'
-    targetCode.style.paddingBottom = '0px';
     svg.style.transform = 'rotate(90deg)';
+    targetCode.style.paddingBottom = '0px';
+    targetCode.style.overflow = 'hidden';
   }
 }
 
