@@ -8,7 +8,6 @@ import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.min.css'
 import multimdTable from 'markdown-it-multimd-table'
-import { mapState } from 'pinia'
 
 
 const props = defineProps({

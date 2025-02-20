@@ -11,22 +11,24 @@ const pageId = computed(() => {
 const hiddenStartPage = ref(0);
 const hiddenEndPage = ref(0);
 const nextPage = () => {
-  router.push(`/page/${pageId + 1}`)
+  router.push(`/page/${pageId.value + 1}`)
 };
 const lastPage = () => {
-  router.push(`/page/${pageId - 1}`)
+  router.push(`/page/${pageId.value - 1}`)
 };
 const allPages = ref([]);
 const updatePages = () => {
   const pages = [];
-  if (pageId >= 8) {
+
+  if (pageId.value >= 8) {
     pages.push(1, -1);
-    for (let i = pageId - 3; i <= pageId + 3 && i <= numberOfPage.value; i++) {
+
+    for (let i = pageId.value - 3; i <= pageId.value + 3 && i <= numberOfPage.value; i++) {
       pages.push(i);
     }
-    hiddenStartPage.value = pageId - 3;
-    hiddenEndPage.value = pageId + 3;
-    if (pageId + 3 < numberOfPage.value) pages.push(-2, numberOfPage.value);
+    hiddenStartPage.value = pageId.value - 3;
+    hiddenEndPage.value = pageId.value + 3;
+    if (pageId.value + 3 < numberOfPage.value) pages.push(-2, numberOfPage.value);
   } else {
     for (let i = 1; i <= 8 && i <= numberOfPage.value; i++) {
       pages.push(i);
@@ -109,10 +111,6 @@ const nextNumOfPage = () => {
     .active {
       background: #434A56;
     }
-
-    .last-num-of-page {}
-
-    .next-num-of-page {}
   }
 
   .last-page,
