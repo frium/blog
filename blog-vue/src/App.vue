@@ -6,11 +6,22 @@ import NavBall from "./components/NavBall.vue";
 import BackToTop from './components/BackToTop.vue';
 import MusicPlayerStrip from './components/MusicPlayerStrip.vue';
 import LyricStrip from './components/LyricStrip.vue';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router'
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 const isHidden = ref(false);
 const observer = ref(null);
 
 
+const route = useRoute();
+const isTimeRoute = ref(false);
+
+watch(() => route.path, (newPath) => {
+  isTimeRoute.value = newPath === '/time';
+  console.log(2222);
+},
+  {
+    immediate: true
+  });
 
 onMounted(() => {
   observer.value = new IntersectionObserver(
@@ -44,7 +55,7 @@ onUnmounted(() => {
             <router-view></router-view>
           </div>
           <div class="right">
-            <PersonalCard class="personal-card"
+            <PersonalCard v-if="!isTimeRoute" class="personal-card"
               :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
             </PersonalCard>
           </div>
@@ -64,7 +75,6 @@ onUnmounted(() => {
   .selection {
     position: relative;
     padding: 80px 5vw 40px 5vw;
-    min-height: 100vh;
     width: 100%;
 
     .container {
@@ -93,6 +103,12 @@ onUnmounted(() => {
               }
             }
 
+            @media (max-width: 1000px) {
+              & {
+                display: none;
+              }
+            }
+
             @media (max-width: 500px) {
               & {
                 display: none;
@@ -103,17 +119,23 @@ onUnmounted(() => {
 
         .router-view {
           margin-left: 1vw;
-          width: 76%;
+          width: v-bind('isTimeRoute ? "100%" : "76%"');
 
           @media (min-width: 1920px) {
             & {
-              width: 80%;
+              width: v-bind('isTimeRoute ? "100%" : "80%"');
             }
           }
 
           @media (max-width: 1440px) {
             & {
-              width: 80%
+              width: v-bind('isTimeRoute ? "100%" : "80%"');
+            }
+          }
+
+          @media (max-width: 1000px) {
+            & {
+              width: 100%
             }
           }
 

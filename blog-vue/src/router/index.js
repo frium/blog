@@ -28,7 +28,7 @@ const router = createRouter({
     {
       name: 'Time',
       path: '/time',
-      component: () => import('@/views/Home/index.vue')
+      component: () => import('@/views/TimeLine/index.vue')
     }, {
       name: 'Friends',
       path: '/friends',
