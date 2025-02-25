@@ -17,7 +17,6 @@ const isTimeRoute = ref(false);
 
 watch(() => route.path, (newPath) => {
   isTimeRoute.value = newPath === '/time';
-  console.log(2222);
 },
   {
     immediate: true

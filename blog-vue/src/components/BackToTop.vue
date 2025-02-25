@@ -30,7 +30,7 @@ const checkScroll = () => {
   const scrollHeight = document.body.scrollHeight;
   const innerHeight = window.innerHeight;
   isVisible.value = height > scrollHeight * 0.05;
-  scrollStore.scrollProportion = +(height / (scrollHeight - innerHeight) * 100).toFixed(0);
+  scrollStore.scrollProportion = Math.max(0, Math.min(100, +(height / (scrollHeight - innerHeight) * 100).toFixed(0)));
   document.body.classList.add('scrolling');
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
