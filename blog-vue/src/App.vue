@@ -76,6 +76,7 @@ onUnmounted(() => {
     position: relative;
     padding: 80px 5vw 40px 5vw;
     width: 100%;
+    height: 100vh;
 
     .container {
       margin: 0 auto;

@@ -32,7 +32,7 @@ const router = createRouter({
     }, {
       name: 'Friends',
       path: '/friends',
-      component: () => import('@/views/Home/index.vue')
+      component: () => import('@/views/Friends/index.vue')
     }, {
       name: 'Other',
       path: '/other',
