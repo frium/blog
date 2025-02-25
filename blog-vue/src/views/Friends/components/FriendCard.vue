@@ -18,7 +18,7 @@
 <style scoped lang="scss">
 .friend-card {
   position: relative;
-  width: 320px;
+  width: 310px;
   height: 100px;
   padding: 10px 30px;
   background: rgba(40, 44, 52, 0.8);
@@ -52,6 +52,10 @@
     img {
       transform: rotate(360deg);
     }
+  }
+
+  a:hover {
+    color: #ccc;
   }
 
   .a-box {

@@ -84,6 +84,9 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 
