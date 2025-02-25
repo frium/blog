@@ -30,6 +30,11 @@ import FriendCard from './components/FriendCard.vue';
   border-radius: 10px;
   overflow: hidden;
   background: rgba(40, 44, 52, 0.6);
+  transition: 0.6s ease-out;
+
+  &:hover {
+    background: rgba(40, 44, 52, 0.8);
+  }
 
   img {
     width: 100%;

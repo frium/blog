@@ -14,7 +14,7 @@ import { Search } from '@element-plus/icons-vue'
             <RouterLink to="/" active-class="router-link-active">首页</RouterLink>
           </li>
           <li class="hover-show">
-            <RouterLink to="/categories" active-class="router-link-active">标签页</RouterLink>
+            <RouterLink to="/categories" active-class="router-link-active">分类</RouterLink>
           </li>
           <li class="hover-show">
             <RouterLink to="/time" active-class="router-link-active">归档</RouterLink>
@@ -78,20 +78,16 @@ import { Search } from '@element-plus/icons-vue'
           content: "";
           background-color: rgba(165, 127, 127, 0.4);
           left: 50%;
-          right: 50%;
+          width: 0;
           bottom: -12px;
           height: 3px;
           border-radius: 4px 4px 0 0;
-          opacity: 0;
           transform: translateX(-50%);
-          transition: all 0.7s ease;
+          transition: all 0.6s ease;
         }
 
         &:hover::after {
-          opacity: 1;
-          left: 10%;
-          right: 10%;
-          transform: translateX(0);
+          width: 100%;
         }
 
         .router-link-active::after {

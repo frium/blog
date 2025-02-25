@@ -23,7 +23,7 @@ const router = createRouter({
     {
       name: 'Categories',
       path: '/categories',
-      component: () => import('@/views/Home/index.vue')
+      component: () => import('@/views/Categories/index.vue')
     },
     {
       name: 'Time',
