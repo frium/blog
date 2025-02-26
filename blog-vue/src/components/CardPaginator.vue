@@ -11,11 +11,11 @@ const pageId = computed(() => {
 const hiddenStartPage = ref(0);
 const hiddenEndPage = ref(0);
 const nextPage = async () => {
-  await router.push(`/page/${pageId.value + 1}`);
+  await router.push(`/home/page/${pageId.value + 1}`);
   updatePages();
 };
 const lastPage = async () => {
-  await router.push(`/page/${pageId.value - 1}`);
+  await router.push(`/home/page/${pageId.value - 1}`);
   updatePages();
 };
 

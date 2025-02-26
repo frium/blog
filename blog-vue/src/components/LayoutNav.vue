@@ -11,7 +11,7 @@ import { Search } from '@element-plus/icons-vue'
       <div>
         <ul class="sub-menu">
           <li class="hover-show">
-            <RouterLink to="/" active-class="router-link-active">首页</RouterLink>
+            <RouterLink to="/home" active-class="router-link-active">首页</RouterLink>
           </li>
           <li class="hover-show">
             <RouterLink to="/categories" active-class="router-link-active">分类</RouterLink>
