@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <router-view></router-view>
+  admin
 </template>
 
 <style scoped lang="scss"></style>
