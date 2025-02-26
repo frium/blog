@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted, ref, nextTick, defineExpose } from "vue";
 import "aplayer/dist/APlayer.min.css";
 import APlayer from "aplayer";
 import { useMusicStore } from "@/stores/musicStore";
@@ -11,7 +11,6 @@ const musicStore = useMusicStore();
 const lrcContainer = ref(null);
 const currentLrc = ref('');
 const currentIndex = ref(0);
-const isShowStrip = ref(false);
 const getMusicList = async () => {
   await musicStore.getMusicList(13049118006);
   musics.value = musicStore.musics;
@@ -68,7 +67,6 @@ const initPlayer = () => {
     aplayerElement.style.transition = 'transform 0.3s ease';
     const observer = new MutationObserver(() => {
       const isNarrow = aplayerElement.classList.contains('aplayer-narrow');
-      console.log(isNarrow);
       if (!isNarrow) {
         aplayerElement.style.transform = 'translateX(0px)';
       } else {
@@ -77,8 +75,6 @@ const initPlayer = () => {
     });
     observer.observe(aplayerElement, { attributes: true, attributeFilter: ['class'] });
   }
-
-
 };
 const fetchLrcContent = async (url) => {
   const response = await fetch(url);
@@ -94,7 +90,7 @@ const parseLRC = (lrcText) => {
       const minutes = parseInt(matches[1]);
       const seconds = parseFloat(matches[2]);
       const time = minutes * 60 + seconds;
-      const text = matches[3].trim();
+      let text = matches[3] ? matches[3].trim() : "~";
       lrcData.push({ time, text });
     }
   });
@@ -102,8 +98,9 @@ const parseLRC = (lrcText) => {
 };
 
 const findLrcIndex = () => {
+
   const currentTime = player.value.audio.currentTime;
-  const playMusicLrc = musicStore.playMusicLrc
+  const playMusicLrc = musicStore.playMusicLrc;
   for (let i = 0; i < playMusicLrc.length; i++) {
     if (currentTime < playMusicLrc[i].time) {
       return i - 1;
@@ -111,6 +108,23 @@ const findLrcIndex = () => {
   }
   return playMusicLrc.length - 1;
 }
+
+const toggleMusic = () => {
+  player.value.toggle();
+};
+const skipBack = () => {
+  player.value.skipBack();
+};
+const skipForward = () => {
+  player.value.skipForward();
+};
+const trunOffLrc = () => {
+  player.value.lrc.hide();
+  const lrcBtn = container.value.querySelector('.aplayer-icon-lrc');
+  lrcBtn.classList.toggle('aplayer-icon-lrc-inactivity');
+
+}
+defineExpose({ toggleMusic, skipBack, skipForward, trunOffLrc });
 
 onMounted(() => {
   getMusicList();

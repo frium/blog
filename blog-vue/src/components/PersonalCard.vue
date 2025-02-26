@@ -46,14 +46,14 @@
   position: relative;
   width: 280px;
   height: 380px;
-  background: rgba(40, 44, 52, 0.6);
   border-radius: 10px;
+  overflow: hidden;
 
   .bg-img {
     width: 100%;
     height: 100%;
     background-image: url('https://blog.frium.top/upload/star.jpg');
-    filter: brightness(80%);
+    opacity: 0.7;
     border-radius: 10px;
     background-position: center;
     background-size: cover;
@@ -95,7 +95,7 @@
 
     .about-button {
       width: 100%;
-      background: #f6cac9;
+      background: #f8c0bf;
       padding: 4.25px;
       color: white;
       border-radius: 20px;

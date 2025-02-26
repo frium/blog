@@ -15,12 +15,27 @@ const observer = ref(null);
 const route = useRoute();
 const isTimeRoute = ref(false);
 
+const playerRef = ref(null);
+const toggleMusic = () => {
+  if (playerRef.value) playerRef.value.toggleMusic();
+}
+const skipForward = () => {
+  if (playerRef.value) playerRef.value.skipForward();
+}
+const skipBack = () => {
+  if (playerRef.value) playerRef.value.skipBack();
+}
+const trunOffLrc = () => {
+  if (playerRef.value) playerRef.value.trunOffLrc();
+}
+
 watch(() => route.path, (newPath) => {
   isTimeRoute.value = newPath === '/time';
 },
   {
     immediate: true
-  });
+  }
+);
 
 onMounted(() => {
   observer.value = new IntersectionObserver(
@@ -63,8 +78,9 @@ onUnmounted(() => {
     </div>
     <BackToTop class="back-to-top"></BackToTop>
     <NavBall class="nav-ball"></NavBall>
-    <MusicPlayerStrip class="music-player-strip"></MusicPlayerStrip>
-    <LyricStrip class="lrc-strip"></LyricStrip>
+    <MusicPlayerStrip ref="playerRef"></MusicPlayerStrip>
+    <LyricStrip @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
+      @turn-off-lrc="trunOffLrc"></LyricStrip>
     <LayoutFooter></LayoutFooter>
   </div>
 </template>

@@ -76,8 +76,6 @@ const updatePages = () => {
 updatePages();
 const lastNumOfPage = () => {
   const pages = [];
-  console.log(hiddenStartPage.value);
-
   if (hiddenStartPage.value <= showNum.value - 2) {
     for (let i = 1; i <= showNum.value - 2 && i <= numberOfPage.value; i++) {
       pages.push(i);
@@ -108,8 +106,6 @@ const lastNumOfPage = () => {
 const nextNumOfPage = () => {
   const pages = [];
   pages.push(1, -1);
-  console.log(hiddenEndPage.value);
-
   if (hiddenEndPage.value >= numberOfPage.value - (showNum.value - 2)) {
     for (let i = numberOfPage.value - (showNum.value - 3); i <= numberOfPage.value; i++) {
       pages.push(i);
