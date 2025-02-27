@@ -1,5 +1,5 @@
 <template>
-  <div class="markdown-container" v-html="htmlContent" />
+  <div id="markdown-container" v-html="htmlContent" />
 </template>
 
 <script setup>
@@ -130,7 +130,7 @@ const handleCopyCode = async (event) => {
   }
 };
 
-const htmlContent = ref('')
+const htmlContent = ref('');
 watchEffect(() => {
   htmlContent.value = md.render(props.source);
   nextTick(() => {
@@ -149,9 +149,8 @@ watchEffect(() => {
 </script>
 
 <style scoped lang="scss">
-.markdown-container {
+#markdown-container {
   user-select: text;
-  box-sizing: border-box;
   width: 100%;
   overflow-wrap: break-word;
   line-height: 1.6;

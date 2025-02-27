@@ -25,7 +25,8 @@ body {
   background-position: center;
   background-attachment: fixed;
   cursor: url('/src/assets/cursor/Arrow.cur'), default !important;
-  overflow-y: overlay
+  overflow-y: overlay;
+  scroll-behavior: smooth;
 }
 
 

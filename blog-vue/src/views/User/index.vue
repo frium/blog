@@ -6,11 +6,11 @@ import NavBall from "@/components/NavBall.vue";
 import BackToTop from '@/components/BackToTop.vue';
 import MusicPlayerStrip from '@/components/MusicPlayerStrip.vue';
 import LyricStrip from '@/components/LyricStrip.vue';
+import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 const isHidden = ref(false);
 const observer = ref(null);
-
 
 const route = useRoute();
 const isTimeRoute = ref(false);
@@ -54,6 +54,7 @@ onMounted(() => {
 onUnmounted(() => {
   if (observer.value) observer.value.disconnect();
 });
+
 </script>
 
 <template>
@@ -69,9 +70,12 @@ onUnmounted(() => {
             <router-view></router-view>
           </div>
           <div class="right">
-            <PersonalCard v-if="!isTimeRoute" class="personal-card"
-              :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
-            </PersonalCard>
+            <div class="content" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
+              <PersonalCard v-if="!isTimeRoute" class="personal-card">
+              </PersonalCard>
+              <MarkdownCatalogue class="markdown-catalogue" v-if="route.path.includes('article')"></MarkdownCatalogue>
+
+            </div>
           </div>
         </div>
       </div>
@@ -99,37 +103,45 @@ onUnmounted(() => {
       .cloumns {
         display: flex;
         justify-content: space-between;
-        width: 100%;
 
         .right {
-          .personal-card {
+          width: 280px;
+
+          .content {
             position: sticky;
 
-            @media (max-width: 1440px) {
-              & {
-                transform: scale(0.8);
-                transform-origin: top;
+            .personal-card,
+            .markdown-catalogue {
+              transform: translateZ(0) scale(0.95);
+              transform-origin: top;
+              transition: transform 1s ease;
+
+              @media (max-width: 1440px) {
+                & {
+                  transform: scale(0.8);
+                }
+              }
+
+              @media (max-width: 1180px) {
+                & {
+                  transform: scale(0.7);
+                }
+              }
+
+              @media (max-width: 1000px) {
+                & {
+                  display: none;
+                }
+              }
+
+              @media (max-width: 500px) {
+                & {
+                  display: none;
+                }
               }
             }
 
-            @media (max-width: 1180px) {
-              & {
-                transform: scale(0.7);
-                transform-origin: top;
-              }
-            }
 
-            @media (max-width: 1000px) {
-              & {
-                display: none;
-              }
-            }
-
-            @media (max-width: 500px) {
-              & {
-                display: none;
-              }
-            }
           }
         }
 

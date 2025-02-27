@@ -28,7 +28,12 @@ const router = createRouter({
         {
           name: 'Article',
           path: 'article/:articleId',
-          component: () => import('@/views/User/Article/index.vue')
+          component: () => import('@/views/User/Article/index.vue'),
+          beforeEnter: (to) => {
+            if (!to.path.endsWith('/')) {
+              return { path: to.path + '/', hash: to.hash }
+            }
+          }
         },
         {
           name: 'Categories',
@@ -62,6 +67,7 @@ const router = createRouter({
 
     }
   ],
-})
+});
+
 
 export default router
