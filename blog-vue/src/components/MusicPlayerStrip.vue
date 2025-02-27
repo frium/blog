@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, nextTick, defineExpose } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import "aplayer/dist/APlayer.min.css";
 import APlayer from "aplayer";
 import { useMusicStore } from "@/stores/musicStore";

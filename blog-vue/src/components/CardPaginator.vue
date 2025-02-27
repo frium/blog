@@ -132,7 +132,7 @@ const nextNumOfPage = () => {
       <template v-for="i in allPages" :key="i">
         <button v-if="i === -1" class="number-router-link " @click="lastNumOfPage()">... </button>
         <button v-else-if="i === -2" class="number-router-link " @click="nextNumOfPage()">...</button>
-        <RouterLink v-else :to="'/page/' + i" class="number-router-link" :class="{ active: i === pageId }">
+        <RouterLink v-else :to="'/home/page/' + i" class="number-router-link" :class="{ active: i === pageId }">
           {{ i }}
         </RouterLink>
       </template>

@@ -16,39 +16,39 @@ const router = createRouter({
         {
           name: 'Home',
           path: 'home',
-          component: () => import('@/views/Home/index.vue'),
+          component: () => import('@/views/User/Home/index.vue'),
           children: [
             {
               name: 'Page',
               path: 'page/:pageId',
-              component: () => import('@/views/Home/index.vue'),
+              component: () => import('@/views/User/Home/index.vue'),
             }
           ]
         },
         {
           name: 'Article',
           path: 'article/:articleId',
-          component: () => import('@/views/Article/index.vue')
+          component: () => import('@/views/User/Article/index.vue')
         },
         {
           name: 'Categories',
           path: 'categories',
-          component: () => import('@/views/Categories/index.vue')
+          component: () => import('@/views/User/Categories/index.vue')
         },
         {
           name: 'Time',
           path: 'time',
-          component: () => import('@/views/TimeLine/index.vue')
+          component: () => import('@/views/User/TimeLine/index.vue')
         },
         {
           name: 'Friends',
           path: 'friends',
-          component: () => import('@/views/Friends/index.vue')
+          component: () => import('@/views/User/Friends/index.vue')
         },
         {
           name: 'Other',
           path: 'other',
-          component: () => import('@/views/Home/index.vue')
+          component: () => import('@/views/User/Home/index.vue')
         },
         {
           path: 'music',
