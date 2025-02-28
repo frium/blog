@@ -2,7 +2,6 @@
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import TopArticleCard from '@/views/User/Home/components/TopArticleCard.vue';
 import { ref } from 'vue'
-import MarkdownCatalogue from './components/MarkdownCatalogue.vue';
 
 const mdContent = ref(`
 # JVM
@@ -336,6 +335,10 @@ java中映引入自动的垃圾回收(GC)机制,垃圾回收器主要负责对�
   <div class="article">
     <TopArticleCard :isTop="false"></TopArticleCard>
     <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true" />
+    <div class="last-next">
+      <RouterLink to="/article/1">{{ '< 上一篇:文章名字' }}</RouterLink>
+          <RouterLink to="/article/1">{{ '下一篇:文章名字 >' }}</RouterLink>
+    </div>
   </div>
 </template>
 
@@ -348,6 +351,17 @@ java中映引入自动的垃圾回收(GC)机制,垃圾回收器主要负责对�
     padding: 6px 25px;
     width: 100%;
     border-radius: 10px;
+  }
+
+  .last-next {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    background: rgba(40, 44, 52, 0.6);
+    border-radius: 8px;
+    color: #999;
   }
 }
 </style>

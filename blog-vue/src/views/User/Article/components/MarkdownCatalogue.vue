@@ -18,9 +18,7 @@ const updateCatalogue = (markdownContainer) => {
     entries.reverse().forEach(entry => {
       if (entry.isIntersecting) {
         const mdCatalogueLi = document.querySelectorAll('.md-catalogue ul li');
-        console.log(entry);
         const currentIndex = parseInt(entry.target.id);
-
         if (currentIndex > lastActiveIndex ||
           entry.boundingClientRect.top < window.innerHeight * 0.1) {
           mdCatalogueLi.forEach((li, liIndex) => {
@@ -34,13 +32,21 @@ const updateCatalogue = (markdownContainer) => {
   },
     {
       root: null,
-      rootMargin: "0px 0px -80% 0px", // 定义顶部 10% 的检测区域
-      threshold: 0 // 只需检测是否进入该区域
+      rootMargin: "0px 0px -96% 0px",
+      threshold: 0
     }
   );
   headers.value.forEach(header => observer.observe(header));
 };
-
+const scrollToHeader = (index) => {
+  const header = headers.value[index];
+  if (header) {
+    header.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+};
 </script>
 
 <template>
@@ -49,11 +55,17 @@ const updateCatalogue = (markdownContainer) => {
     <hr>
     <ul>
       <li v-for="(header, index) in headers" :key="index">
-        <a v-if="header.tagName === 'H1'" :href="`#${index}`"> {{ header.innerText }}</a>
+        <a v-if="header.tagName === 'H1'" @click.prevent="scrollToHeader(index)" :data-index="index">
+          {{ header.innerText }}
+        </a>
         <ol v-else class="h2-ol">
-          <a v-if="header.tagName === 'H2'" :href="`#${index}`"> {{ header.innerText }}</a>
+          <a v-if="header.tagName === 'H2'" @click.prevent="scrollToHeader(index)" :data-index="index">
+            {{ header.innerText }}
+          </a>
           <ol v-else class="h3-ol">
-            <a :href="`#${index}`">{{ header.innerText }}</a>
+            <a @click.prevent="scrollToHeader(index)" :data-index="index">
+              {{ header.innerText }}
+            </a>
           </ol>
         </ol>
       </li>

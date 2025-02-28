@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref } from 'vue'
 import { useMusicStore } from "@/stores/musicStore";
 const musicStore = useMusicStore();
 const draggableElement = ref(null);

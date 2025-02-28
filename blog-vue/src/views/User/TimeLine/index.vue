@@ -42,13 +42,14 @@ import TimeLineCard from './components/TimeLineCard.vue';
         &:nth-child(#{$i}) {
           left:#{$index * 22vw};
 
+          @if ($i % 2==0) {
+            top: 46vh;
+          }
+
           @media (max-width: 1160px) {
             left: calc(#{$index} * 255px);
           }
 
-          @if ($i % 2==0) {
-            top: 46vh;
-          }
         }
       }
     }

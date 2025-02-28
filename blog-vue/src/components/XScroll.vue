@@ -43,7 +43,7 @@ onUnmounted(() => {
   .v-scroll {
 
     width: calc(v-bind('fHeight')*1px);
-    height: calc(v-bind('fWidth')*1px);
+    height: 90vw;
     position: relative;
     overflow: auto;
     transform-origin: 0 0;

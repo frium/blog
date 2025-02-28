@@ -88,14 +88,18 @@
     }
 
     img {
+
+      display: block;
       margin-top: 5px;
       margin-left: 3px;
       height: 65px;
       width: 65px;
-      border: 3px solid #646060;
+      flex-shrink: 0;
       border-radius: 50%;
+      border: 3px solid #646060;
       transition: all ease 0.6s;
-
+      object-fit: cover;
+      min-height: 100%;
     }
   }
 

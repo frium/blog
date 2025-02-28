@@ -13,6 +13,14 @@ const isHidden = ref(false);
 const observer = ref(null);
 
 const route = useRoute();
+const isChanging = ref(false);
+
+watch(route, () => {
+  isChanging.value = true;
+  setTimeout(() => {
+    isChanging.value = false;
+  }, 300);//应该是routerview的资源加载完毕后 isChanging.value = false;
+});
 const isTimeRoute = ref(false);
 
 const playerRef = ref(null);
@@ -65,16 +73,16 @@ onUnmounted(() => {
     <div class="selection">
       <div class="container">
         <div class="cloumns">
-          <div class="router-view">
+          <div class="router-view"
+            :style="{ opacity: isChanging ? '0' : '1', transform: isChanging ? 'translateY(20px)' : 'translateY(0px)' }">
             <div id="trigger" style="height: 1px; width: 100%;"></div>
             <router-view></router-view>
           </div>
-          <div class="right">
+          <div class="right" v-if="!isTimeRoute">
             <div class="content" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
-              <PersonalCard v-if="!isTimeRoute" class="personal-card">
+              <PersonalCard class="personal-card">
               </PersonalCard>
               <MarkdownCatalogue class="markdown-catalogue" v-if="route.path.includes('article')"></MarkdownCatalogue>
-
             </div>
           </div>
         </div>
@@ -105,7 +113,7 @@ onUnmounted(() => {
         justify-content: space-between;
 
         .right {
-          width: 280px;
+          width: 270px;
 
           .content {
             position: sticky;
@@ -127,27 +135,33 @@ onUnmounted(() => {
                   transform: scale(0.7);
                 }
               }
-
-              @media (max-width: 1000px) {
-                & {
-                  display: none;
-                }
-              }
-
-              @media (max-width: 500px) {
-                & {
-                  display: none;
-                }
-              }
             }
+          }
 
+          @media (max-width: 1180px) {
+            & {
+              width: 240px;
+            }
+          }
 
+          @media (max-width: 1050px) {
+            & {
+              display: none;
+            }
+          }
+
+          @media (max-width: 500px) {
+            & {
+              display: none;
+            }
           }
         }
 
         .router-view {
           margin-left: 1vw;
-          width: v-bind('isTimeRoute ? "100%" : "76%"');
+          transition: opacity 0.5s ease, transform 0.5s ease;
+          transform-origin: top;
+          width: v-bind('isTimeRoute ? "100%" : "77%"');
 
           @media (min-width: 1920px) {
             & {
@@ -161,7 +175,9 @@ onUnmounted(() => {
             }
           }
 
-          @media (max-width: 1000px) {
+
+
+          @media (max-width: 1050px) {
             & {
               width: 100%
             }
