@@ -98,112 +98,110 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
-#app {
-  .selection {
-    position: relative;
-    padding: 80px 5vw 40px 5vw;
-    width: 100%;
-    min-height: 100vh;
+.selection {
+  position: relative;
+  padding: 80px 5vw 40px 5vw;
+  width: 100%;
+  min-height: 100vh;
 
-    .container {
-      margin: 0 auto;
+  .container {
+    margin: 0 auto;
 
-      .cloumns {
-        display: flex;
-        justify-content: space-between;
+    .cloumns {
+      display: flex;
+      justify-content: space-between;
 
-        .right {
-          width: 270px;
+      .right {
+        width: 270px;
 
-          .content {
-            position: sticky;
+        .content {
+          position: sticky;
 
-            .personal-card,
-            .markdown-catalogue {
-              transform: translateZ(0) scale(0.95);
-              transform-origin: top;
-              transition: transform 1s ease;
+          .personal-card,
+          .markdown-catalogue {
+            transform: translateZ(0) scale(0.95);
+            transform-origin: top;
+            transition: transform 1s ease;
 
-              @media (max-width: 1440px) {
-                & {
-                  transform: scale(0.8);
-                }
-              }
-
-              @media (max-width: 1180px) {
-                & {
-                  transform: scale(0.7);
-                }
+            @media (max-width: 1440px) {
+              & {
+                transform: scale(0.8);
               }
             }
-          }
 
-          @media (max-width: 1180px) {
-            & {
-              width: 240px;
-            }
-          }
-
-          @media (max-width: 1050px) {
-            & {
-              display: none;
-            }
-          }
-
-          @media (max-width: 500px) {
-            & {
-              display: none;
+            @media (max-width: 1180px) {
+              & {
+                transform: scale(0.7);
+              }
             }
           }
         }
 
-        .router-view {
-          margin-left: 1vw;
-          transition: opacity 0.5s ease, transform 0.5s ease;
-          transform-origin: top;
-          width: v-bind('isTimeRoute ? "100%" : "77%"');
-
-          @media (min-width: 1920px) {
-            & {
-              width: v-bind('isTimeRoute ? "100%" : "80%"');
-            }
+        @media (max-width: 1180px) {
+          & {
+            width: 240px;
           }
+        }
 
-          @media (max-width: 1440px) {
-            & {
-              width: v-bind('isTimeRoute ? "100%" : "80%"');
-            }
+        @media (max-width: 1050px) {
+          & {
+            display: none;
           }
+        }
 
-
-
-          @media (max-width: 1050px) {
-            & {
-              width: 100%
-            }
-          }
-
-          @media (max-width: 500px) {
-            & {
-              width: 400px;
-            }
+        @media (max-width: 500px) {
+          & {
+            display: none;
           }
         }
       }
 
+      .router-view {
+        margin-left: 1vw;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        transform-origin: top;
+        width: v-bind('isTimeRoute ? "100%" : "77%"');
+
+        @media (min-width: 1920px) {
+          & {
+            width: v-bind('isTimeRoute ? "100%" : "80%"');
+          }
+        }
+
+        @media (max-width: 1440px) {
+          & {
+            width: v-bind('isTimeRoute ? "100%" : "80%"');
+          }
+        }
+
+
+
+        @media (max-width: 1050px) {
+          & {
+            width: 100%
+          }
+        }
+
+        @media (max-width: 500px) {
+          & {
+            width: 400px;
+          }
+        }
+      }
     }
-  }
 
-  .back-to-top {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
   }
+}
 
-  .nav-ball {
-    position: fixed;
-    bottom: 30px;
-    right: 20px;
-  }
+.back-to-top {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+}
+
+.nav-ball {
+  position: fixed;
+  bottom: 30px;
+  right: 20px;
 }
 </style>

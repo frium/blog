@@ -6,7 +6,7 @@ const router = createRouter({
     {
       name: 'User',
       path: '/',
-      component: import('@/views/User/index.vue'),
+      component: () => import('@/views/User/index.vue'),
       children: [
         {
           path: '',
@@ -48,7 +48,7 @@ const router = createRouter({
         {
           name: 'Other',
           path: 'other',
-          component: () => import('@/views/User/Other/index.vue')
+          component: () => import('@/views/User/Home/index.vue')
         },
         {
           path: 'music',
@@ -58,8 +58,13 @@ const router = createRouter({
     },
     {
       path: '/admin',
-      component: () => import('@/views/Admin/index.vue')
-
+      children: [
+        {
+          name: "Login",
+          path: 'login',
+          component: () => import('@/views/Admin/Login/index.vue'),
+        }
+      ]
     }
   ],
 });

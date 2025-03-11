@@ -7,8 +7,6 @@ onMounted(() => {
 });
 const updateCatalogue = (markdownContainer) => {
   headers.value = markdownContainer.querySelectorAll('h1, h2, h3');
-
-
   headers.value.forEach((header, index) => {
     header.id = index;
   });

@@ -98,6 +98,37 @@ const mdContent = ref(`
 
 ## 运行时数据区
 
+## 代码展示
+ \`\`\`java
+ public static void main(String[] args) {
+         long max=0;
+         for (long i = 10000000; i >0 ; i--) {
+             if(get(i)){
+                 max= i;
+                 break;
+             }
+         }
+         System.out.println(max);
+     }
+     public static boolean get(long n){
+         long []arr=new long[100000];//获取n的位数
+         arr[0]=n/1000000%10;
+         arr[1]=n/100000%10;
+         arr[2]=n/10000%10;
+         arr[3]=n/1000%10;
+         arr[4]=n/100%10;
+         arr[5]=n/10%10;
+         arr[6]=n%10;
+         for (int i = 7; i < arr.length; i++) {
+             long number =arr[i-1]+arr[i-2]+arr[i-3]+arr[i-4]+arr[i-5]+arr[i-6]+arr[i-7];
+             //当有一个数都大于我们要寻找的数时,那他再加上前面我们的几位数肯定会比我们要找的数大,这里就直接停止寻找返回false了
+             if(number>n)return  false;
+             if(number==n)return true;//说明这个数在我们这个数列当中,满足题干
+             arr[i]=number;//将前七位总和的数添加进去
+         }
+         return false;
+     }
+ \`\`\`
 ### 程序计数器(线程不共享)
 
 用于记录当前要执行的字节码指令的地址,可以控制程序指令的进行,实现分支,跳转,异常等,同时在多线程的情况下,jvm也可以通过程序计数器记录cpu切换前的指令
