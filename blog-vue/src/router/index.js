@@ -57,12 +57,44 @@ const router = createRouter({
       ]
     },
     {
+      name: 'Admin',
       path: '/admin',
+      component: () => import('@/views/Admin/index.vue'),
       children: [
         {
           name: "Login",
           path: 'login',
           component: () => import('@/views/Admin/Login/index.vue'),
+        },
+        {
+          name: 'Dashboard',
+          path: 'dashboard',
+          component: () => import('@/views/Admin/Dashboard/index.vue')
+        },
+        {
+          name: " Article",
+          path: 'article',
+          component: () => import('@/views/Admin/Article/index.vue'),
+        },
+        {
+          name: 'Comment',
+          path: 'comment',
+          component: () => import('@/views/Admin/Dashboard/index.vue')
+        }
+        , {
+          name: "File",
+          path: 'file',
+          component: () => import('@/views/Admin/File/index.vue'),
+        },
+        {
+          name: 'Links',
+          path: 'links',
+          component: () => import('@/views/Admin/Links/index.vue')
+        },
+        {
+          name: 'User',
+          path: 'user',
+          component: () => import('@/views/Admin/User/index.vue')
         }
       ]
     }
