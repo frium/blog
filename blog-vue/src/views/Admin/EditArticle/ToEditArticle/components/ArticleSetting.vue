@@ -1,7 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 
-// do not use same name with ref
 const form = reactive({
   name: '',
   region: '',

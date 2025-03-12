@@ -2,8 +2,8 @@
 import EditArticleCard from './components/EditArticleCard.vue';
 import { ref, watch } from 'vue';
 import { Search } from '@element-plus/icons-vue'
-import ListOperation from './components/ListOperation.vue';
 import HeadOperation from '../../Layout/components/HeadOperation.vue';
+import router from '@/router';
 const tableData = [
   {
     id: 1,
@@ -34,6 +34,20 @@ const inputValue = ref('');
 const selectedRows = ref([]);
 
 const showSearch = ref(true);
+
+const creatArticle = () => {
+  router.push({ name: 'ToEditArticle' })
+}
+
+const getCategories = () => {
+  console.log('getCategories')
+}
+const buttonArr = [
+  { name: "分类", onClick: getCategories },
+  { name: "新建", onClick: creatArticle },
+];
+
+
 const handleSelectionChange = (selection) => {
   selectedRows.value = selection;
   console.log("选中的行数据：", selectedRows.value);
@@ -48,8 +62,7 @@ watch(() => selectedRows.value.length, newLength => {
 
 <template>
 
-  <HeadOperation :title="'文章'" :icon="'article.svg'">
-    <ListOperation></ListOperation>
+  <HeadOperation :title="'文章'" :icon="'article.svg'" :button-arr="buttonArr">
   </HeadOperation>
   <div class="admin-container">
     <div class="edit-article">

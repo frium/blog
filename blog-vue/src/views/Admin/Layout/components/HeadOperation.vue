@@ -9,6 +9,10 @@ const props = defineProps({
   icon: {
     type: String,
     default: ""
+  },
+  buttonArr: {
+    type: Array,
+    default: []
   }
 });
 
@@ -24,7 +28,10 @@ const iconSrc = computed(() => {
       <span>{{ props.title }}</span>
     </div>
     <div class="right">
-      <slot></slot>
+      <button v-for="(button, index) in buttonArr" :key="button.name"
+        :class="{ active: index === buttonArr.length - 1 }" @click="button.onClick">
+        {{ button.name }}
+      </button>
     </div>
   </div>
 </template>
@@ -52,6 +59,32 @@ const iconSrc = computed(() => {
     span {
       font-size: 22px;
       font-weight: 600;
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    button {
+      padding: 3px 18px;
+      border: 1px solid rgb(217, 219, 224);
+      border-radius: 6px;
+      transition: all 0.3s;
+
+      &:hover {
+        background: rgb(217, 219, 224);
+      }
+    }
+
+    .active {
+      background-color: black;
+      color: #fff;
+
+      &:hover {
+        background: rgb(64, 64, 66);
+      }
     }
   }
 }
