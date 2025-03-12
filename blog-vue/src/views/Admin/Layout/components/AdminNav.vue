@@ -16,9 +16,9 @@ const route = useRoute();
         <img src="@/assets/icons/dashboard.svg" alt="">
         <RouterLink to="/admin/dashboard" style="flex-grow: 1;">仪表盘</RouterLink>
       </li>
-      <li :class="{ active: route.path === '/admin/article' }">
+      <li :class="{ active: route.path === '/admin/editArticle' }">
         <img src="@/assets/icons/article.svg" alt="">
-        <RouterLink to="/admin/article" style="flex-grow: 1;">文章</RouterLink>
+        <RouterLink to="/admin/editArticle" style="flex-grow: 1;">文章</RouterLink>
       </li>
       <li :class="{ active: route.path === '/admin/comment' }">
         <img src="@/assets/icons/comment.svg" alt="">
@@ -53,8 +53,8 @@ a:hover {
   height: 100vh;
   padding: 20px 16px;
   background: #ffff;
-  color: black;
-
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 
   .tool-bar {
     display: flex;

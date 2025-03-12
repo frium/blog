@@ -49,10 +49,6 @@ const router = createRouter({
           name: 'Other',
           path: 'other',
           component: () => import('@/views/User/Home/index.vue')
-        },
-        {
-          path: 'music',
-          component: () => import('@/components/MusicPlayerStrip.vue')
         }
       ]
     },
@@ -72,16 +68,16 @@ const router = createRouter({
           component: () => import('@/views/Admin/Dashboard/index.vue')
         },
         {
-          name: " Article",
-          path: 'article',
-          component: () => import('@/views/Admin/Article/index.vue'),
+          name: "EditArticle",
+          path: 'editArticle',
+          component: () => import('@/views/Admin/EditArticle/index.vue'),
         },
         {
           name: 'Comment',
           path: 'comment',
           component: () => import('@/views/Admin/Dashboard/index.vue')
-        }
-        , {
+        },
+        {
           name: "File",
           path: 'file',
           component: () => import('@/views/Admin/File/index.vue'),
@@ -92,7 +88,7 @@ const router = createRouter({
           component: () => import('@/views/Admin/Links/index.vue')
         },
         {
-          name: 'User',
+          name: 'ManageUser',
           path: 'user',
           component: () => import('@/views/Admin/User/index.vue')
         }

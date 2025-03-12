@@ -133,3 +133,12 @@ img {
 i {
   font-style: normal;
 }
+
+.admin-container {
+  box-sizing: content-box;
+  width: calc(100% - 32px);
+  margin: 16px;
+  background-color: #fff;
+  min-height: 500px;
+  border-radius: 5px;
+}
