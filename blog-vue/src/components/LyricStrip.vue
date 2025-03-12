@@ -87,9 +87,9 @@ const handleMusicToggle = () => {
           <img src="/src/assets/icons/next.svg" alt="" :style="{ transform: ' rotate(180deg)' }">
         </button>
         <button @click="handleMusicToggle">
-          <img :key="isPlaying ? 'pause' : 'play'" :src="isPlaying
-            ? '/src/assets/icons/pause.svg'
-            : '/src/assets/icons/play.svg'" alt="play/pause">
+          <img v-if="!isPlaying" src='/src/assets/icons/play.svg' alt="">
+          <img v-else src='/src/assets/icons/pause.svg' alt="">
+
         </button>
         <button @click="emit('skip-forward')">
           <img src="/src/assets/icons/next.svg" alt="">
