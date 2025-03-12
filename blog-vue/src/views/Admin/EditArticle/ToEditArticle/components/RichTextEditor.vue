@@ -1,7 +1,8 @@
 <template>
   <div style="border: 1px solid #ccc;min-width: 365px; max-width: 100%; ">
     <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
-    <Editor style="height: 400px; overflow-y: hidden;" :defaultConfig="editorConfig" @onCreated="handleCreated" />
+    <Editor style="height: calc(100vh - 130px); overflow-y: hidden;" :defaultConfig="editorConfig"
+      @onCreated="handleCreated" />
   </div>
 </template>
 

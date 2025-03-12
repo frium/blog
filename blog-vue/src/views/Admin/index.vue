@@ -37,5 +37,10 @@ const updateBodyStyle = () => {
   .router-view-div {
     width: 100%;
   }
+
+  ::selection {
+    background: #999798;
+    color: #fff;
+  }
 }
 </style>
