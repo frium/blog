@@ -71,6 +71,24 @@ const router = createRouter({
           name: "EditArticle",
           path: 'editArticle',
           component: () => import('@/views/Admin/EditArticle/index.vue'),
+          children: [
+
+            {
+              path: '',
+              redirect: { name: 'ArticleList' }
+            },
+            {
+              name: "ArticleList",
+              path: 'articleList',
+              component: () => import('@/views/Admin/EditArticle/ArticleList/index.vue'),
+            },
+            {
+              name: "ToEditArticle",
+              path: 'toEditArticle',
+              component: () => import('@/views/Admin/EditArticle/ToEditArticle/index.vue'),
+            }
+
+          ]
         },
         {
           name: 'Comment',

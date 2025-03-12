@@ -16,7 +16,7 @@ const route = useRoute();
         <img src="@/assets/icons/dashboard.svg" alt="">
         <RouterLink to="/admin/dashboard" style="flex-grow: 1;">仪表盘</RouterLink>
       </li>
-      <li :class="{ active: route.path === '/admin/editArticle' }">
+      <li :class="{ active: route.path.includes('/admin/editArticle') }">
         <img src="@/assets/icons/article.svg" alt="">
         <RouterLink to="/admin/editArticle" style="flex-grow: 1;">文章</RouterLink>
       </li>
