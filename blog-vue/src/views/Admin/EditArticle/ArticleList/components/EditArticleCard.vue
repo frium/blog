@@ -74,7 +74,7 @@ const changeVisible = () => {
 
     .title {
       margin-bottom: 2px;
-      font-size: 17px;
+      font-size: 16px;
       color: black;
     }
 

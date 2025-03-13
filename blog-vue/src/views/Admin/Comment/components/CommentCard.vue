@@ -41,6 +41,7 @@ const props = defineProps({
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 55px;
 
   .left {
     display: flex;
@@ -49,6 +50,7 @@ const props = defineProps({
     width: 70%;
 
     .text {
+      font-size: 15px;
       white-space: nowrap;
       word-break: break-all;
       -webkit-box-orient: vertical;
