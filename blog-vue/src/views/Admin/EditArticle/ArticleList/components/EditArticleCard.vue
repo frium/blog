@@ -26,7 +26,7 @@ const changeVisible = () => {
       <span class="title">几微米</span>
       <span>分类: #mysql</span>
       <div class="bottom">
-        <span>访问量: 100</span>
+        <span>浏览量: 100</span>
         <span>评论: 100</span>
       </div>
     </div>

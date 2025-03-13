@@ -31,15 +31,47 @@
 </template>
 
 <style scoped lang="scss">
+a:hover {
+  color: rgb(0, 0, 0) !important;
+}
+
 .link-card {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   .left {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
 
     .detail {
       display: flex;
       flex-direction: column;
+
+      .title {
+        font-size: 16px;
+        color: #000;
+      }
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+
+    .el-dropdown-link {
+      cursor: pointer;
+      font-size: 20px;
+      font-weight: 800;
+      margin-left: 20px;
     }
   }
 }

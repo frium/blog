@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
+import UploadImg from '@/components/UploadImg.vue'
 
 const form = reactive({
   name: '',
@@ -13,23 +14,12 @@ const form = reactive({
 })
 
 
-const changeAvatar = () => {
-
-}
 
 const onSubmit = () => {
   console.log('submit!')
 }
 
 
-const changeImg = ref(false);
-const showChangeImg = () => {
-  changeImg.value = true;
-}
-
-const hiddenChangeImg = () => {
-  changeImg.value = false;
-}
 </script>
 
 <template>
@@ -45,16 +35,7 @@ const hiddenChangeImg = () => {
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <div style=" height: 91px; min-width: 90px;  position: relative; border:1px solid #d0cece;">
-          <div @mouseenter="showChangeImg" @mouseleave="hiddenChangeImg" style="height: 100%;">
-            <img v-if="thumbnailUrl" :src="thumbnailUrl" style="height: 90px; min-width: 90px;" />
-            <img v-else src="@/assets/icons/add.svg"
-              style=" position: absolute; top: 50%;left:50%; transform: translate(-50%,-50%);" />
-            <div class="change-img" v-show="changeImg" @click="uploadCoverImg">
-              <img src="@/assets/icons/camera.svg" alt="">
-            </div>
-          </div>
-        </div>
+        <UploadImg></UploadImg>
       </el-form-item>
       <el-form-item label="摘要">
         <el-input v-model="form.desc" type="textarea" maxlength="200" show-word-limit />
@@ -76,28 +57,6 @@ const hiddenChangeImg = () => {
   max-height: 500px;
   padding: 0 25px;
   color: black;
-
-  .change-img {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 90px;
-    top: 0px;
-    left: 0px;
-    background: #222226;
-    opacity: 0.8;
-    overflow: hidden;
-    cursor: pointer;
-    object-fit: cover;
-
-    img {
-      margin: auto;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-    }
-  }
 
   button {
     padding: 0 18px;

@@ -27,6 +27,7 @@ const updateBodyStyle = () => {
   position: relative;
   display: flex;
 
+
   .admin-nav {
     position: sticky;
     top: 0;

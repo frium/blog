@@ -25,9 +25,7 @@ const buttonArr = [
 </script>
 
 <template>
-  <HeadOperation :title="'文章'" :icon="'article.svg'" :button-arr="buttonArr">
-    <EditOperation @to-publish="toPublish"></EditOperation>
-  </HeadOperation>
+  <HeadOperation :title="'文章'" :icon="'article.svg'" :button-arr="buttonArr"></HeadOperation>
   <div class="admin-container">
     <RichTextEditor></RichTextEditor>
     <el-dialog title="文章设置" v-model="showArticleSetting" width="550px" style="overflow: auto;">
