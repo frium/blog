@@ -1,8 +1,7 @@
 <script setup>
-import QuickFind from './components/QuickFind.vue';
-import HeadOperation from '../Layout/components/HeadOperation.vue';
-import InfoCard from './components/InfoCard.vue';
-import RecentArticle from './components/RecentArticle.vue';
+import InfoCard from '@/views/Admin/DashBoard/components/InfoCard.vue';
+import RecentArticle from '@/views/Admin/DashBoard/components/RecentArticle.vue';
+import FastNavigation from '@/views/Admin/DashBoard/components/FastNavigation.vue';
 </script>
 
 <template>
@@ -19,11 +18,11 @@ import RecentArticle from './components/RecentArticle.vue';
         <h3>任意门</h3>
         <hr>
         <div class="quick-finds">
-          <QuickFind></QuickFind>
-          <QuickFind></QuickFind>
-          <QuickFind></QuickFind>
-          <QuickFind></QuickFind>
-          <QuickFind></QuickFind>
+          <FastNavigation></FastNavigation>
+          <FastNavigation></FastNavigation>
+          <FastNavigation></FastNavigation>
+          <FastNavigation></FastNavigation>
+          <FastNavigation></FastNavigation>
         </div>
       </div>
       <div class="out-box">
