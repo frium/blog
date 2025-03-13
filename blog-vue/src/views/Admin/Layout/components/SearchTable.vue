@@ -10,7 +10,6 @@ const props = defineProps({
 });
 
 
-console.log(props.tableData);
 
 
 const selectedRows = ref([]);

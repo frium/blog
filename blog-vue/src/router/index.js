@@ -112,8 +112,14 @@ const router = createRouter({
         },
         {
           name: 'ManageUser',
-          path: 'user',
-          component: () => import('@/views/Admin/User/index.vue')
+          path: 'manageUser',
+          component: () => import('@/views/Admin/ManageUser/index.vue')
+        },
+        {
+          name: 'PersonalCenter',
+          path: 'personalCenter',
+          component: () => import('@/views/Admin/PersonalCenter/index.vue')
+
         }
       ]
     }

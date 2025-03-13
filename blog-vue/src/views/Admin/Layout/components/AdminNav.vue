@@ -32,9 +32,9 @@ const route = useRoute();
         <img src="@/assets/icons/links.svg" alt="">
         <RouterLink to="/admin/links" style="flex-grow: 1;">添加友链</RouterLink>
       </li>
-      <li :class="{ active: route.path === '/admin/user' }">
-        <img src="@/assets/icons/user.svg" alt="">
-        <RouterLink to="/admin/user" style="flex-grow: 1;">用户</RouterLink>
+      <li :class="{ active: route.path === '/admin/manageUser' }">
+        <img src="@/assets/icons/manageUser.svg" alt="">
+        <RouterLink to="/admin/manageUser" style="flex-grow: 1;">用户</RouterLink>
       </li>
     </ul>
     <div class="admin-info">
