@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from "vue"
 
+const props = defineProps({
+  data: Object
+})
+
 
 const visible = ref(true);
 const toUser = () => {
@@ -23,11 +27,13 @@ const changeVisible = () => {
 <template>
   <div class="edit-article-card">
     <div class="edit-left">
-      <span class="title">几微米</span>
-      <span>分类: #mysql</span>
+      <span class="title">{{ props.data.title }}</span>
+      <span v-for="(category, index) in props.data.categories" :key="index">
+        {{ category }}
+      </span>
       <div class="bottom">
-        <span>浏览量: 100</span>
-        <span>评论: 100</span>
+        <span> {{ props.data.viewNumber }}</span>
+        <span>{{ props.data.commentNumber }}</span>
       </div>
     </div>
     <div class="edit-right">

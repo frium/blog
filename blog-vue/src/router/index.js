@@ -63,6 +63,11 @@ const router = createRouter({
           component: () => import('@/views/Admin/Login/index.vue'),
         },
         {
+          path: '',
+          redirect: { name: 'DashBoard' }
+        },
+
+        {
           name: 'DashBoard',
           path: 'dashBoard',
           component: () => import('@/views/Admin/DashBoard/index.vue')
@@ -93,7 +98,7 @@ const router = createRouter({
         {
           name: 'Comment',
           path: 'comment',
-          component: () => import('@/views/Admin/Dashboard/index.vue')
+          component: () => import('@/views/Admin/Comment/index.vue')
         },
         {
           name: "File",
