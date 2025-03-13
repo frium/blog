@@ -63,9 +63,9 @@ const router = createRouter({
           component: () => import('@/views/Admin/Login/index.vue'),
         },
         {
-          name: 'Dashboard',
-          path: 'dashboard',
-          component: () => import('@/views/Admin/Dashboard/index.vue')
+          name: 'DashBoard',
+          path: 'dashBoard',
+          component: () => import('@/views/Admin/DashBoard/index.vue')
         },
         {
           name: "EditArticle",

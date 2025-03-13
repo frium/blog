@@ -49,7 +49,7 @@ const iconSrc = computed(() => {
   .left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 
     img {
       width: 25px;
