@@ -27,7 +27,7 @@ const fileData = [
     createTime: '2025-03-12 14:45'
   }
 ]
-
+const uploadFileDialog = ref(null);
 
 const deleteFunction = () => {
 }
@@ -42,6 +42,12 @@ const toUploadFile = () => {
 const buttonArr = [
   { name: '上传', onClick: toUploadFile }
 ]
+
+const handleDialogClosed = () => {
+  if (uploadFileDialog.value) {
+    uploadFileDialog.value.resetState();
+  }
+};
 </script>
 
 <template>
@@ -54,8 +60,8 @@ const buttonArr = [
         </template>
       </SearchTable>
     </div>
-    <el-dialog title="上传附件" v-model="showUploadFile" width="920px" style="overflow: auto;">
-      <UploadFileDialog></UploadFileDialog>
+    <el-dialog title="上传附件" v-model="showUploadFile" width="920px" style="overflow: auto;" @close="handleDialogClosed">
+      <UploadFileDialog ref="uploadFileDialog" />
     </el-dialog>
   </div>
 </template>
