@@ -17,7 +17,7 @@ public class FileController {
     @Autowired
     UploadFileService uploadFileService;
     @PostMapping("/uploadFile")
-    public R<?> loginByEmail(@RequestParam("file") MultipartFile file) {
+    public R<?> uploadFile(@RequestParam("file") MultipartFile file) {
         uploadFileService.uploadFile(file);
         return R.success();
     }

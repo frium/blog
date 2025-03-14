@@ -1,18 +1,13 @@
 package top.frium.uitls;
 
-
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import top.frium.common.MyException;
+import top.frium.common.StatusCodeEnum;
 
 import java.io.OutputStream;
 
-/**
- * Created by jlm on 2019-09-17 17:44
- */
 @Component
 public class FtpUtils {
     @Value("${ecs.ip}")
@@ -26,55 +21,81 @@ public class FtpUtils {
     @Value("${ecs.path}")
     private String path;
 
-    /**
-     * 利用JSch包实现SFTP上传文件
-     */
-    public void sshSftp(byte[] file, String fileName) throws Exception {
-        Session session;
-        Channel channel = null;
-        JSch jsch = new JSch();
-        if (port <= 0) {
-            //连接服务器，采用默认端口
-            session = jsch.getSession(user, ip);
-        } else {
-            //采用指定的端口连接服务器
-            session = jsch.getSession(user, ip, port);
-        }
-        //如果服务器连接不上，则抛出异常
-        if (session == null) {
-            throw new Exception("session is null");
-        }
+    private Session session;
+    private ChannelSftp sftp;
 
-        //设置登陆主机的密码
-        session.setPassword(password);//设置密码
-        //设置第一次登陆的时候提示，可选值：(ask | yes | no)
+    /**
+     * 确保 SFTP 连接可用
+     */
+    private void ensureConnected() throws JSchException {
+        if (sftp != null && sftp.isConnected()) {
+            return; // 连接已建立
+        }
+        connect();
+    }
+
+    /**
+     * 连接 SFTP 服务器
+     */
+    private void connect() throws JSchException {
+        JSch jsch = new JSch();
+        session = jsch.getSession(user, ip, port);
+        session.setPassword(password);
         session.setConfig("StrictHostKeyChecking", "no");
-        //设置登陆超时时间
         session.connect(30000);
-        OutputStream outstream = null;
-        try {
-            //创建sftp通信通道
-            channel = (Channel) session.openChannel("sftp");
-            channel.connect(1000);
-            ChannelSftp sftp = (ChannelSftp) channel;
-            //进入服务器指定的文件夹
-            sftp.cd(path);
-            //以下代码实现从本地上传一个文件到服务器，如果要实现下载，对换以下流就可以了
-            outstream = sftp.put(fileName);
-            outstream.write(file);
-        } catch (Exception e) {
-            throw new Exception();
-        } finally {
-            //关流操作
-            if (outstream != null) {
-                outstream.flush();
-                outstream.close();
-            }
+        Channel channel = session.openChannel("sftp");
+        channel.connect(1000);
+        sftp = (ChannelSftp) channel;
+    }
+
+    /**
+     * 断开 SFTP 连接
+     */
+    public void disconnect() {
+        if (sftp != null && sftp.isConnected()) {
+            sftp.disconnect();
+        }
+        if (session != null && session.isConnected()) {
             session.disconnect();
-            if (channel != null) {
-                channel.disconnect();
-            }
         }
     }
 
+    /**
+     * 检查文件是否存在
+     */
+    public boolean fileExists(String relativePath) {
+        try {
+            ensureConnected();
+            String fullPath = path + "/" + relativePath;
+            sftp.stat(fullPath);
+            return true;
+        } catch (SftpException e) {
+            return e.id != ChannelSftp.SSH_FX_NO_SUCH_FILE;
+        } catch (JSchException e) {
+            throw new MyException(StatusCodeEnum.ERROR);
+        }
+    }
+
+    /**
+     * 上传文件到 SFTP 服务器
+     */
+    public void sshSftp(byte[] file, String fileName) {
+        OutputStream outstream = null;
+        try {
+            ensureConnected();
+            sftp.cd(path);
+            outstream = sftp.put(fileName);
+            outstream.write(file);
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.ERROR);
+        } finally {
+            try {
+                if (outstream != null) {
+                    outstream.flush();
+                    outstream.close();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+    }
 }

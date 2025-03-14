@@ -20,7 +20,7 @@ export default defineConfig({
     port: 80,
     proxy: {
       '/api': {
-        target: 'http://frium.top:7654',
+        target: 'http://frium.top:1024',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }
