@@ -1,9 +1,8 @@
 import axios from "axios";
-
+import { ElNotification } from "element-plus";
 
 export const request = axios.create({
-  baseURL: 'http://',
-  timeout: 5000
+  baseURL: '/api',
 })
 
 export const musicRequest = axios.create({
@@ -24,3 +23,4 @@ request.interceptors.response.use(res => res.data, e => {
   });
   return Promise.reject(e);
 })
+

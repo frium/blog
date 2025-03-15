@@ -1,6 +1,9 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { ElMessage } from "element-plus";
+import { uploadFileAPI } from "@/api/file";
+import ProgressCircle from "./ProgressCircle.vue";
+import { SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 
 const fileBlodArr = ref([]);
 const fileNameSet = ref(new Set());
@@ -15,11 +18,7 @@ const showDragBox = () => {
 };
 const dropEvent = (event) => {
   event.preventDefault();
-
-  if (event.type === 'drop') {
-    //上传文件
-
-  } else if (event.type === 'dragleave') {
+  if (event.type === 'dragleave') {
     isDragEnter.value = false;
   } else {
     isDragEnter.value = true;
@@ -50,7 +49,11 @@ const openFolder = () => {
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (!validateFile(file)) continue;
-      fileBlodArr.value.push(file);
+      const fileInfo = {
+        file: file,
+        uploadProgress: -1,
+      }
+      fileBlodArr.value.push(fileInfo);
     }
     if (dragBox.value) dragBox.value = false;
   };
@@ -78,7 +81,7 @@ const getImagePreview = (file) => {
 }
 
 const cleanupUrls = () => {
-  previewUrls.value.forEach((url, file) => {
+  previewUrls.value.forEach((url) => {
     URL.revokeObjectURL(url);
   });
   previewUrls.value.clear();
@@ -92,8 +95,7 @@ const offDragBox = () => {
   dragBox.value = false;
 }
 const resetState = () => {
-  fileBlodArr.value = [];
-  fileNameSet.value.clear();
+  cancle();
   cleanupUrls();
 };
 defineExpose({ resetState });
@@ -101,13 +103,53 @@ defineExpose({ resetState });
 onUnmounted(() => {
   if (drop) {
     const handler = dropEvent;
-    drop.value.removeEventListener('drop', handler);
-    drop.value.removeEventListener("dragenter", handler);
-    drop.value.removeEventListener("dragover", handler);
-    drop.value.removeEventListener("dragleave", handler);
+    drop.value?.removeEventListener('drop', handler);
+    drop.value?.removeEventListener("dragenter", handler);
+    drop.value?.removeEventListener("dragover", handler);
+    drop.value?.removeEventListener("dragleave", handler);
   }
   cleanupUrls();
+});
+const onUploadProgress = (index) => (e) => {
+  fileBlodArr.value[index].uploadProgress = Math.round((e.loaded / e.total) * Math.floor(Math.random() * (12)) + 76,);
+}
+const resolve = (index) => {
+  fileBlodArr.value[index].uploadProgress = 99;
+  setTimeout(() => {
+    fileBlodArr.value[index].uploadProgress = 100;
+  }, 1000);
+}
+
+let queue = [];
+let concurrentUploads = ref(0);
+const maxConcurrentUploads = 4;
+
+const processQueue = () => {
+  while (concurrentUploads.value < maxConcurrentUploads && queue.length > 0) {
+    const { file, index } = queue.shift();
+    concurrentUploads.value++;
+    uploadFileAPI(file, onUploadProgress(index)).then(() => {
+      resolve(index);
+      concurrentUploads.value--;
+    })
+  }
+}
+
+const handlerUploadFile = () => {
+  if (fileBlodArr.value.length > 0) {
+    fileBlodArr.value.forEach((value, index) => {
+      value.uploadProgress = 0;
+      queue.push({ file: value.file, index });
+    });
+  }
+  processQueue();
+};
+watch((concurrentUploads) => {
+  processQueue();
 })
+const cancleUpload = () => {
+
+}
 </script>
 
 <template>
@@ -126,13 +168,25 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="selected-file">
-        <div v-for="(file, index) in fileBlodArr" :key="index">
-          <img v-if="file.type.startsWith('image')" :src="getImagePreview(file)"
-            style="width: 190px; height: 120px; object-fit: cover; box-shadow: 3px 3px 5px 2px rgb(164, 160, 160);" />
-          <img v-else src="@/assets/icons/doc.svg" alt=""
-            style="width: 190px; height: 120px; box-shadow: 3px 3px 5px 2px rgb(164, 160, 160);">
+        <div v-for="(fileInfo, index) in fileBlodArr" :key="index" class="img-out-box">
+          <img v-if="fileInfo.file.type.startsWith('image')" :src="getImagePreview(fileInfo.file)"
+            style="object-fit: cover;" />
+          <img v-else src="@/assets/icons/doc.svg" alt="">
+
+          <el-icon class="upload-status" v-if="fileBlodArr[index].uploadProgress === 100" color="#54af4f" size="18px">
+            <SuccessFilled />
+          </el-icon>
+          <el-icon style="cursor: pointer;" class="upload-status" v-else @click="cancleUpload" size="18px">
+            <CircleCloseFilled />
+          </el-icon>
+          <div class="progress"
+            v-if="fileBlodArr[index].uploadProgress >= 0 && fileBlodArr[index].uploadProgress < 100">
+            <ProgressCircle class="cancle-upload" :percent="fileBlodArr[index].uploadProgress" size="60px"
+              border-width="5px" color="#fff" inactive-color="rgba(200,200,200,0.3)">
+            </ProgressCircle>
+          </div>
           <span class="name">
-            {{ file.name }}
+            {{ fileInfo.file.name }}
           </span>
         </div>
 
@@ -147,7 +201,7 @@ onUnmounted(() => {
       <div class="hint" v-show="isDragEnter">放到这</div>
     </div>
     <div v-if="fileBlodArr.length > 0" class="bottom">
-      <el-button type="success">{{ '上传' + fileBlodArr.length + '个文件' }}</el-button>
+      <el-button type="success" @click="handlerUploadFile">{{ '上传' + fileBlodArr.length + '个文件' }}</el-button>
     </div>
 
   </div>
@@ -189,18 +243,64 @@ onUnmounted(() => {
     background-color: #f4f4f4;
     overflow-y: auto;
 
-    .name {
-      margin-top: 5px;
-      display: block;
-      max-width: 185px;
-      white-space: nowrap;
-      word-break: break-all;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: center
+    .img-out-box {
+      position: relative;
+      border-radius: 10px;
+
+      .upload-status {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        top: -9px;
+        right: -9px;
+        box-shadow: 0px 0px;
+        background: #f4f4f4;
+        border-radius: 50%;
+      }
+
+      img {
+        border-radius: 3px;
+        width: 190px;
+        height: 120px;
+        box-shadow: 3px 3px 5px 2px rgb(164, 160, 160);
+        transform: translateZ(0);
+      }
+
+      .progress {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 190px;
+        height: 120px;
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 3px;
+
+        .cancle-upload {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+
+
+        }
+
+
+      }
+
+      .name {
+        margin-top: 5px;
+        display: block;
+        max-width: 185px;
+        white-space: nowrap;
+        word-break: break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center
+      }
     }
+
   }
 
   .upload-file-box {
