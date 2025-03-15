@@ -60,7 +60,9 @@ const handleDialogClosed = () => {
         </template>
       </SearchTable>
     </div>
-    <el-dialog title="上传附件" v-model="showUploadFile" width="920px" style="overflow: auto;" @close="handleDialogClosed">
+    <el-dialog title="上传附件" v-model="showUploadFile" width="920px"
+      style="overflow: auto; position: fixed;top: 35%; left: 50%;transform: translate(-50%, -50%);z-index: 9999;"
+      @close="handleDialogClosed">
       <UploadFileDialog ref="uploadFileDialog" />
     </el-dialog>
   </div>

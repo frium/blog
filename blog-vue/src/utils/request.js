@@ -16,11 +16,13 @@ request.interceptors.request.use(config => {
 }, e => Promise.reject(e))
 
 request.interceptors.response.use(res => res.data, e => {
-  ElNotification({
-    title: 'Error',
-    message: e.response.data.message,
-    type: 'error'
-  });
+  if (e.response?.data) {
+    ElNotification({
+      title: 'Error',
+      message: e.response.data.message,
+      type: 'error'
+    });
+  }
   return Promise.reject(e);
 })
 

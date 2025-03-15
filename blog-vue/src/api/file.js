@@ -1,6 +1,6 @@
 import { request } from "@/utils/request";
 
-export function uploadFileAPI(file, onUploadProgress) {
+export function uploadFileAPI(file, onUploadProgress, signal) {
   const formData = new FormData();
   formData.append('file', file);
 
@@ -11,6 +11,7 @@ export function uploadFileAPI(file, onUploadProgress) {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    onUploadProgress
+    onUploadProgress,
+    signal: signal
   })
 }

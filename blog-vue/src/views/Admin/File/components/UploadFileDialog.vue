@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from "vue";
+import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
 import { ElMessage } from "element-plus";
 import { uploadFileAPI } from "@/api/file";
 import ProgressCircle from "./ProgressCircle.vue";
@@ -8,12 +8,15 @@ import { SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 const fileBlodArr = ref([]);
 const fileNameSet = ref(new Set());
 const previewUrls = ref(new Map());
+const uploading = ref(false);
+const promiseNum = ref(-1);
 
 const isDragEnter = ref(false);
 const drop = ref(null);
 
 const dragBox = ref(false);
 const showDragBox = () => {
+  if (fileNameSet.value.size === 0) fileBlodArr.value = [];
   dragBox.value = true;
 };
 const dropEvent = (event) => {
@@ -31,7 +34,7 @@ const validateFile = (file) => {
     return false;
   }
   if (fileNameSet.value.has(file.name)) {
-    ElMessage.error(file.name + " 已经上传过了");
+    ElMessage.error(file.name + " 已经添加过了");
     return false;
   }
   fileNameSet.value.add(file.name);
@@ -46,14 +49,23 @@ const openFolder = () => {
   input.onchange = async (e) => {
     const files = e.target.files;
     if (files.length === 0) return;
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       if (!validateFile(file)) continue;
       const fileInfo = {
         file: file,
-        uploadProgress: -1,
+        uploadProgress: 0,
       }
-      fileBlodArr.value.push(fileInfo);
+      if (!fileBlodArr.value[i]) {
+        fileBlodArr.value[i] = fileInfo;
+      } else {
+        fileBlodArr.value.push(fileInfo);
+      }
+      promiseNum.value = Math.max(promiseNum.value, 0) + 1;
+      const controller = new AbortController();
+      abortControllers.value[i] = controller;
+      queue.push({ file, index: i, signal: controller.signal });
     }
     if (dragBox.value) dragBox.value = false;
   };
@@ -111,48 +123,70 @@ onUnmounted(() => {
   cleanupUrls();
 });
 const onUploadProgress = (index) => (e) => {
-  fileBlodArr.value[index].uploadProgress = Math.round((e.loaded / e.total) * Math.floor(Math.random() * (12)) + 76,);
+  fileBlodArr.value[index].uploadProgress = Math.round((e.loaded / e.total) * Math.floor(Math.random() * (12)) + 76);
 }
 const resolve = (index) => {
-  fileBlodArr.value[index].uploadProgress = 99;
-  setTimeout(() => {
-    fileBlodArr.value[index].uploadProgress = 100;
-  }, 1000);
+  promiseNum.value = promiseNum.value - 1;
+  fileNameSet.value.delete(fileBlodArr.value[index].file.name);
+  fileBlodArr.value[index].uploadProgress = 100;
+  ElMessage.success(fileBlodArr.value[index].file.name + '上传成功')
 }
 
 let queue = [];
 let concurrentUploads = ref(0);
 const maxConcurrentUploads = 4;
-const abortControllers = {};
+const abortControllers = ref([]);
 
 const processQueue = () => {
   while (concurrentUploads.value < maxConcurrentUploads && queue.length > 0) {
     const { file, index, signal } = queue.shift();
+    if (!fileBlodArr.value[index]) continue;
+    fileBlodArr.value[index].uploadProgress = 0;
     concurrentUploads.value++;
-    uploadFileAPI(file, onUploadProgress(index), { signal }).then(() => {
-      resolve(index);
-      concurrentUploads.value--;
-    })
+    uploadFileAPI(file, onUploadProgress(index), signal)
+      .then(() => {
+        resolve(index);
+      })
+      .catch((error) => {
+        if (error.message === 'canceled') {
+          ElMessage.warning(`文件 ${file.name} 撤销上传`);
+        } else {
+          ElMessage.error(`文件 ${file.name} 上传失败`);
+
+        }
+      })
+      .finally(() => {
+        concurrentUploads.value--;
+      });
   }
 }
 
 const handlerUploadFile = () => {
-  if (fileBlodArr.value.length > 0) {
-    fileBlodArr.value.forEach((value, index) => {
-      value.uploadProgress = 0;
-      const controller = new AbortController();
-      abortControllers[index] = controller;
-      queue.push({ file: value.file, index, signal: controller.signal });
-    });
-  }
+  uploading.value = true;
   processQueue();
 };
-watch((concurrentUploads) => {
+
+watch(concurrentUploads, (newVal, oldVal) => {
   processQueue();
-})
+
+});
+
+watch(promiseNum, (newVal, oldVal) => {
+  console.log('new', newVal);
+
+  if (newVal <= 0) {
+    uploading.value = false;
+  }
+});
+
 const cancleUpload = (index) => {
-  abortControllers[index].about
-  delete abortControllers[index];
+  if (abortControllers.value[index]) {
+    abortControllers.value[index].abort();
+    abortControllers.value[index] = null;
+  }
+  promiseNum.value = promiseNum.value - 1;
+  fileNameSet.value.delete(fileBlodArr.value[index].file.name);
+  fileBlodArr.value[index] = null;
 }
 </script>
 
@@ -160,40 +194,40 @@ const cancleUpload = (index) => {
   <div class="upload-file-dialog">
     <div v-if="fileBlodArr.length > 0" class="upload-file">
       <div class="head">
-        <button style="color:red;" v-if="fileBlodArr.length > 0 && dragBox" @click="offDragBox">
+        <button style="color:red;" v-if="fileNameSet.size > 0 && dragBox" @click="offDragBox">
           返回
         </button>
         <button style="color:red;" v-else @click="cancle">
           取消
         </button>
-        <span>{{ fileBlodArr.length + '个文件待上传' }}</span>
-        <button style="color:#479dce;" @click="showDragBox">
-          添加更多文件
+        <span v-if="fileNameSet.size !== 0">{{ fileNameSet.size + '个文件待上传' }}</span>
+        <button :disabled="uploading" style="color:#479dce;" @click="showDragBox">
+          添加文件
         </button>
       </div>
       <div class="selected-file">
-        <div v-for="(fileInfo, index) in fileBlodArr" :key="index" class="img-out-box">
-          <img v-if="fileInfo.file.type.startsWith('image')" :src="getImagePreview(fileInfo.file)"
-            style="object-fit: cover;" />
-          <img v-else src="@/assets/icons/doc.svg" alt="">
+        <template v-for="(fileInfo, index) in fileBlodArr" :key="index">
+          <div v-if="fileInfo" class="img-out-box">
+            <img v-if="fileInfo.file.type.startsWith('image')" :src="getImagePreview(fileInfo.file)"
+              style="object-fit: cover;" />
+            <img v-else src="@/assets/icons/doc.svg" alt="">
 
-          <el-icon class="upload-status" v-if="fileBlodArr[index].uploadProgress === 100" color="#54af4f" size="18px">
-            <SuccessFilled />
-          </el-icon>
-          <el-icon style="cursor: pointer;" class="upload-status" v-else @click="cancleUpload(index)" size="18px">
-            <CircleCloseFilled />
-          </el-icon>
-          <div class="progress"
-            v-if="fileBlodArr[index].uploadProgress >= 0 && fileBlodArr[index].uploadProgress < 100">
-            <ProgressCircle class="cancle-upload" :percent="fileBlodArr[index].uploadProgress" size="60px"
-              border-width="5px" color="#fff" inactive-color="rgba(200,200,200,0.3)">
-            </ProgressCircle>
+            <el-icon class="upload-status" v-if="fileBlodArr[index].uploadProgress === 100" color="#54af4f" size="18px">
+              <SuccessFilled />
+            </el-icon>
+            <el-icon style="cursor: pointer;" class="upload-status" v-else @click="cancleUpload(index)" size="18px">
+              <CircleCloseFilled />
+            </el-icon>
+            <div v-if="uploading && fileBlodArr[index].uploadProgress < 100" class="progress">
+              <ProgressCircle class="cancle-upload" :percent="fileBlodArr[index].uploadProgress" size="60px"
+                border-width="5px" color="#fff" inactive-color="rgba(200,200,200,0.3)">
+              </ProgressCircle>
+            </div>
+            <span class="name">
+              {{ fileInfo.file.name }}
+            </span>
           </div>
-          <span class="name">
-            {{ fileInfo.file.name }}
-          </span>
-        </div>
-
+        </template>
       </div>
     </div>
     <div v-show="fileBlodArr.length === 0 || dragBox" class="upload-file-box" ref="drop"
@@ -204,10 +238,9 @@ const cancleUpload = (index) => {
       </span>
       <div class="hint" v-show="isDragEnter">放到这</div>
     </div>
-    <div v-if="fileBlodArr.length > 0" class="bottom">
-      <el-button type="success" @click="handlerUploadFile">{{ '上传' + fileBlodArr.length + '个文件' }}</el-button>
+    <div v-if="fileNameSet.size > 0 && !uploading" class="bottom">
+      <el-button type="success" @click="handlerUploadFile">{{ '上传' + fileNameSet.size + '个文件' }}</el-button>
     </div>
-
   </div>
 </template>
 
@@ -230,7 +263,6 @@ const cancleUpload = (index) => {
       padding-bottom: 10px;
       padding: 15px 10px;
 
-
       button {
         padding: 3px 10px;
       }
@@ -240,9 +272,11 @@ const cancleUpload = (index) => {
   .selected-file {
     height: 530px;
     display: grid;
+    grid-auto-flow: dense;
     grid-template-columns: repeat(auto-fill, 190px);
-    justify-content: space-between;
+    grid-template-rows: repeat(auto-fill, 150px);
     row-gap: 15px;
+    justify-content: space-between;
     padding: 15px 20px;
     background-color: #f4f4f4;
     overflow-y: auto;
@@ -260,6 +294,8 @@ const cancleUpload = (index) => {
         box-shadow: 0px 0px;
         background: #f4f4f4;
         border-radius: 50%;
+        z-index: 2;
+
       }
 
       img {
@@ -284,11 +320,7 @@ const cancleUpload = (index) => {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-
-
         }
-
-
       }
 
       .name {

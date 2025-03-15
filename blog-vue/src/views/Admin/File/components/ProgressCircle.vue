@@ -41,7 +41,7 @@ const animateProgress = (start, end, duration) => {
     if (progress < 1) {
       requestAnimationFrame(step);
     } else {
-      currentPercent.value = end; // 确保最终值是准确的
+      currentPercent.value = end;
     }
   };
 
@@ -49,11 +49,11 @@ const animateProgress = (start, end, duration) => {
 };
 
 watch(() => props.percent, (newPercent) => {
-  animateProgress(currentPercent.value, newPercent, 3000); // 动画持续 1 秒
+  animateProgress(currentPercent.value, Math.max(newPercent, currentPercent.value), 1000); // 动画持续 1 秒
 });
 
 onMounted(() => {
-  animateProgress(0, props.percent, 3000); // 页面加载时从 0 动画到初始百分比
+  animateProgress(0, props.percent, 1000); // 页面加载时从 0 动画到初始百分比
 });
 </script>
 
