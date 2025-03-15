@@ -123,12 +123,13 @@ const resolve = (index) => {
 let queue = [];
 let concurrentUploads = ref(0);
 const maxConcurrentUploads = 4;
+const abortControllers = {};
 
 const processQueue = () => {
   while (concurrentUploads.value < maxConcurrentUploads && queue.length > 0) {
-    const { file, index } = queue.shift();
+    const { file, index, signal } = queue.shift();
     concurrentUploads.value++;
-    uploadFileAPI(file, onUploadProgress(index)).then(() => {
+    uploadFileAPI(file, onUploadProgress(index), { signal }).then(() => {
       resolve(index);
       concurrentUploads.value--;
     })
@@ -139,7 +140,9 @@ const handlerUploadFile = () => {
   if (fileBlodArr.value.length > 0) {
     fileBlodArr.value.forEach((value, index) => {
       value.uploadProgress = 0;
-      queue.push({ file: value.file, index });
+      const controller = new AbortController();
+      abortControllers[index] = controller;
+      queue.push({ file: value.file, index, signal: controller.signal });
     });
   }
   processQueue();
@@ -147,8 +150,9 @@ const handlerUploadFile = () => {
 watch((concurrentUploads) => {
   processQueue();
 })
-const cancleUpload = () => {
-
+const cancleUpload = (index) => {
+  abortControllers[index].about
+  delete abortControllers[index];
 }
 </script>
 
@@ -176,7 +180,7 @@ const cancleUpload = () => {
           <el-icon class="upload-status" v-if="fileBlodArr[index].uploadProgress === 100" color="#54af4f" size="18px">
             <SuccessFilled />
           </el-icon>
-          <el-icon style="cursor: pointer;" class="upload-status" v-else @click="cancleUpload" size="18px">
+          <el-icon style="cursor: pointer;" class="upload-status" v-else @click="cancleUpload(index)" size="18px">
             <CircleCloseFilled />
           </el-icon>
           <div class="progress"
