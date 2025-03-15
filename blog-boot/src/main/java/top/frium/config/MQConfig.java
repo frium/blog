@@ -2,6 +2,7 @@ package top.frium.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
@@ -22,6 +23,20 @@ import static top.frium.context.RabbitMQConstant.IMAGE_QUEUE;
  */
 @Configuration
 public class MQConfig implements RabbitListenerConfigurer {
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
+            ConnectionFactory connectionFactory) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+
+        // 关键参数设置
+        factory.setConcurrentConsumers(5);    // 初始并发消费者数
+        factory.setMaxConcurrentConsumers(10); // 最大并发数（根据机器CPU核心数调整）
+        factory.setPrefetchCount(20);         // 每个消费者预取消息数（建议值=并发数×2）
+
+        return factory;
+    }
+
     @Bean
     public Queue emailQueue() {
         return new Queue(EMAIL_QUEUE, true);

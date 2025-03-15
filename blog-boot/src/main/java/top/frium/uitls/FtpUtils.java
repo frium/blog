@@ -5,96 +5,64 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
-
+import javax.annotation.PostConstruct;
 import java.io.OutputStream;
 
 @Component
 public class FtpUtils {
-    @Value("${ecs.ip}")
-    private String ip;
-    @Value("${ecs.user}")
-    private String user;
-    @Value("${ecs.password}")
-    private String password;
-    @Value("${ecs.port}")
-    private Integer port;
-    @Value("${ecs.path}")
-    private String path;
+    @Value("${ecs.ip}") private String ip;
+    @Value("${ecs.port}") private Integer port;
+    @Value("${ecs.user}") private String user;
+    @Value("${ecs.password}") private String password;
+    @Value("${ecs.path}") private String path;
 
-    private Session session;
-    private ChannelSftp sftp;
+    private SftpPool sftpPool;
 
-    /**
-     * 确保 SFTP 连接可用
-     */
-    private void ensureConnected() throws JSchException {
-        if (sftp != null && sftp.isConnected()) {
-            return; // 连接已建立
-        }
-        connect();
+    @PostConstruct
+    public void init() {
+        this.sftpPool = new SftpPool(ip, port, user, password);
     }
 
-    /**
-     * 连接 SFTP 服务器
-     */
-    private void connect() throws JSchException {
-        JSch jsch = new JSch();
-        session = jsch.getSession(user, ip, port);
-        session.setPassword(password);
-        session.setConfig("StrictHostKeyChecking", "no");
-        session.connect(30000);
-        Channel channel = session.openChannel("sftp");
-        channel.connect(1000);
-        sftp = (ChannelSftp) channel;
-    }
-
-    /**
-     * 断开 SFTP 连接
-     */
-    public void disconnect() {
-        if (sftp != null && sftp.isConnected()) {
-            sftp.disconnect();
-        }
-        if (session != null && session.isConnected()) {
-            session.disconnect();
-        }
-    }
-
-    /**
-     * 检查文件是否存在
-     */
     public boolean fileExists(String relativePath) {
+        ChannelSftp sftp = null;
         try {
-            ensureConnected();
-            String fullPath = path + "/" + relativePath;
-            sftp.stat(fullPath);
+            sftp = sftpPool.borrowObject();
+            sftp.stat(path + "/" + relativePath);
             return true;
         } catch (SftpException e) {
             return e.id != ChannelSftp.SSH_FX_NO_SUCH_FILE;
-        } catch (JSchException e) {
-            throw new MyException(StatusCodeEnum.ERROR);
-        }
-    }
-
-    /**
-     * 上传文件到 SFTP 服务器
-     */
-    public void sshSftp(byte[] file, String fileName) {
-        OutputStream outstream = null;
-        try {
-            ensureConnected();
-            sftp.cd(path);
-            outstream = sftp.put(fileName);
-            outstream.write(file);
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
         } finally {
+            if (sftp != null) sftpPool.returnObject(sftp);
+        }
+    }
+
+    // FtpUtils.java 修改后关键代码
+    public void sshSftp(byte[] file, String fileName) {
+        ChannelSftp sftp = null;
+        try {
+            sftp = sftpPool.borrowObject();
             try {
-                if (outstream != null) {
-                    outstream.flush();
-                    outstream.close();
+                sftp.cd(path);
+            } catch (SftpException e) {
+                sftp.mkdir(path);
+                sftp.cd(path);
+            }
+
+            try (OutputStream out = sftp.put(fileName)) {
+                out.write(file);
+                out.flush();
+            }
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.ERROR);
+        } finally {
+            if (sftp != null) {
+                try {
+                    sftpPool.returnObject(sftp); // 确保连接归还
+                } catch (Exception e) {
+                    System.out.println(e);
                 }
-            } catch (Exception ignored) {
             }
         }
     }
