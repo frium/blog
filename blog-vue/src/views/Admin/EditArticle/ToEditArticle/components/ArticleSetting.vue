@@ -45,7 +45,7 @@ const onSubmit = () => {
       </el-form-item>
       <el-form-item>
         <button @click="onSubmit" class="release">发布</button>
-        <button>取消</button>
+        <button @click="cancle">取消</button>
       </el-form-item>
     </el-form>
   </div>

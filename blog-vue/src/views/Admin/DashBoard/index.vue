@@ -5,10 +5,10 @@ import InfoCard from './components/InfoCard.vue';
 import RecentArticle from './components/RecentArticle.vue';
 
 const testData = [
-  { title: "用户数", number: 100, icon: "article.svg" },
-  { title: "订单数", number: 250, icon: "order-icon.png" },
-  { title: "销售额", number: "¥5000", icon: "sales-icon.png" },
-  { title: "库存", number: 75, icon: "stock-icon.png" }
+  { title: "文章", number: 100, icon: "article.svg" },
+  { title: "用户", number: 250, icon: "user.svg" },
+  { title: "评论", number: "¥5000", icon: "comment.svg" },
+  { title: "浏览量", number: 75, icon: "visible.svg" }
 ];
 const quickFindData = [
   { title: "个人中心", url: "ManageUser", icon: "user.svg" },

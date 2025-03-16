@@ -17,7 +17,6 @@ const editArticle = () => {
 }
 
 const deleteArticle = () => {
-  console.log('删除文章');
 
 }
 const setArticle = () => {
