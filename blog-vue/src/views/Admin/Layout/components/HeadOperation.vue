@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed } from "vue";
 
 const props = defineProps({
   title: {
@@ -28,8 +28,8 @@ const iconSrc = computed(() => {
       <span>{{ props.title }}</span>
     </div>
     <div class="right">
-      <button v-for="(button, index) in buttonArr" :key="button.name"
-        :class="{ active: index === buttonArr.length - 1 }" @click="button.onClick">
+      <button v-for="(button, index) in buttonArr" :key="index" :class="{ active: index === buttonArr.length - 1 }"
+        @click="button.onClick">
         {{ button.name }}
       </button>
     </div>

@@ -1,7 +1,22 @@
 <script setup>
+import TimeAndOperation from '@/components/TimeAndOperation.vue';
+
 const props = defineProps({
   data: Object
 })
+const passComment = () => {
+  console.log('审核通过');
+}
+const deleteComment = () => {
+  console.log('审核通过');
+}
+
+const operations = [
+  { name: '审核通过', operate: passComment },
+  { name: '删除', operate: deleteComment }
+]
+
+
 </script>
 
 <template>
@@ -12,26 +27,12 @@ const props = defineProps({
         <h4 class="username">{{ props.data.username }}</h4>
         <p class="text">{{ props.data.email }}</p>
       </div>
-      <div style="width: 70%;">
+      <div style="width: 70%; margin-left: 20px;">
         <h4>{{ props.data.articleTitle }}</h4>
         <p class="text">{{ props.data.comment }}</p>
       </div>
     </div>
-    <div class="right">
-      <span>{{ props.data.createTime }}</span>
-      <el-dropdown trigger="click" class="el-dropdown-link">
-        <p style="transform: translate(0,-7px); padding: 3px;">
-          ...
-        </p>
-        <template #dropdown>
-          <el-dropdown-menu style="padding: 10px 5px; width: 120px;">
-            <el-dropdown-item>审核通过</el-dropdown-item>
-            <el-dropdown-item><span style="color:red;">删除</span></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </div>
-
+    <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
 </template>
 

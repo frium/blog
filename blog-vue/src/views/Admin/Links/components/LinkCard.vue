@@ -1,8 +1,23 @@
 <script setup>
+import TimeAndOperation from '@/components/TimeAndOperation.vue';
+
+
 const props = defineProps({
   data: Object
-})
+});
 
+const setLink = () => {
+  console.log('编辑友链');
+}
+
+
+const deleteLink = () => {
+  console.log('删除友链');
+}
+const operations = [
+  { name: '编辑', operate: setLink },
+  { name: '删除', operate: deleteLink }
+]
 
 </script>
 
@@ -15,21 +30,7 @@ const props = defineProps({
         <a class="link">{{ props.data.link }}</a>
       </div>
     </div>
-    <div class="right">
-      <span>{{ props.data.title }}</span>
-      <el-dropdown trigger="click" class="el-dropdown-link">
-        <p style="transform: translate(0,-7px); padding: 3px;">
-          ...
-        </p>
-        <template #dropdown>
-          <el-dropdown-menu style="padding: 10px 5px; width: 120px;">
-            <el-dropdown-item>编辑</el-dropdown-item>
-            <el-dropdown-item><span style="color:red;">删除</span></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </div>
-
+    <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
 </template>
 

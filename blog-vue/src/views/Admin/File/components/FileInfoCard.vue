@@ -1,7 +1,15 @@
 <script setup>
+import TimeAndOperation from '@/components/TimeAndOperation.vue';
 const props = defineProps({
   data: Object
 })
+const deleteFile = () => {
+  console.log('删除附件');
+
+}
+const operations = [
+  { name: '删除', onClick: deleteFile }
+];
 </script>
 
 <template>
@@ -14,21 +22,7 @@ const props = defineProps({
         <span>{{ props.data.fileSzie }}</span>
       </div>
     </div>
-    <div class="right">
-      <span>{{ props.data.createTime }}</span>
-      <el-dropdown trigger="click" class="el-dropdown-link">
-        <p style="transform: translate(0,-7px); padding: 3px;">
-          ...
-        </p>
-        <template #dropdown>
-          <el-dropdown-menu style="padding: 10px 5px; width: 120px;">
-            <el-dropdown-item>审核通过</el-dropdown-item>
-            <el-dropdown-item><span style="color:red;">删除</span></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-    </div>
-
+    <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
 </template>
 

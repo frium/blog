@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue"
-
+import TimeAndOperation from "@/components/TimeAndOperation.vue";
 const props = defineProps({
   data: Object
 })
@@ -12,13 +12,23 @@ const toUser = () => {
 }
 
 const editArticle = () => {
+  console.log('编辑文章');
 
 }
 
 const deleteArticle = () => {
+  console.log('删除文章');
 
 }
+const setArticle = () => {
+  console.log('设置文章');
 
+}
+const operations = [
+  { name: '编辑', onClick: editArticle },
+  { name: '设置', onClick: setArticle },
+  { name: '删除', onClick: deleteArticle },
+];
 const changeVisible = () => {
   visible.value = !visible.value;
 }
@@ -43,18 +53,7 @@ const changeVisible = () => {
         alt="">
       <img v-else @click="changeVisible" style="width: 24px; height: 24px;" src="@/assets/icons/invisible.svg" alt="">
       <span> 2024-10-15 21:49 </span>
-      <el-dropdown trigger="click" class="el-dropdown-link">
-        <p style="transform: translate(0,-7px); padding: 3px;">
-          ...
-        </p>
-        <template #dropdown>
-          <el-dropdown-menu style="padding: 10px 5px; width: 120px;">
-            <el-dropdown-item>编辑</el-dropdown-item>
-            <el-dropdown-item>设置</el-dropdown-item>
-            <el-dropdown-item><span style="color:red;">删除</span></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
     </div>
   </div>
 </template>
