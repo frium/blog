@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.frium.mapper.ArticleMapper">
+    <insert id="insertArticleLabels" parameterType="java.util.Map">
+        INSERT INTO article_label (article_id, label_id)
+        VALUES
+        <if test="labelIds != null and !labelIds.isEmpty()">
+            <foreach collection="labelIds" item="labelId" separator=",">
+                (#{articleId}, #{labelId})
+            </foreach>
+        </if>
+        <if test="labelIds == null or labelIds.isEmpty()">
+            (null, null)
+        </if>
+    </insert>
+
+
+    <select id="getLabelsByArticleId" parameterType="Long" resultType="top.frium.pojo.entity.Label">
+        SELECT id, label_name
+        FROM label
+                 JOIN article_label al ON label.id = al.label_id
+        WHERE al.article_id = #{articleId}
+    </select>
+
+    <delete id="deleteLabelsByArticleId" parameterType="Long">
+        DELETE FROM article_label WHERE article_id = #{articleId}
+    </delete>
+
+
+</mapper>

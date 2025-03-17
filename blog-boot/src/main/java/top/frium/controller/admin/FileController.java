@@ -21,4 +21,7 @@ public class FileController {
         uploadFileService.uploadFile(file);
         return R.success();
     }
+
+
+
 }
