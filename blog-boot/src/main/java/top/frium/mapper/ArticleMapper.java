@@ -15,6 +15,13 @@ import java.util.Map;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
     void insertArticleLabels(Map<String, Object> params);
+
     List<Label> getLabelsByArticleId(Long articleId);
+
     void deleteLabelsByArticleId(Long articleId);
+
+    void deleteLabelRelations(List<Long> labelIds);
+    void deleteLabel(List<Long> labelIds);
+
+    Integer checkLabelExists( Long labelId);
 }

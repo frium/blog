@@ -12,6 +12,7 @@ public class ArticleVO {
     private List<Label> label;
     private String coverImg;
     private String summary;
+    private Boolean isShow;
     private Boolean isTop;
     private String createTime;
     private String content;

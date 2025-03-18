@@ -15,6 +15,7 @@ public class ArticleDTO {
     private List<Long> label;
     private String coverImg;
     private String summary;
+    private Boolean isShow;
     private Boolean isTop;
     private String content;
 }

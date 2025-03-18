@@ -28,4 +28,5 @@ public interface ArticleService extends IService<Article> {
     void deleteLabel(List<Long> labelIds);
 
     void updateLabel(Label label);
+
 }

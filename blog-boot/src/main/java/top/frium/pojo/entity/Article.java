@@ -11,6 +11,7 @@ public class Article {
     private String coverImg;
     private String summary;
     private Boolean isTop;
+    private Boolean isShow;
     private String createTime;
     private String content;
 }

@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static top.frium.context.CommonConstant.DATA_TIME_PATTERN;
 
@@ -40,9 +41,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             BeanUtils.copyProperties(articleDTO, article);
             article.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
             save(article);
+            List<Long> validLabelIds = articleDTO.getLabel().stream()
+                    .filter(labelId -> articleMapper.checkLabelExists(labelId) != null)
+                    .toList();
+
             Map<String, Object> params = new HashMap<>();
             params.put("articleId", article.getId());
-            params.put("labelIds", articleDTO.getLabel());
+            params.put("labelIds", validLabelIds);
             articleMapper.insertArticleLabels(params);
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
@@ -110,7 +115,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public void deleteLabel(List<Long> labelIds) {
-        if (labelIds != null && !labelIds.isEmpty()) labelMapper.deleteBatchIds(labelIds);
+        if (labelIds != null && !labelIds.isEmpty()){
+            articleMapper.deleteLabelRelations(labelIds);
+            articleMapper.deleteLabel(labelIds);
+        }
     }
 
     @Override
@@ -124,5 +132,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 
     }
+
 
 }
