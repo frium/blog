@@ -1,6 +1,7 @@
 package top.frium.controller.admin;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import top.frium.service.UploadFileService;
 public class FileController {
     @Autowired
     UploadFileService uploadFileService;
+    @ApiOperation("上传文件")
     @PostMapping("/uploadFile")
     public R<?> uploadFile(@RequestParam("file") MultipartFile file) {
         uploadFileService.uploadFile(file);

@@ -43,7 +43,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         try {
             Files.createDirectories(Paths.get(directoryPath)); // 创建目录
             Files.copy(file.getInputStream(), filePath);
-            System.out.println("文件已保存到: " + filePath.toString());
+            System.out.println("文件已保存到: " + filePath);
         } catch (IOException e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }
