@@ -18,7 +18,7 @@ public class EmailConsumer {
     @Autowired
     EmailUtil emailUtil;
 
-    @RabbitListener(queues = RabbitMQConstant.EMAIL_QUEUE)
+    @RabbitListener(queues = RabbitMQConstant.EMAIL_QUEUE, ackMode = "AUTO")
     public void sendEmailMsg(String msg) {
         log.info("向 {} 发送邮箱验证码", msg);
         emailUtil.sendVerificationEmail(msg);

@@ -15,7 +15,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import top.frium.Filter.TokenFilter;
 
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration // 标记此类为配置类，表示该类中包含了Spring的Bean定义
@@ -29,17 +28,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/user/logout").authenticated() //  接口需要认证
-                        .anyRequest().permitAll()) // 其他所有请求都允许
-                .formLogin(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)// 根据需要禁用CSRF保护
-                .httpBasic(withDefaults())// 禁用basic明文验证
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/user/*").permitAll() // 允许登录和注册请求
+                        .anyRequest().authenticated()) // 其他所有请求都需要认证
+                .formLogin(AbstractHttpConfigurer::disable)  // 禁用表单登录
+                .csrf(AbstractHttpConfigurer::disable)  // 禁用 CSRF 保护
+                .httpBasic(AbstractHttpConfigurer::disable)  // 禁用 HTTP Basic 认证
+                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);  // 添加自定义过滤器
 
-        return http.build(); // 构建SecurityFilterChain实例并返回
+        return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         // 使用BCryptPasswordEncoder进行密码加密
