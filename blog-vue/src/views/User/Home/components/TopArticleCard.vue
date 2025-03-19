@@ -42,7 +42,7 @@ span {
   .bg-img {
     width: 100%;
     height: 100%;
-    background-image: url('https://blog.frium.top/upload/flowes.jpg');
+    background-image: url('http://static.frium.top/blog/sea of flowers.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 10px;

@@ -35,7 +35,7 @@ const text = ref('单看外形似乎只是个古灵精怪的快乐少女，实�
       </div>
     </div>
     <div class="right-div">
-      <img src="https://blog.frium.top/upload/hutao.jpg" alt="">
+      <img src="http://static.frium.top/blog/hutao.jpg" alt="">
     </div>
   </div>
 </template>

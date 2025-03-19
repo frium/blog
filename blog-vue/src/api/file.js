@@ -1,6 +1,6 @@
 import { request } from "@/utils/request";
 
-export function uploadFileAPI(file, onUploadProgress, signal) {
+export const uploadFileAPI = (file, onUploadProgress, signal) => {
   const formData = new FormData();
   formData.append('file', file);
 

@@ -22,7 +22,7 @@ const operations = [
 <template>
   <div class="comment-card">
     <div class="left">
-      <img src="https://blog.frium.top/upload/hutao.jpg" alt="">
+      <img src="http://static.frium.top/blog/hutao.jpg" alt="">
       <div style="width: 20%;">
         <h4 class="username">{{ props.data.username }}</h4>
         <p class="text">{{ props.data.email }}</p>

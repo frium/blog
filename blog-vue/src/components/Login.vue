@@ -1,80 +1,95 @@
 <script setup>
+import { getUserInfoAPI, getVerifyAPI, loginAPI, registerAPI } from '@/api/user';
+import { useUserStore } from '@/stores/userStore';
+import { ElNotification } from 'element-plus';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const regUsernameCheck = ref(true);
+const props = defineProps({
+  handleClose: Function
+})
+const userStore = useUserStore();
+const regEmailCheck = ref(true);
 const regPasswordCheck = ref(true);
-const usernameCheck = ref(true);
+const regVerifyCheck = ref(true);
+const emailCheck = ref(true);
 const passwordCheck = ref(true);
 
-const usernameErrorMsg = ref('')
-const passwordErrorMsg = ref('')
-const regUsernameErrorMsg = ref('')
-const regPasswordErrorMsg = ref('')
+const emailErrorMsg = ref('');
+const passwordErrorMsg = ref('');
+const regEmailErrorMsg = ref('');
+const regPasswordErrorMsg = ref('');
+const regVerifyErrorMsg = ref('');
 
-const user = {
-  username: '',
+const router = useRouter();
+
+const login = ref({
+  email: '',
   password: ''
-}
-const login = ref({ user });
-const register = ref({ user });
+});
+const register = ref({
+  email: '',
+  password: '',
+  verify: ''
+});
 const isLogin = ref(true);//switch控制状态
 const changState = () => {
   isLogin.value = !isLogin.value
   setTimeout(() => {
-    regUsernameCheck.value = true;
+    regEmailCheck.value = true;
     regPasswordCheck.value = true;
-    usernameCheck.value = true;
+    regVerifyCheck.value = true;
+    emailCheck.value = true;
     passwordCheck.value = true;
-    login.value.username = '';
+    login.value.email = '';
     login.value.password = '';
-    register.value.username = '';
+    register.value.email = '';
     register.value.password = '';
+    register.value.verify = '';
   }, 600)
 }
 
-const checkUsername = () => {
-  if (!login.value.username) {
-    usernameCheck.value = false;
-    usernameErrorMsg.value = '用户名不能为空!'
+const checkEmail = () => {
+  if (!login.value.email) {
+    emailCheck.value = false;
+    emailErrorMsg.value = '邮箱不能为空!';
     return;
   }
-  login.value.username = login.value.username.trim();
-  if (login.value.username === '') {
-    usernameCheck.value = false;
-    usernameErrorMsg.value = '用户名不能为空!'
+  login.value.email = login.value.email.trim();
+  if (login.value.email === '') {
+    emailCheck.value = false;
+    emailErrorMsg.value = '邮箱不能为空!';
     return;
   }
-  if (!/^[a-zA-Z0-9]+$/.test(login.value.username)) {
-    usernameCheck.value = false;
-    usernameErrorMsg.value = '用户名不能包含特殊字符!'
+  // 邮箱格式校验
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(login.value.email)) {
+    emailCheck.value = false;
+    emailErrorMsg.value = '邮箱格式不正确!';
     return;
   }
-  usernameCheck.value = true;
+  emailCheck.value = true;
 }
-const checkRegUsername = () => {
-  if (!register.value.username) {
-    regUsernameCheck.value = false;
-    regUsernameErrorMsg.value = '用户名不能为空!'
+const checkRegEmail = () => {
+  if (!register.value.email) {
+    regEmailCheck.value = false;
+    regEmailErrorMsg.value = '邮箱不能为空!';
     return;
   }
-  register.value.username = register.value.username.trim();
-  if (register.value.username === '') {
-    regUsernameCheck.value = false;
-    regUsernameErrorMsg.value = '用户名不能为空!'
+  register.value.email = register.value.email.trim();
+  if (register.value.email === '') {
+    regEmailCheck.value = false;
+    regEmailErrorMsg.value = '邮箱不能为空!';
     return;
   }
-  if (!/^[a-zA-Z0-9]+$/.test(register.value.username)) {
-    regUsernameCheck.value = false;
-    regUsernameErrorMsg.value = '用户名不能包含特殊字符!';
+  // 邮箱格式校验
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(register.value.email)) {
+    regEmailCheck.value = false;
+    regEmailErrorMsg.value = '邮箱格式不正确!';
     return;
   }
-  if (!/^.{6,16}$/.test(register.value.username)) {
-    regUsernameCheck.value = false;
-    regUsernameErrorMsg.value = '用户名长度应在6~16之间!';
-    return;
-  }
-  regUsernameCheck.value = true;
+  regEmailCheck.value = true;
 }
+
 const checkPassword = () => {
   if (!login.value.password) {
     passwordCheck.value = false;
@@ -109,45 +124,90 @@ const checkRegPassword = () => {
   }
   regPasswordCheck.value = true;
 }
-
-const signin = () => {
-  checkUsername();
-  checkPassword();
-  if (!usernameCheck.value && !passwordCheck.value) return;
-  //登录操作
-  console.log('登录');
-
+const checkRegVerify = () => {
+  if (!register.value.verify) {
+    regVerifyCheck.value = false;
+    regVerifyErrorMsg.value = '验证码不能为空!';
+    return;
+  }
+  regVerifyCheck.value = true;
 }
 
-const signup = () => {
-  checkRegUsername();
-  checkRegPassword();
-  if (!regUsernameCheck.value && !regPasswordCheck.value) return;
-  //注册操作
-  console.log('注册');
+const getVerify = () => {
+  checkRegEmail();
+  if (!regEmailCheck.value) return;
+  getVerifyAPI(register.value.email);
+  ElNotification.success('发送成功');
+}
 
+const signin = async () => {
+  checkEmail();
+  checkPassword();
+  if (!emailCheck.value || !passwordCheck.value) return;
+
+  const res = await loginAPI(login.value);
+  if (res.code != 200) {
+    ElNotification.error({
+      title: '登录失败',
+      message: res.msg,
+    });
+    return;
+  }
+  ElNotification.success('登录成功');
+  //用户就去home 管理员就去admin 存入token
+  userStore.jwt = res.data.jwt;
+  props.handleClose();
+  if (res.data.userAuth === 'admin') router.push({ name: 'Admin' });
+  const userInfoRes = await getUserInfoAPI();
+  Object.assign(userStore.userInfo, userInfoRes.data);
+}
+const signup = async () => {
+  checkRegEmail();
+  checkRegPassword();
+  checkRegVerify();
+  if (!regEmailCheck.value || !regPasswordCheck.value || !regVerifyCheck.value) return;
+  const res = await registerAPI(register.value);
+  if (res.code != 200) {
+    ElNotification.error({
+      title: '注册失败',
+      message: res.msg,
+    });
+    return;
+  }
+  ElNotification.success('注册成功');
+  changState();
 }
 
 
 </script>
 
 <template>
-  <div class="container">
+  <div class="login-container">
     <div class="shell">
       <div class="register box  "
         :style="{ left: isLogin ? '400px' : '0px', opacity: isLogin ? 0 : 1, 'z-index': isLogin ? 0 : 100 }">
         <form action="" class="register-form" @submit.prevent>
           <span>创建账号</span>
           <div class="input-container">
-            <input type="text" placeholder="username" v-model="register.username" @blur="checkRegUsername()">
-            <div v-if="!regUsernameCheck" class="error-msg">
-              <span>{{ regUsernameErrorMsg }} </span>
+            <input type="text" placeholder="email" v-model="register.email" @blur="checkRegEmail()">
+            <div v-if="!regEmailCheck" class="error-msg">
+              <span>{{ regEmailErrorMsg }} </span>
             </div>
           </div>
           <div class="input-container">
             <input type="password" placeholder="password" v-model="register.password" @blur="checkRegPassword()">
             <div v-if="!regPasswordCheck" class="error-msg">
               <span>{{ regPasswordErrorMsg }}</span>
+            </div>
+          </div>
+          <div class="input-container verify">
+            <input class="verify-input" type="text" placeholder="verify" v-model="register.verify"
+              @blur="checkRegVerify()">
+            <button class="verify-button" @click="getVerify">
+              获取验证码
+            </button>
+            <div v-if="!regVerifyCheck" class="error-msg">
+              <span>{{ regVerifyErrorMsg }}</span>
             </div>
           </div>
           <button @click="signup">SIGN UP</button>
@@ -158,9 +218,9 @@ const signup = () => {
         <form action="" class="login-form" @submit.prevent>
           <span>登录账号</span>
           <div class="input-container">
-            <input type="text" placeholder="username" v-model="login.username" @blur="checkUsername()">
-            <div v-if="!usernameCheck" class="error-msg">
-              <span>{{ usernameErrorMsg }}</span>
+            <input type="text" placeholder="email" v-model="login.email" @blur="checkEmail()">
+            <div v-if="!emailCheck" class="error-msg">
+              <span>{{ emailErrorMsg }}</span>
             </div>
           </div>
           <div class="input-container">
@@ -191,18 +251,6 @@ const signup = () => {
 
 
 <style scoped lang="scss">
-div {
-  font-family: 'LXGW WenKai Regular', 'Noto Serif SC';
-}
-
-span {
-  font-family: 'LXGW WenKai Regular', 'Noto Serif SC';
-}
-
-a {
-  font-family: 'LXGW WenKai Regular', 'Noto Serif SC';
-}
-
 @keyframes moveForm {
   from {
     left: 400px;
@@ -225,12 +273,12 @@ a {
 }
 
 
-.container {
+.login-container {
   width: 100%;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  user-select: none;
 
   a {
     font-size: 16px;
@@ -267,7 +315,7 @@ a {
     height: 600px;
     padding: 25px;
     background-color: #ecf0f3;
-    box-shadow: 10px 10px 10px rgb(164, 160, 160);
+    box-shadow: 3px 6px 10px rgba(152, 152, 152, 0.7);
     border-radius: 12px;
     overflow: hidden;
 
@@ -287,12 +335,7 @@ a {
 
       .input-container {
         position: relative;
-
-        &:nth-of-type(2) {
-          input {
-            margin-top: 22px;
-          }
-        }
+        margin-bottom: 23px;
 
         .error-msg {
           margin-top: 2px;
@@ -307,6 +350,19 @@ a {
             color: #dd2727;
             letter-spacing: 2px;
           }
+        }
+      }
+
+      .verify {
+        .verify-button {
+          position: absolute;
+          top: 2px;
+          right: 0;
+          width: 100px;
+          height: 36px;
+          border-radius: 8px;
+          margin: 0;
+          background-color: rgba($color: #000000, $alpha: 0.2);
         }
       }
 
@@ -339,7 +395,6 @@ a {
           transition: 0.25s ease;
           border-radius: 8px;
           box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
-
 
 
           &:focus {

@@ -1,3 +1,4 @@
+import { useUserStore } from "@/stores/userStore";
 import axios from "axios";
 import { ElNotification } from "element-plus";
 
@@ -12,6 +13,8 @@ export const musicRequest = axios.create({
 
 //拦截器
 request.interceptors.request.use(config => {
+  const token = useUserStore().jwt;
+  if (token) config.headers.Authorization = `${token}`;
   return config;
 }, e => Promise.reject(e))
 

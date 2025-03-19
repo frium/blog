@@ -16,7 +16,8 @@ import FriendCard from './components/FriendCard.vue';
         <ul>
           <li>名称: frium's blog</li>
           <li>地址: <a href="https://blog.frium.top">https://blog.frium.top</a></li>
-          <li>图标: <a href="/upload/flowerboy.jpg">https://blog.frium.top/upload/flowerboy.jpg</a></li>
+          <li>图标: <a href="http://static.frium.top/blog/flowerboy.jpg">https://blog.frium.top/upload/flowerboy.jpg</a>
+          </li>
           <li>描述: 摸鱼，摸鱼，摸摸你的咸鱼</li>
         </ul>
       </div>

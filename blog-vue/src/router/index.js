@@ -58,11 +58,6 @@ const router = createRouter({
       component: () => import('@/views/Admin/index.vue'),
       children: [
         {
-          name: "Login",
-          path: 'login',
-          component: () => import('@/views/Admin/Login/index.vue'),
-        },
-        {
           path: '',
           redirect: { name: 'DashBoard' }
         },

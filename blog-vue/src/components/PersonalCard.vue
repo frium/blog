@@ -52,7 +52,7 @@
   .bg-img {
     width: 100%;
     height: 100%;
-    background-image: url('https://blog.frium.top/upload/star.jpg');
+    background-image: url('http://static.frium.top/blog/start.jpg');
     opacity: 0.7;
     border-radius: 10px;
     background-position: center;
@@ -64,7 +64,7 @@
     position: absolute;
     top: 20px;
     left: 90px;
-    background-image: url('https://blog.frium.top/upload/7b914c84-b6ec-4406-8d8b-976eee71e502.png');
+    background-image: url('http://static.frium.top/blog/flowerboy.jpg');
     width: 100px;
     height: 100px;
     border-radius: 50%;

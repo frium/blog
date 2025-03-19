@@ -1,5 +1,16 @@
 <script setup>
 import { Search } from '@element-plus/icons-vue'
+import { ref } from 'vue'
+import Login from './Login.vue';
+
+const showLogin = ref(false);
+const handleShowLogin = () => {
+  showLogin.value = true;
+}
+
+const handleClose = () => {
+  showLogin.value = false;
+};
 </script>
 
 <template>
@@ -31,8 +42,19 @@ import { Search } from '@element-plus/icons-vue'
           </li>
         </ul>
       </div>
-      <el-button :icon="Search" round color="#f6cac9" style="color: white; width: 50px; font-size: 18px;" />
+      <el-button :icon="Search" round color="#f6cac9"
+        style="color: white; width: 50px; font-size: 18px;margin-left: auto; margin-right: 25px;" />
+      <button class="login" @click="handleShowLogin">登录</button>
+      <el-dialog style="width:1000px; padding : 0px; margin-top: 7%; background-color: transparent;  user-select: none;"
+        v-model="showLogin" @before-close="handleClose" :append-to-body="true" :show-close="false">
+        <div style="margin-top: -30px;">
+          <Login :handleClose="handleClose"></Login>
+
+        </div>
+      </el-dialog>
+
     </div>
+
   </div>
 </template>
 
@@ -64,6 +86,7 @@ import { Search } from '@element-plus/icons-vue'
     display: flex;
     justify-content: space-between;
     width: 100%;
+    align-items: center;
 
     .sub-menu {
       display: flex;
@@ -103,6 +126,22 @@ import { Search } from '@element-plus/icons-vue'
         }
       }
     }
+
+    .login {
+      color: #c4c4c4;
+      transition: all 0.6s ease;
+
+      &:hover {
+        color: #f6cac9;
+      }
+    }
+
+
+
+
+
   }
+
+
 }
 </style>
