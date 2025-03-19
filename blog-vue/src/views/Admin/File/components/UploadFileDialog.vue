@@ -1,9 +1,10 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, translate } from "element-plus";
 import { uploadFileAPI } from "@/api/file";
 import ProgressCircle from "./ProgressCircle.vue";
 import { SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
+import { all } from "axios";
 
 const fileBlodArr = ref([]);
 const fileNameSet = ref(new Set());
@@ -21,16 +22,43 @@ const showDragBox = () => {
 };
 const dropEvent = (event) => {
   event.preventDefault();
-  if (event.type === 'dragleave') {
+  if (event.type === 'drop') {
+    dragBox.value = false;
+    const files = event.dataTransfer.files;
+    if (files.length === 0) return;
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (!validateFile(file)) continue;
+      const fileInfo = {
+        file: file,
+        uploadProgress: 0,
+      }
+      if (!fileBlodArr.value[i]) {
+        fileBlodArr.value[i] = fileInfo;
+      } else {
+        fileBlodArr.value.push(fileInfo);
+      }
+      promiseNum.value = Math.max(promiseNum.value, 0) + 1;
+      const controller = new AbortController();
+      abortControllers.value[i] = controller;
+      queue.push({ file, index: i, signal: controller.signal });
+    }
     isDragEnter.value = false;
-  } else {
-    isDragEnter.value = true;
+    return;
+  } else if (event.type === 'dragleave') {
+    isDragEnter.value = false;
+    dragBox.value = false;
+    return;
+  } else if (event.type === 'dragenter') {
+    dragBox.value = true;
   }
+  isDragEnter.value = true;
+
 }
 
 const validateFile = (file) => {
   if (file.size > 52428800) {
-    ElMessage.error(file.name + "文件大小不能超过50MB")
+    ElMessage.error(file.name + "文件大小已超过50MB")
     return false;
   }
   if (fileNameSet.value.has(file.name)) {
@@ -123,12 +151,13 @@ onUnmounted(() => {
   cleanupUrls();
 });
 const onUploadProgress = (index) => (e) => {
-  fileBlodArr.value[index].uploadProgress = Math.round((e.loaded / e.total) * Math.floor(Math.random() * (12)) + 76);
+  console.log(e);
+  fileBlodArr.value[index].uploadProgress = Math.round(e.progress * 100);
+  console.log(fileBlodArr.value[index].uploadProgress);
 }
 const resolve = (index) => {
   promiseNum.value = promiseNum.value - 1;
   fileNameSet.value.delete(fileBlodArr.value[index].file.name);
-  fileBlodArr.value[index].uploadProgress = 100;
   ElMessage.success(fileBlodArr.value[index].file.name + '上传成功')
 }
 
@@ -172,8 +201,6 @@ watch(concurrentUploads, (newVal, oldVal) => {
 });
 
 watch(promiseNum, (newVal, oldVal) => {
-  console.log('new', newVal);
-
   if (newVal <= 0) {
     uploading.value = false;
   }
@@ -230,13 +257,19 @@ const cancleUpload = (index) => {
         </template>
       </div>
     </div>
-    <div v-show="fileBlodArr.length === 0 || dragBox" class="upload-file-box" ref="drop"
-      :style="{ height: fileBlodArr.length === 0 ? '650px' : '592px', top: fileBlodArr.length === 0 ? '0px' : '58px' }">
-      <span style="margin: auto; transform: translate(-10px,-30px );"> 拖拽文件到这里,或者
+    <div class="upload-file-box" ref="drop" :style="{
+      height: fileBlodArr.length === 0 ? '650px' : '532px', top: fileBlodArr.length === 0 ? '0px' : '58px',
+      opacity: fileBlodArr.length === 0 || dragBox ? 1 : 0,
+      zIndex: fileBlodArr.length === 0 || dragBox ? 9 : -9,
+    }">
+      <span v-show="!isDragEnter" style="margin: auto; transform: translate(-10px,-30px );"> 拖拽文件到这里,或者
         <button style="color: brown;" @click="openFolder">浏览</button>
         文件
       </span>
-      <div class="hint" v-show="isDragEnter">放到这</div>
+      <div class="hint" v-show="isDragEnter">
+        <img src="@/assets/icons/uploadFile.svg" alt="">
+        <p>拖拽文件到这里</p>
+      </div>
     </div>
     <div v-if="fileNameSet.size > 0 && !uploading" class="bottom">
       <el-button type="success" @click="handlerUploadFile">{{ '上传' + fileNameSet.size + '个文件' }}</el-button>
@@ -280,6 +313,7 @@ const cancleUpload = (index) => {
     padding: 15px 20px;
     background-color: #f4f4f4;
     overflow-y: auto;
+    pointer-events: auto;
 
     .img-out-box {
       position: relative;
@@ -341,23 +375,30 @@ const cancleUpload = (index) => {
 
   .upload-file-box {
     position: absolute;
+    z-index: 9;
     top: 58px;
     left: 0;
     display: flex;
     align-items: center;
     width: 100%;
-    background-color: rgba($color: #dfdfdf, $alpha: 0.8);
+    background-color: rgba($color: rgb(231, 231, 231), $alpha: 0.8);
     font-size: 22px;
     color: black;
 
     .hint {
       position: absolute;
-      top: 50%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      top: 42%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 100px;
-      height: 50px;
-      background-color: antiquewhite;
+      height: 130px;
+      pointer-events: none;
+
+      img {
+        width: 130px;
+      }
     }
   }
 

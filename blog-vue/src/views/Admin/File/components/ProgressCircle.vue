@@ -26,16 +26,15 @@ const props = defineProps({
 });
 
 const sizeNumber = computed(() => parseInt(props.size, 10));
-const currentPercent = ref(0); // 动态变化的百分比
+const currentPercent = ref(0);
 
-// 动画函数
 const animateProgress = (start, end, duration) => {
   const startTime = performance.now();
 
   const step = () => {
     const currentTime = performance.now();
     const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 3);
+    const progress = Math.min(elapsed / duration, 1);
     currentPercent.value = start + (end - start) * progress;
 
     if (progress < 1) {
@@ -49,12 +48,13 @@ const animateProgress = (start, end, duration) => {
 };
 
 watch(() => props.percent, (newPercent) => {
-  animateProgress(currentPercent.value, Math.max(newPercent, currentPercent.value), 1000); // 动画持续 1 秒
+  animateProgress(currentPercent.value, Math.max(newPercent, currentPercent.value), 500);
 });
 
 onMounted(() => {
-  animateProgress(0, props.percent, 1000); // 页面加载时从 0 动画到初始百分比
+  animateProgress(0, props.percent, 500);
 });
+
 </script>
 
 <template>
@@ -110,7 +110,7 @@ onMounted(() => {
   fill: none;
   stroke-width: var(--border-width);
   stroke-linecap: round;
-  transition: stroke-dasharray 1s ease-out, stroke 1s;
+  transition: stroke-dasharray 0.5s ease-out, stroke 0.5s;
 }
 
 .progress-circle circle:first-child {
