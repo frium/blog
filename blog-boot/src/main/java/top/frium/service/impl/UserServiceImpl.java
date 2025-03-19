@@ -19,13 +19,13 @@ import top.frium.pojo.LoginUser;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.pojo.entity.User;
+import top.frium.pojo.vo.LoginVO;
 import top.frium.service.UserService;
 import top.frium.uitls.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static top.frium.context.CommonConstant.*;
@@ -73,28 +73,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         BeanUtils.copyProperties(registerEmailDTO, user);
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
-        user.setUsername("用户" + Math.floor(100000 + Math.random() * 900000));
+        user.setUsername("用户" + Math.round(100000 + Math.random() * 900000));
         save(user);
         userMapper.addUserPermission(user.getId());
     }
 
     @Override
-    public String loginByEmail(LoginEmailDTO loginEmailDTO) {
+    public LoginVO loginByEmail(LoginEmailDTO loginEmailDTO) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginEmailDTO.getEmail(), loginEmailDTO.getPassword());
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+        Authentication authenticate;
         //判断认证是否通过
-        if (Objects.isNull(authenticate)) {
+        try {
+            authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (Exception e) {
             throw new MyException(StatusCodeEnum.LOGIN_FAIL);
-        } else {
-            //存token
-            LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-            Long id = loginUser.getUser().getId();
-            redisTemplate.opsForValue().set(LOGIN_USER + id, loginUser, 7, TimeUnit.DAYS);
-            Map<String, Object> claims = new HashMap<>();
-            claims.put(USER_ID, id);
-            return JwtUtil.createToken(key, ttl, claims);
         }
+        //存token
+        LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+        Long id = loginUser.getUser().getId();
+        redisTemplate.opsForValue().set(LOGIN_USER + id, loginUser, 7, TimeUnit.DAYS);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(USER_ID, id);
+        return new LoginVO(JwtUtil.createToken(key, ttl, claims), loginUser.getPermission().get(0));
     }
-
 }
