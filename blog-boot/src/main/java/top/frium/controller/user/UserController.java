@@ -48,5 +48,9 @@ public class UserController {
         return R.success();
     }
 
-
+    @ApiOperation("获取用户信息")
+    @GetMapping("/getUserInfo")
+    public R<?> getUserInfo() {
+        return R.success(userService.getUserInfo());
+    }
 }

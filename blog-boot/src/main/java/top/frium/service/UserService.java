@@ -6,6 +6,7 @@ import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.pojo.entity.User;
 import top.frium.pojo.vo.LoginVO;
+import top.frium.pojo.vo.UserInfoVO;
 
 /**
  *
@@ -18,4 +19,6 @@ public interface UserService extends IService<User> {
 
     LoginVO loginByEmail(LoginEmailDTO loginEmailDTO);
     void getEmailCode(String email);
+
+    UserInfoVO getUserInfo();
 }

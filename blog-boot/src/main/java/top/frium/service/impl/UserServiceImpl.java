@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import top.frium.common.MyException;
@@ -20,6 +21,7 @@ import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.pojo.entity.User;
 import top.frium.pojo.vo.LoginVO;
+import top.frium.pojo.vo.UserInfoVO;
 import top.frium.service.UserService;
 import top.frium.uitls.JwtUtil;
 
@@ -55,6 +57,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Long expire = redisTemplate.getExpire(email, TimeUnit.MINUTES);
         if (expire != null && expire >= 4) throw new MyException("获取验证码过于频繁!", 426);
         rabbitTemplate.convertAndSend(RabbitMQConstant.EMAIL_QUEUE, email);//异步发送邮箱验证码
+    }
+
+    @Override
+    public UserInfoVO getUserInfo() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = getById(loginUser.getUser().getId());
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user,userInfoVO);
+        return userInfoVO;
     }
 
     @Override
