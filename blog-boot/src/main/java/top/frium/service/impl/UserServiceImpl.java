@@ -73,6 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         BeanUtils.copyProperties(registerEmailDTO, user);
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
+        user.setUsername("用户" + Math.floor(100000 + Math.random() * 900000));
         save(user);
         userMapper.addUserPermission(user.getId());
     }

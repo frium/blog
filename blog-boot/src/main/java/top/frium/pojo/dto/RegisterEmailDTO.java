@@ -15,10 +15,6 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @ApiModel("邮箱注册")
 public class RegisterEmailDTO {
-    @Length(min = 3, max = 18, message = "密码长度应在3~18位之间")
-    @ApiModelProperty(value = "用户名", required = true)
-    String username;
-
     @Email(message = "邮箱格式有误")
     @ApiModelProperty(value = "邮箱",required = true)
     String email;
