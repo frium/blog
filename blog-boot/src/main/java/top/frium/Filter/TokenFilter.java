@@ -13,12 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import top.frium.common.MyException;
-import top.frium.common.StatusCodeEnum;
 import top.frium.pojo.LoginUser;
 import top.frium.uitls.ExceptionUtil;
 import top.frium.uitls.JwtUtil;
-
 
 import java.io.IOException;
 import java.util.Objects;
@@ -38,15 +35,21 @@ public class TokenFilter extends OncePerRequestFilter {
     @Value("${jwt.name}")
     private String tokenName;
     @Autowired
-    RedisTemplate<Object,Object> redisTemplate;
+    RedisTemplate<Object, Object> redisTemplate;
     @Autowired
     ExceptionUtil exceptionUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader(tokenName);
-        if (token == null || token.isEmpty()) {
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/user/loginByEmail") || requestURI.equals("/user/registerByEmail") || requestURI.equals("/user/getEmailSMS")) {
             filterChain.doFilter(request, response);
+            return;
+        }
+        String token = request.getHeader(tokenName);
+
+        if (token == null || token.isEmpty()) {
+            exceptionUtil.throwException(response, NOT_LOGIN);
             return;
         }
         Long id;

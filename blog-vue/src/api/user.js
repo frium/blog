@@ -30,3 +30,19 @@ export const getUserInfoAPI = () => {
     url: '/user/getUserInfo',
   })
 }
+
+
+export const updateUsernameAPI = (username) => {
+  return request({
+    url: `/user/updateUsername/${username}`,
+    method: 'POST',
+  })
+}
+
+export const updateEmailAPI = (data) => {
+  return request({
+    url: '/user/updateEmail',
+    method: 'POST',
+    data
+  })
+}

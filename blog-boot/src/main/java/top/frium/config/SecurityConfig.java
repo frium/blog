@@ -28,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers("/user/*").permitAll() // 允许登录和注册请求
+                        .requestMatchers("/user/loginByEmail","/user/registerByEmail","user/getEmailSMS").permitAll() // 允许登录和注册请求
                         .anyRequest().authenticated()) // 其他所有请求都需要认证
                 .formLogin(AbstractHttpConfigurer::disable)  // 禁用表单登录
                 .csrf(AbstractHttpConfigurer::disable)  // 禁用 CSRF 保护
