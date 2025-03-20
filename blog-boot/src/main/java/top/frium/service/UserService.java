@@ -2,6 +2,7 @@ package top.frium.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.pojo.entity.User;
@@ -21,4 +22,8 @@ public interface UserService extends IService<User> {
     void getEmailCode(String email);
 
     UserInfoVO getUserInfo();
+
+    void updateEmail(EmailDTO emailDTO );
+
+    void updateUsername(String username);
 }

@@ -9,6 +9,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.frium.common.R;
+import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.service.UserService;
@@ -18,7 +19,7 @@ import top.frium.service.UserService;
  * @date 2024-07-29 23:33:26
  * @description
  */
-@Api("登录注册接口")
+@Api("用户接口")
 @Validated
 @RestController
 @RequestMapping("/user")
@@ -39,6 +40,19 @@ public class UserController {
     @PostMapping("/loginByEmail")
     public R<?> loginByEmail(@Valid @RequestBody LoginEmailDTO loginEmailDTO) {
         return R.success(userService.loginByEmail(loginEmailDTO));
+    }
+    @ApiOperation("修改邮箱")
+    @PostMapping("/updateEmail")
+    public R<?> updateEmail(EmailDTO emailDTO) {
+        userService.updateEmail(emailDTO);
+        return R.success();
+    }
+
+    @ApiOperation("修改用户名")
+    @PostMapping("/updateUsername")
+    public R<?> updateUsername(String username) {
+        userService.updateUsername(username);
+        return R.success();
     }
 
     @ApiOperation("获取邮箱短信")

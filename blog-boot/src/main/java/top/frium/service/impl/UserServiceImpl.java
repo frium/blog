@@ -17,6 +17,7 @@ import top.frium.common.StatusCodeEnum;
 import top.frium.context.RabbitMQConstant;
 import top.frium.mapper.UserMapper;
 import top.frium.pojo.LoginUser;
+import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.pojo.entity.User;
@@ -37,6 +38,7 @@ import static top.frium.context.CommonConstant.*;
  * @date 2024-07-29 23:30:21
  * @description
  */
+@SuppressWarnings("all")
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
@@ -64,8 +66,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = getById(loginUser.getUser().getId());
         UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(user,userInfoVO);
+        BeanUtils.copyProperties(user, userInfoVO);
         return userInfoVO;
+    }
+
+    @Override
+    public void updateEmail(EmailDTO emailDTO) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+        Object o = redisTemplate.opsForValue().get(emailDTO.getEmail());
+        if (o == null || !emailDTO.getVerify().equals(o.toString())) {
+            throw new MyException(StatusCodeEnum.ERROR_VERIFY);
+        }
+        User u = lambdaQuery().eq(User::getEmail, emailDTO.getEmail()).one();
+        if (u != null) throw new MyException(StatusCodeEnum.USER_EXIST);
+        lambdaUpdate().eq(User::getId, userId).set(User::getEmail, emailDTO.getEmail()).update();
+    }
+
+    @Override
+    public void updateUsername(String username) {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userId = loginUser.getUser().getId();
+        lambdaUpdate().eq(User::getId, userId).set(User::getUsername, username).update();
     }
 
     @Override
