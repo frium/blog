@@ -56,7 +56,12 @@ public class UserController {
         return R.success();
     }
 
-
+    @ApiOperation("登出")
+    @GetMapping("/logout")
+    public R<?> logout() {
+        userService.logout();
+        return R.success();
+    }
     @ApiOperation("获取邮箱短信")
     @GetMapping("/getEmailSMS")
     public R<?> getEmailSMS(@NotNull String email) {

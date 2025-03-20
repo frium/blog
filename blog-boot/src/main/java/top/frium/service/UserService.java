@@ -15,7 +15,7 @@ import top.frium.pojo.vo.UserInfoVO;
  * @description
  */
 public interface UserService extends IService<User> {
-
+    void logout();
     void registerByEmail(RegisterEmailDTO registerEmailDTO);
 
     LoginVO loginByEmail(LoginEmailDTO loginEmailDTO);

@@ -46,3 +46,9 @@ export const updateEmailAPI = (data) => {
     data
   })
 }
+
+export const logoutAPI = () => {
+  return request({
+    url: '/user/logout'
+  })
+}

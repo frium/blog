@@ -85,7 +85,7 @@ span {
     .describe {
       margin-top: 10px;
       transition: transform 0.8s ease-out;
-      background: linear-gradient(to right, #deb1b1 60%, transparent 100%) no-repeat left bottom;
+      background: linear-gradient(to right, #deb1b1 10%, rgba(222, 177, 177, 0.25) 100%) no-repeat left bottom;
       background-size: 0px 2px;
       transition: 1s;
       width: 480px;

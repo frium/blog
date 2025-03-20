@@ -157,7 +157,7 @@ const signin = async () => {
   //用户就去home 管理员就去admin 存入token
   userStore.jwt = res.data.jwt;
   props.handleClose();
-  if (res.data.userAuth === 'admin') router.push({ name: 'Admin' });
+  if (res.data.userAuth === 'admin') router.push({ name: 'DashBoard' });
   const userInfoRes = await getUserInfoAPI();
   Object.assign(userStore.userInfo, userInfoRes.data);
 }

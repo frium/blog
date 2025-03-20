@@ -54,6 +54,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     RabbitTemplate rabbitTemplate;
 
+
+    @Override
+    public void logout() {
+        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (loginUser.getUser().getId() != null) redisTemplate.delete(LOGIN_USER + loginUser.getUser().getId());
+    }
+
     @Override
     public void getEmailCode(String email) {
         Long expire = redisTemplate.getExpire(email, TimeUnit.MINUTES);

@@ -63,6 +63,18 @@ onUnmounted(() => {
   if (observer.value) observer.value.disconnect();
 });
 
+onMounted(() => {
+  updateBodyStyle();
+  console.log(2222);
+
+});
+const updateBodyStyle = () => {
+  document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("http://static.frium.top/blog/sea%20of%20flowers.jpg") no-repeat';
+  document.body.style.backgroundSize = 'cover';
+  document.body.style.backgroundPosition = 'center';
+  document.body.style.backgroundAttachment = 'fixed';
+  document.body.style.color = '#c4c4c4';
+}
 </script>
 
 <template>

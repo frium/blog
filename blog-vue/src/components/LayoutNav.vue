@@ -4,7 +4,8 @@ import { onMounted, ref } from 'vue'
 import Login from './Login.vue';
 import { useUserStore } from '@/stores/userStore';
 import PersoanalInfo from './PersoanalInfo.vue';
-import { getUserInfoAPI } from '@/api/user';
+import { getUserInfoAPI, logoutAPI } from '@/api/user';
+import notificationToast from '@/utils/notificationToast ';
 const userStore = useUserStore();
 const showLogin = ref(false);
 const handleShowLogin = () => {
@@ -24,6 +25,15 @@ onMounted(async () => {
     Object.assign(userStore.userInfo, res.data);
   }
 })
+
+const handelLogout = async () => {
+  await logoutAPI();
+  userStore.userInfo.avatar = "";
+  userStore.userInfo.email = "";
+  userStore.userInfo.username = "";
+  userStore.jwt = "";
+  notificationToast.success('登出成功!');
+}
 </script>
 
 <template>
@@ -62,7 +72,7 @@ onMounted(async () => {
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="handelShowPersonalInfo">个人中心</el-dropdown-item>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click="handelLogout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -155,6 +165,8 @@ onMounted(async () => {
     }
 
     .login {
+      width: 36px;
+      height: 36px;
       color: #c4c4c4;
       transition: all 0.6s ease;
 
