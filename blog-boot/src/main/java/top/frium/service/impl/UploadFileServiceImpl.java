@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
+import top.frium.mapper.FileMapper;
+import top.frium.pojo.entity.File;
 import top.frium.service.UploadFileService;
 import top.frium.uitls.FtpUtils;
 
@@ -29,10 +31,14 @@ public class UploadFileServiceImpl implements UploadFileService {
     FtpUtils ftpUtils;
     @Value("${ecs.directoryPath}")
     String directoryPath;
+    @Autowired
+    FileMapper fileMapper;
+    @Value("${ecs.exposePath}")
+    String fileUrl;
+
     @Override
-    public void uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         String fileName = Objects.requireNonNull(file.getOriginalFilename());
-        System.out.println("生成的文件名: " + fileName);
         Path filePath = Paths.get(directoryPath, fileName);
         int count = 1;
         while (Files.exists(filePath)) {
@@ -43,7 +49,9 @@ public class UploadFileServiceImpl implements UploadFileService {
         try {
             Files.createDirectories(Paths.get(directoryPath)); // 创建目录
             Files.copy(file.getInputStream(), filePath);
-            System.out.println("文件已保存到: " + filePath);
+            String url = fileUrl + filePath.getFileName();
+            fileMapper.insert(new File(null, url));
+            return url;
         } catch (IOException e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }

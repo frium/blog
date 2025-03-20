@@ -21,8 +21,7 @@ public class FileController {
     @ApiOperation("上传文件")
     @PostMapping("/uploadFile")
     public R<?> uploadFile(@RequestParam("file") MultipartFile file) {
-        uploadFileService.uploadFile(file);
-        return R.success();
+        return R.success(uploadFileService.uploadFile(file));
     }
 
 

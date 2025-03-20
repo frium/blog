@@ -63,8 +63,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserInfoVO getUserInfo() {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = getById(loginUser.getUser().getId());
+        User user = null;
+        try {
+            LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            user = getById(loginUser.getUser().getId());
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.NOT_LOGIN);
+        }
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user, userInfoVO);
         return userInfoVO;
@@ -72,8 +77,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateEmail(EmailDTO emailDTO) {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = loginUser.getUser().getId();
+        Long userId;
+        try {
+            LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = loginUser.getUser().getId();
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.NOT_LOGIN);
+        }
         Object o = redisTemplate.opsForValue().get(emailDTO.getEmail());
         if (o == null || !emailDTO.getVerify().equals(o.toString())) {
             throw new MyException(StatusCodeEnum.ERROR_VERIFY);
@@ -85,8 +95,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateUsername(String username) {
-        LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = loginUser.getUser().getId();
+        Long userId;
+        try {
+            LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = loginUser.getUser().getId();
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.NOT_LOGIN);
+        }
         lambdaUpdate().eq(User::getId, userId).set(User::getUsername, username).update();
     }
 
