@@ -1,6 +1,7 @@
 import { useUserStore } from "@/stores/userStore";
 import axios from "axios";
 import { ElNotification } from "element-plus";
+import notificationToast from "./notificationToast ";
 
 export const request = axios.create({
   baseURL: '/api',
@@ -19,13 +20,17 @@ request.interceptors.request.use(config => {
 }, e => Promise.reject(e))
 
 request.interceptors.response.use(res => res.data, e => {
-  if (e.response?.data) {
-    ElNotification({
-      title: 'Error',
-      message: e.response.data.message,
-      type: 'error'
-    });
+  if (error.response?.status === 401) {
+    notificationToast.error('用户身份过期!');
+    useUserStore().jwt = "";
+    useUserStore().userInfo.avatar = "";
+    useUserStore().userInfo.email = "";
+    useUserStore().userInfo.username = "";
+    return Promise.reject(error);
   }
-  return Promise.reject(e);
+
+  const errorMsg = error.response.data.msg || '请求异常，请稍后重试'
+  notificationToast.error(errorMsg)
+  return Promise.reject(error);
 })
 

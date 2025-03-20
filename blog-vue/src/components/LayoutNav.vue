@@ -1,8 +1,11 @@
 <script setup>
 import { Search } from '@element-plus/icons-vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import Login from './Login.vue';
-
+import { useUserStore } from '@/stores/userStore';
+import PersoanalInfo from './PersoanalInfo.vue';
+import { getUserInfoAPI } from '@/api/user';
+const userStore = useUserStore();
 const showLogin = ref(false);
 const handleShowLogin = () => {
   showLogin.value = true;
@@ -11,6 +14,16 @@ const handleShowLogin = () => {
 const handleClose = () => {
   showLogin.value = false;
 };
+const showPersonalInfo = ref(false);
+const handelShowPersonalInfo = () => {
+  showPersonalInfo.value = true;
+}
+onMounted(async () => {
+  if (userStore.jwt) {
+    const res = await getUserInfoAPI();
+    Object.assign(userStore.userInfo, res.data);
+  }
+})
 </script>
 
 <template>
@@ -44,16 +57,30 @@ const handleClose = () => {
       </div>
       <el-button :icon="Search" round color="#f6cac9"
         style="color: white; width: 50px; font-size: 18px;margin-left: auto; margin-right: 25px;" />
-      <button class="login" @click="handleShowLogin">登录</button>
+      <el-dropdown v-if=(userStore.userInfo.avatar)>
+        <img class="user-head" :src="userStore.userInfo.avatar" alt="">
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="handelShowPersonalInfo">个人中心</el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <button v-else class="login" @click="handleShowLogin">登录</button>
       <el-dialog style="width:1000px; padding : 0px; margin-top: 7%; background-color: transparent;  user-select: none;"
         v-model="showLogin" @before-close="handleClose" :append-to-body="true" :show-close="false">
         <div style="margin-top: -30px;">
           <Login :handleClose="handleClose"></Login>
-
         </div>
       </el-dialog>
-
     </div>
+    <el-dialog
+      style="width:23.5vw; padding : 0px; margin: 0px 0px 0px 76.5vw;   background-color: transparent;   height: 100vh;"
+      v-model="showPersonalInfo" @before-close="handleClose" :append-to-body="true">
+      <div style="margin-top: -16px;">
+        <PersoanalInfo></PersoanalInfo>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -136,11 +163,18 @@ const handleClose = () => {
       }
     }
 
+    .user-head {
+      height: 36px;
+      width: 36px;
+      transition: transform 0.5s;
+      border-radius: 50%;
 
-
-
-
+      &:hover {
+        transform: rotate(560deg)
+      }
+    }
   }
+
 
 
 }

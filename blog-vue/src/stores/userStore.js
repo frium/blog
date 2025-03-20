@@ -11,7 +11,10 @@ export const useUserStore = defineStore('userStore', () => {
   )
   const jwt = ref("");
   return {
-    userInfo
-    , jwt
+    userInfo,
+    jwt
   }
+
+}, {
+  persist: true
 })
