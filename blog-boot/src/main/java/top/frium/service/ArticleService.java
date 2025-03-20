@@ -15,7 +15,7 @@ import java.util.List;
 public interface ArticleService extends IService<Article> {
     void uploadArticle(ArticleDTO articleDTO);
 
-    ArticleVO getArticle(long articleId);
+    String getArticleContent(Long articleId);
 
     void updateArticle(ArticleDTO articleDTO);
 
@@ -29,4 +29,7 @@ public interface ArticleService extends IService<Article> {
 
     void updateLabel(Label label);
 
+    List<ArticleVO> getArticleList(Long pageNum);
+
+    void changeArticleShowStatus(Long articleId);
 }

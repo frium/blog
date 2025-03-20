@@ -2,8 +2,6 @@ package top.frium.pojo.entity;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class Article {
     private Long id;
@@ -14,4 +12,6 @@ public class Article {
     private Boolean isShow;
     private String createTime;
     private String content;
+    private Long viewNum;
+    private Long commentNum;
 }

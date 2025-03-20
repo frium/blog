@@ -18,16 +18,10 @@ import java.util.List;
 
 @Api("文章管理")
 @RestController
-@RequestMapping("/article")
-public class ArticleController {
+@RequestMapping("/adminArticle")
+public class AdminArticleController {
     @Autowired
     ArticleService articleService;
-
-    @ApiOperation("获取文章数量")
-    @GetMapping("/getArticleNum")
-    public R<?> getArticleNum() {
-        return R.success(articleService.count());
-    }
 
     @ApiOperation("添加文章")
     @PostMapping("/uploadArticle")
@@ -43,10 +37,11 @@ public class ArticleController {
         return R.success();
     }
 
-    @ApiOperation("获取文章")
-    @GetMapping("/getArticle")
-    public R<?> getArticle(Long articleId) {
-        return R.success(articleService.getArticle(articleId));
+    @ApiOperation("修改文章可见状态")
+    @PostMapping("/changeArticleShowStatus")
+    public R<?> changeArticleShowStatus(Long articleId) {
+        articleService.changeArticleShowStatus(articleId);
+        return R.success();
     }
 
     @ApiOperation("删除文章")
@@ -56,11 +51,6 @@ public class ArticleController {
         return R.success();
     }
 
-    @ApiOperation("获取所有标签")
-    @GetMapping("/getLabels")
-    public R<?> getLabels() {
-        return R.success(articleService.getLabels());
-    }
 
     @ApiOperation("添加标签")
     @PostMapping("/addLabel")

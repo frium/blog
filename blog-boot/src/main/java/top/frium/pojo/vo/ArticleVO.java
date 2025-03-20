@@ -15,5 +15,6 @@ public class ArticleVO {
     private Boolean isShow;
     private Boolean isTop;
     private String createTime;
-    private String content;
+    private Long viewNum;
+    private Long commentNum;
 }

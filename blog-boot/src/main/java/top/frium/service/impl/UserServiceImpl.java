@@ -54,7 +54,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     RabbitTemplate rabbitTemplate;
 
-
     @Override
     public void logout() {
         LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
