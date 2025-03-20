@@ -21,7 +21,7 @@ const props = defineProps({
 <template>
   <div class="time-line-card">
     <RouterLink to="/time">
-      <img src="http://static.frium.top/blog/head.png" alt="">
+      <img src="https://static.frium.top/blog/head.png" alt="">
     </RouterLink>
     <div class="time">2024-10-15</div>
     <span class="describe">如果你停止,就是谷底 如果你还在继续果你还在继续如果你停止还在继续如果你停止还在继续如果你停止还在继续如果你停止还在继续如果你停止,就是谷底 如果你还在继续,就是上坡</span>

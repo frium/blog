@@ -83,6 +83,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void updateEmail(EmailDTO emailDTO) {
+        if (emailDTO.getEmail() == null) throw new MyException(StatusCodeEnum.FAIL);
         Long userId;
         try {
             LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

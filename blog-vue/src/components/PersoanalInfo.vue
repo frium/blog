@@ -42,13 +42,16 @@ const getEmailCode = () => {
 }
 const updateEmail = async (event) => {
   emailData.email = userInfo.email;
-  if (emailData.verify.length < 6) {
-    notificationToast.error('邮箱验证码长度有误')
+  console.log(emailData.email);
+
+  if (!emailData.verify || !/^\d{6}$/.test(emailData.verify)) {
+    notificationToast.error('邮箱验证码应为6位数字');
     return;
   }
-  await updateEmailAPI(emailData);
+  const res = await updateEmailAPI(emailData);
   emailData.data = '';
-  notificationToast.success('修改成功')
+  if (res.code === 200) notificationToast.success('修改成功');
+  else notificationToast.error(res.msg);
   userStore.userInfo.email = userInfo.email;
   cancle(event);
 

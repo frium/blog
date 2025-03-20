@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import top.frium.common.R;
 import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
@@ -16,7 +15,6 @@ import top.frium.pojo.dto.RegisterEmailDTO;
 import top.frium.service.UserService;
 
 /**
- *
  * @date 2024-07-29 23:33:26
  * @description
  */
@@ -42,9 +40,10 @@ public class UserController {
     public R<?> loginByEmail(@Valid @RequestBody LoginEmailDTO loginEmailDTO) {
         return R.success(userService.loginByEmail(loginEmailDTO));
     }
+
     @ApiOperation("修改邮箱")
     @PostMapping("/updateEmail")
-    public R<?> updateEmail(EmailDTO emailDTO) {
+    public R<?> updateEmail(@RequestBody EmailDTO emailDTO) {
         userService.updateEmail(emailDTO);
         return R.success();
     }
@@ -62,6 +61,7 @@ public class UserController {
         userService.logout();
         return R.success();
     }
+
     @ApiOperation("获取邮箱短信")
     @GetMapping("/getEmailSMS")
     public R<?> getEmailSMS(@NotNull String email) {
