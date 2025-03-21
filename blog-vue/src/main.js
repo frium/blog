@@ -11,10 +11,21 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 const app = createApp(App);
 
-app.use(createPinia());
 app.use(router);
 app.use(pinia);
 app.use(ElementPlus);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('Service Worker 注册成功: ', registration.scope);
+      })
+      .catch((error) => {
+        console.log('Service Worker 注册失败: ', error);
+      });
+  });
+}
 
 app.mount('#app');
 

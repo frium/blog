@@ -4,7 +4,7 @@ import FriendCard from './components/FriendCard.vue';
 
 <template>
   <div class="friend-out-box">
-    <img src="https://blog.frium.top/upload/网易云背景.jpg" alt="">
+    <img src="https://static.frium.top/blog/网易云背景.jpg" alt="">
     <div class="content">
       <h3>frium的小伙伴们</h3>
       <div class="friend-cards">

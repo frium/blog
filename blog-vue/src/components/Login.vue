@@ -195,7 +195,8 @@ const signup = async () => {
             </div>
           </div>
           <div class="input-container">
-            <input type="password" placeholder="password" v-model="register.password" @blur="checkRegPassword()">
+            <input type="password" placeholder="password" autocomplete="current-password" v-model="register.password"
+              @blur="checkRegPassword()">
             <div v-if="!regPasswordCheck" class="error-msg">
               <span>{{ regPasswordErrorMsg }}</span>
             </div>
@@ -224,7 +225,8 @@ const signup = async () => {
             </div>
           </div>
           <div class="input-container">
-            <input type="password" placeholder="password" v-model="login.password" @blur="checkPassword()">
+            <input type="password" placeholder="password" autocomplete="current-password" v-model="login.password"
+              @blur="checkPassword()">
             <div v-if="!passwordCheck" class="error-msg">
               <span>{{ passwordErrorMsg }}</span>
             </div>
@@ -341,11 +343,10 @@ const signup = async () => {
           margin-top: 2px;
           margin-left: 8px;
           position: absolute;
-          font-size: 2px;
 
           span {
             padding: 2px 0;
-            font-size: 4px;
+            font-size: 14px;
             line-height: 0;
             color: #dd2727;
             letter-spacing: 2px;

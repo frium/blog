@@ -3,10 +3,18 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: LXGW WenKai;
+  font-family: 'LXGW WenKai Screen', sans-serif;
+
 }
 
 
+@font-face {
+  font-family: 'LXGW WenKai Screen';
+  src: url('/fonts/LXGWWenKaiGBScreen.woff2') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 
 

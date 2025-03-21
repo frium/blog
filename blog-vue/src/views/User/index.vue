@@ -65,8 +65,6 @@ onUnmounted(() => {
 
 onMounted(() => {
   updateBodyStyle();
-  console.log(2222);
-
 });
 const updateBodyStyle = () => {
   document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://static.frium.top/blog/sea%20of%20flowers.jpg") no-repeat';
