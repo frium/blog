@@ -1,47 +1,65 @@
 <script setup>
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import UploadImg from '@/components/UploadImg.vue'
+import { useEditArticleStore } from '@/stores/editArticle'
+import { getLabelsAPI } from '@/api/article';
+import { updateArticleAPI } from '@/api/adminArticle';
+import { ElMessage } from 'element-plus';
 
-const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
+const article = reactive({});
+const props = defineProps({
+  closeArticleSetting: Function
+})
+const editArticleStore = useEditArticleStore();
+
+const labels = ref([]);
+const onSubmit = async () => {
+  console.log(article.label);
+
+  await updateArticleAPI(article);
+  ElMessage.success('发布成功!')
+  editArticleStore.article = article;
+}
+
+const cancle = () => {
+  Object.assign(article, editArticleStore.article);
+  props.closeArticleSetting();
+}
+
+onMounted(async () => {
+  const res = await getLabelsAPI();
+  labels.value = res.data;
+  Object.assign(article, editArticleStore.article);
+  article.label.forEach((item, index, array) => {
+    array[index] = item.id;
+  });
 })
 
-
-
-const onSubmit = () => {
-  console.log('submit!')
-}
 
 
 </script>
 
 <template>
   <div class="article-setting">
-    <el-form :model="form" label-width="auto" style="max-width: 500px">
+    <el-form @submit.prevent :model="article" label-width="auto" style="max-width: 500px">
       <el-form-item label="标题">
-        <el-input v-model="form.name" />
+        <el-input v-model="article.title" />
       </el-form-item>
       <el-form-item label="分类">
-        <el-select v-model="form.region" placeholder="选择文章分类">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+        <el-select v-model="article.label" placeholder="选择文章分类" multiple>
+          <template v-for="label in labels" :key="label.id">
+            <el-option :label=label.labelName :value=label.id />
+          </template>
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <UploadImg></UploadImg>
+        <UploadImg :border-radius="'0'" :avatar-img="article.coverImg"></UploadImg>
       </el-form-item>
       <el-form-item label="摘要">
-        <el-input v-model="form.desc" type="textarea" maxlength="200" show-word-limit />
+        <el-input v-model="article.summary" type="textarea" maxlength="200" show-word-limit />
       </el-form-item>
       <el-form-item label="置顶">
-        <el-switch v-model="form.delivery" />
+        <el-switch v-model="article.isTop" />
       </el-form-item>
       <el-form-item>
         <button @click="onSubmit" class="release">发布</button>

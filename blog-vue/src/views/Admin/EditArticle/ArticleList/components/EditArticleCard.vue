@@ -1,23 +1,26 @@
 <script setup>
-import { ref } from "vue"
 import TimeAndOperation from "@/components/TimeAndOperation.vue";
+import { changeArticleShowStatusAPI, deleteArticleAPI } from "@/api/adminArticle";
+import { useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+
+const router = useRouter();
+
 const props = defineProps({
   data: Object
 })
 
 
-const visible = ref(true);
-const toUser = () => {
-
-}
-
 const editArticle = () => {
-  console.log('编辑文章');
-
+  router.push({ name: 'ToEditArticle', params: { 'editArticleId': props.data.id } })
 }
-
-const deleteArticle = () => {
-
+const emit = defineEmits(['delete-success']);
+const deleteArticle = async () => {
+  const data = [];
+  data.push(props.data.id);
+  await deleteArticleAPI(data);
+  ElMessage.success('删除成功');
+  emit('delete-success', props.data.id);
 }
 const setArticle = () => {
   console.log('设置文章');
@@ -28,8 +31,10 @@ const operations = [
   { name: '设置', onClick: setArticle },
   { name: '删除', onClick: deleteArticle },
 ];
-const changeVisible = () => {
-  visible.value = !visible.value;
+const changeVisible = async () => {
+  await changeArticleShowStatusAPI(props.data.id);
+  props.data.isShow = !props.data.isShow;
+  ElMessage.success('修改成功');
 }
 </script>
 
@@ -46,12 +51,9 @@ const changeVisible = () => {
       </div>
     </div>
     <div class="edit-right">
-      <img @click="toUser" style="width: 35px; height: 35px; border-radius: 50%; "
-        src="https://blog.frium.top/upload/7b914c84-b6ec-4406-8d8b-976eee71e502.png" alt="">
-      <img v-if="visible" @click="changeVisible" style="width: 24px; height: 24px;" src="@/assets/icons/visible.svg"
-        alt="">
+      <img v-if="props.data.isShow" @click="changeVisible" style="width: 24px; height: 24px;"
+        src="@/assets/icons/visible.svg" alt="">
       <img v-else @click="changeVisible" style="width: 24px; height: 24px;" src="@/assets/icons/invisible.svg" alt="">
-      <span> 2024-10-15 21:49 </span>
       <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
     </div>
   </div>
@@ -63,17 +65,17 @@ const changeVisible = () => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 2px 0;
+  padding: 2px 0 0 0;
   font-size: 15px;
 
   .edit-left {
     display: flex;
     flex-direction: column;
+    align-items: center;
 
     .title {
-      margin-bottom: 2px;
       font-size: 16px;
-      color: black;
+      padding: 3px 0;
     }
 
     .bottom {

@@ -2,7 +2,11 @@
 import { ref } from "vue";
 const props = defineProps({
   avatarImg: String,
-  changeAvatar: Function
+  changeAvatar: Function,
+  borderRadius: {
+    type: String,
+    default: '50%'
+  }
 })
 const changeImg = ref(false);
 const showChangeImg = () => {
@@ -18,11 +22,11 @@ const hiddenChangeImg = () => {
 </script>
 
 <template>
-  <div class="upload-img">
+  <div class="upload-img" :style="{ borderRadius: props.borderRadius }">
     <div @mouseenter="showChangeImg" @mouseleave="hiddenChangeImg" style="height: 100%;">
       <img v-if="props.avatarImg" :src="props.avatarImg" style="height: 120px; width: 120px;" />
       <img v-else src="@/assets/icons/add.svg"
-        style=" position: absolute; top: 50%;left:50%; transform: translate(-50%,-50%); width: 120px; height: 120px;" />
+        style=" position: absolute; top:50%;left: 50%; transform: translate(-50%,-50%); width: 120px; height: 120px; " />
       <div class="change-img" v-show="changeImg" @click="props.changeAvatar">
         <img src="@/assets/icons/camera.svg" alt="">
       </div>
@@ -35,9 +39,9 @@ const hiddenChangeImg = () => {
   height: 120px;
   width: 120px;
   position: relative;
-  border-radius: 50%;
   overflow: hidden;
   user-select: none;
+  border: 1px solid rgb(193, 189, 189);
 
   .change-img {
     position: absolute;

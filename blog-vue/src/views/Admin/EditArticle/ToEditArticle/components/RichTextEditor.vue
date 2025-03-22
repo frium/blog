@@ -1,8 +1,8 @@
 <template>
   <div style="border: 1px solid #ccc;min-width: 365px; max-width: 100%; ">
     <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
-    <Editor style="height: calc(100vh - 130px); overflow-y: hidden;" :defaultConfig="editorConfig"
-      @onCreated="handleCreated" />
+    <Editor v-model="editArticleStore.article.content" style="height: calc(100vh - 130px); overflow-y: hidden;"
+      :defaultConfig="editorConfig" @onCreated="handleCreated" />
   </div>
 </template>
 
@@ -10,9 +10,9 @@
 import { shallowRef, onBeforeUnmount } from 'vue'
 import "@wangeditor/editor/dist/css/style.css";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
-// import { useRTEditorStore } from '@/stores/rtEditorStore';
-// const rtEditorStore = useRTEditorStore();
-
+import { useEditArticleStore } from '@/stores/editArticle';
+import { uploadFileAPI } from '@/api/file';
+const editArticleStore = useEditArticleStore();
 const editorRef = shallowRef()
 
 // 工具栏配置
@@ -52,27 +52,24 @@ const toolbarConfig = {
 // 编辑器配置
 const editorConfig = {
   placeholder: '请输入内容...',
-  MENU_CONF: {},// 初始化 MENU_CONF 对象
+  MENU_CONF: {}
 };
 
 // 上传图片配置
 editorConfig.MENU_CONF['uploadImage'] = {
   async customUpload(file, insertFn) {
-    // const formData = new FormData();
-    // formData.append("file", file);
-
-    // try {
-    //   const res = await uploadAvatarAPI(formData); // 假设 uploadAvatarAPI 是一个返回 Promise 的函数
-    //   insertFn(res.data.url); // 插入图片 URL
-    // } catch (error) {
-    //   console.error('上传图片失败:', error); // 打印错误信息
-    // }
+    try {
+      const res = await uploadFileAPI(file, null, null); // 假设 uploadAvatarAPI 是一个返回 Promise 的函数
+      insertFn(res.data); // 插入图片 URL
+    } catch (error) {
+      console.error('上传图片失败:', error); // 打印错误信息
+    }
   }
 };
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
-  // rtEditorStore.content = '';
+  editArticleStore.article.content = '';
   const editor = editorRef.value
   if (editor == null) return
   editor.destroy();

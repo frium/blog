@@ -3,34 +3,10 @@ import EditArticleCard from './components/EditArticleCard.vue';
 import HeadOperation from '../../Layout/components/HeadOperation.vue';
 import SearchTable from '../../Layout/components/SearchTable.vue';
 import router from '@/router';
+import { onMounted, ref } from 'vue';
+import { getArticleListAPI } from '@/api/adminArticle';
 
-const tableData = [
-  {
-    id: 1,
-    title: 'Vue.js 官方文档',
-    link: 'https://vuejs.org',
-  },
-  {
-    id: 2,
-    title: 'Element Plus 组件库',
-    link: 'https://element-plus.org',
-  },
-  {
-    id: 3,
-    title: 'Longfish 的个人博客',
-    link: 'https://longfish.site',
-  },
-  {
-    id: 4,
-    title: 'GitHub 主页',
-    link: 'https://github.com',
-  },
-  {
-    id: 5,
-    title: 'MDN Web 文档',
-    link: 'https://developer.mozilla.org',
-  },
-];
+const tableData = ref([]);
 
 const creatArticle = () => {
   router.push({ name: 'ToEditArticle' })
@@ -50,6 +26,13 @@ const deleteFunction = () => {
 const searchFunction = () => {
 
 }
+const handleDeleteSuccess = (deletedId) => {
+  tableData.value = tableData.value.filter(item => item.id !== deletedId);
+};
+onMounted(async () => {
+  const res = await getArticleListAPI();
+  tableData.value = res.data;
+})
 </script>
 
 <template>
@@ -60,7 +43,7 @@ const searchFunction = () => {
     <div class="edit-article">
       <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
-          <EditArticleCard :data="row"></EditArticleCard>
+          <EditArticleCard :data="row" @delete-success="handleDeleteSuccess"></EditArticleCard>
         </template>
       </SearchTable>
     </div>

@@ -84,7 +84,7 @@ const router = createRouter({
             },
             {
               name: "ToEditArticle",
-              path: 'toEditArticle',
+              path: 'toEditArticle/:editArticleId?',
               component: () => import('@/views/Admin/EditArticle/ToEditArticle/index.vue'),
             }
 
