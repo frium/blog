@@ -27,7 +27,6 @@ const updateBodyStyle = () => {
   position: relative;
   display: flex;
 
-
   .admin-nav {
     position: sticky;
     top: 0;
@@ -36,7 +35,7 @@ const updateBodyStyle = () => {
   }
 
   .router-view-div {
-    width: 100%;
+    width: calc(100% - 250px);
   }
 
   ::selection {
