@@ -26,16 +26,16 @@ public class ArticleController {
         return R.success(articleService.count());
     }
 
-    @ApiOperation("获取文章列表")
+    @ApiOperation("获取可见文章列表")
     @GetMapping("/getArticleList")
-    public R<?> getArticleList(Long pageNum) {
-        return R.success(articleService.getArticleList(pageNum));
+    public R<?> getArticleList() {
+        return R.success(articleService.getArticleList());
     }
 
     @ApiOperation("获取文章内容")
-    @GetMapping("/getArticleContent")
-    public R<?> getArticleContent(Long articleId) {
-        return R.success(articleService.getArticleContent(articleId));
+    @GetMapping("/getArticle")
+    public R<?> getArticle(Long articleId) {
+        return R.success(articleService.getArticle(articleId));
     }
     @ApiOperation("获取所有标签")
     @GetMapping("/getLabels")

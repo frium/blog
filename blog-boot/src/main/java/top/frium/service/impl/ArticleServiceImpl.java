@@ -3,7 +3,6 @@ package top.frium.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +16,7 @@ import top.frium.mapper.LabelMapper;
 import top.frium.pojo.dto.ArticleDTO;
 import top.frium.pojo.entity.Article;
 import top.frium.pojo.entity.Label;
+import top.frium.pojo.vo.ArticleListVO;
 import top.frium.pojo.vo.ArticleVO;
 import top.frium.service.ArticleService;
 
@@ -49,17 +49,20 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             BeanUtils.copyProperties(articleDTO, article);
             article.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
             save(article);
-            List<Long> validLabelIds = articleDTO.getLabel().stream()
-                    .filter(labelId -> articleMapper.checkLabelExists(labelId) != null)
-                    .toList();
+            if (articleDTO.getLabel() != null && !articleDTO.getLabel().isEmpty()) {
+                List<Long> validLabelIds = articleDTO.getLabel().stream()
+                        .filter(labelId -> articleMapper.checkLabelExists(labelId) != null)
+                        .toList();
 
-            Map<String, Object> params = new HashMap<>();
-            params.put("articleId", article.getId());
-            params.put("labelIds", validLabelIds);
-            articleMapper.insertArticleLabels(params);
+                Map<String, Object> params = new HashMap<>();
+                params.put("articleId", article.getId());
+                params.put("labelIds", validLabelIds);
+                articleMapper.insertArticleLabels(params);
+            }
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }
+        redisTemplate.delete("articleList:all");
     }
 
     @Override
@@ -69,11 +72,13 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public String getArticleContent(Long articleId) {
+    public ArticleVO getArticle(Long articleId) {
         Article article = getById(articleId);
         if (article == null) throw new MyException(StatusCodeEnum.NOT_FOUND);
-        return article.getContent();
-
+        ArticleVO articleVO = new ArticleVO();
+        BeanUtils.copyProperties(article, articleVO);
+        articleVO.setLabel(articleMapper.getLabelsByArticleId(articleId));
+        return articleVO;
     }
 
     @Override
@@ -82,14 +87,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             Article article = new Article();
             BeanUtils.copyProperties(articleDTO, article);
             articleMapper.deleteLabelsByArticleId(articleDTO.getId());
-            Map<String, Object> params = new HashMap<>();
-            params.put("articleId", articleDTO.getId());
-            params.put("labelIds", articleDTO.getLabel());
-            articleMapper.insertArticleLabels(params);
+            if (articleDTO.getLabel() != null && !articleDTO.getLabel().isEmpty()) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("articleId", articleDTO.getId());
+                params.put("labelIds", articleDTO.getLabel());
+                articleMapper.insertArticleLabels(params);
+            }
             updateById(article);
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }
+        redisTemplate.delete("articleList:all");
     }
 
     @Override
@@ -98,6 +106,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             removeById(id);
             articleMapper.deleteLabelsByArticleId(id);
         }
+        redisTemplate.delete("articleList:all");
     }
 
     @Override
@@ -130,39 +139,66 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             labelMapper.updateById(label);
         } else throw new MyException(StatusCodeEnum.LABEL_EXIST);
 
-
     }
 
     @Override
-    public List<ArticleVO> getArticleList(Long pageNum) {
+    public List<ArticleListVO> getArticleList() {
+        String redisKey = "articleList:all"; // 更改 Redis Key 为查询所有文章
+        String cachedData = (String) redisTemplate.opsForValue().get(redisKey);
+        if (cachedData != null) {
+            return JSON.parseArray(cachedData, ArticleListVO.class); // 如果缓存存在，则直接返回缓存数据
+        }
+
+        // 查询所有文章
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        lambdaQuery().orderByDesc(Article::getIsTop)
+                .orderByDesc(Article::getCreateTime);
+        List<Article> articleList = articleMapper.selectList(queryWrapper); // 查询所有文章
+
+        // 将文章列表转为 ArticleListVO 列表
+        List<ArticleListVO> articleListVOList = articleList.stream()
+                .map(article -> {
+                    ArticleListVO articleListVO = new ArticleListVO();
+                    BeanUtils.copyProperties(article, articleListVO);
+                    return articleListVO;
+                }).collect(Collectors.toList());
+
+        // 将查询结果存入 Redis
+        String jsonString = JSON.toJSONString(articleListVOList);
+        redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS); // 设置过期时间为1天
+
+        return articleListVOList;
+    }
+
+    @Override
+    public List<ArticleListVO> getShowArticleList(Long pageNum) {
         if (pageNum == null) pageNum = 1L;
         String redisKey = "articleList:page:" + pageNum;
         String cachedData = (String) redisTemplate.opsForValue().get(redisKey);
         if (cachedData != null) {
-            return JSON.parseArray(cachedData, ArticleVO.class);
+            return JSON.parseArray(cachedData, ArticleListVO.class);
         }
         Page<Article> page = new Page<>(pageNum, 7);
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         lambdaQuery().orderByDesc(Article::getIsTop)
                 .orderByDesc(Article::getCreateTime);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
-        List<ArticleVO> articleVOList = articlePage.getRecords().stream()
+        List<ArticleListVO> articleListVOList = articlePage.getRecords().stream()
                 .map(article -> {
-                    ArticleVO articleVO = new ArticleVO();
-                    BeanUtils.copyProperties(article, articleVO);
-                    return articleVO;
+                    ArticleListVO articleListVO = new ArticleListVO();
+                    BeanUtils.copyProperties(article, articleListVO);
+                    return articleListVO;
                 }).collect(Collectors.toList());
 
         // 3. 将查询结果存入 Redis
-        String jsonString = JSON.toJSONString(articleVOList);
+        String jsonString = JSON.toJSONString(articleListVOList);
         redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS); // 设置过期时间为1小时
-        return articleVOList;
+        return articleListVOList;
     }
 
     @Override
     public void changeArticleShowStatus(Long articleId) {
-        articleMapper.update(null, new LambdaUpdateWrapper<Article>()
-                .eq(Article::getId, articleId)
-                .setSql("is_show = NOT is_show"));
+        articleMapper.changeArticleShowStatus(articleId);
+        redisTemplate.delete("articleList:all");
     }
 }

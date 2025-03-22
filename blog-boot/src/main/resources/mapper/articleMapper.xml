@@ -45,5 +45,12 @@
         </foreach>
     </delete>
 
+    <update id="changeArticleShowStatus">
+        UPDATE article
+        SET is_show = 1 - is_show
+        WHERE id = #{articleId}
+    </update>
+
+
 
 </mapper>

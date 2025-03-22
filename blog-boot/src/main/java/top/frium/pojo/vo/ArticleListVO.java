@@ -5,18 +5,13 @@ import top.frium.pojo.entity.Label;
 
 import java.util.List;
 
-/**
- * @date 2025-03-22 22:08:19
- * @description
- */
 @Data
-public class ArticleVO {
+public class ArticleListVO {
     private Long id;
     private String title;
     private List<Label> label;
     private String coverImg;
     private String summary;
-    private String content;
     private Boolean isShow;
     private Boolean isTop;
     private String createTime;
