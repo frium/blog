@@ -12,4 +12,5 @@ import lombok.Data;
 public class Label {
     long id;
     String labelName;
+    String createTime;
 }
