@@ -2,21 +2,21 @@
 import EditArticleCard from './components/EditArticleCard.vue';
 import HeadOperation from '../../Layout/components/HeadOperation.vue';
 import SearchTable from '../../Layout/components/SearchTable.vue';
-import router from '@/router';
 import { onMounted, ref } from 'vue';
 import { getArticleListAPI } from '@/api/adminArticle';
+import { useRouter } from 'vue-router';
 
 const tableData = ref([]);
-
+const router = useRouter();
 const creatArticle = () => {
   router.push({ name: 'ToEditArticle' })
 }
 
-const getCategories = () => {
-  console.log('getCategories')
+const toLabelList = () => {
+  router.push({ name: 'LabelList' })
 }
 const buttonArr = [
-  { name: "分类", onClick: getCategories },
+  { name: "分类", onClick: toLabelList },
   { name: "新建", onClick: creatArticle },
 ];
 

@@ -36,7 +36,7 @@ export const deleteArticleAPI = (list) => {
     data: list
   })
 }
-export const addLabelAPI = (labelName) => {
+export const uploadLabelAPI = (labelName) => {
   return request({
     url: '/adminArticle/addLabel',
     method: 'POST',
@@ -47,7 +47,7 @@ export const addLabelAPI = (labelName) => {
 }
 export const deleteLabelAPI = (labelList) => {
   return request({
-    url: '/adminArticle/uploadArticle',
+    url: '/adminArticle/deleteLabel',
     method: 'POST',
     data: labelList
   })
