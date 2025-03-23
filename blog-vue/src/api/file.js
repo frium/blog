@@ -15,3 +15,16 @@ export const uploadFileAPI = (file, onUploadProgress, signal) => {
     signal: signal
   })
 }
+
+export const getAllFilesAPI = () => {
+  return request({
+    url: '/file/getAllFiles',
+  })
+}
+export const deleteFileAPI = (list) => {
+  return request({
+    url: '/file/deleteFile',
+    method: 'POST',
+    data: list
+  })
+}

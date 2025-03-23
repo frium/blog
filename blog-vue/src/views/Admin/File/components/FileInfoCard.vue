@@ -1,11 +1,19 @@
 <script setup>
+import { deleteFileAPI } from '@/api/file';
 import TimeAndOperation from '@/components/TimeAndOperation.vue';
+import { ElMessage } from 'element-plus';
 const props = defineProps({
   data: Object
-})
-const deleteFile = () => {
-  console.log('删除附件');
+});
 
+
+const emit = defineEmits(['delete-success']);
+const deleteFile = async () => {
+  const list = [];
+  list.push(props.data.id);
+  await deleteFileAPI(list);
+  ElMessage.success('删除成功!');
+  emit('delete-success', props.data.id);
 }
 const operations = [
   { name: '删除', onClick: deleteFile }
@@ -18,8 +26,7 @@ const operations = [
       <img :src="props.data.url" alt="">
       <div class="detail">
         <p class="text">{{ props.data.fileName }}</p>
-        <span>{{ props.data.fileType }}</span>
-        <span>{{ props.data.fileSzie }}</span>
+        <span>{{ 'size: ' + props.data.size + 'MB' }}</span>
       </div>
     </div>
     <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />

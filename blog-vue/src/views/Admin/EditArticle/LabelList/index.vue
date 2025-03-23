@@ -61,7 +61,7 @@ onMounted(async () => {
       <el-input v-model="createLabelValue" placeholder="请输入标签名称"></el-input>
       <div style="display: flex; margin-top: 10px;">
         <el-button text type="primary" @click="createLabel">确认</el-button>
-        <el-button text type="warning" @click="close">取消</el-button>
+        <el-button text type="danger" @click="close">取消</el-button>
       </div>
     </el-dialog>
   </div>
