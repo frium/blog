@@ -118,7 +118,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void addLabel(String label) {
         Long count = labelMapper.selectCount(new LambdaQueryWrapper<Label>()
                 .eq(Label::getLabelName, label));
-        if (count == 0) labelMapper.insert(new Label(0, label, LocalDateTime.now().format(DATA_TIME_PATTERN)));
+        if (count == 0) labelMapper.insert(new Label(0L, label, LocalDateTime.now().format(DATA_TIME_PATTERN)));
         else throw new MyException(StatusCodeEnum.LABEL_EXIST);
     }
 

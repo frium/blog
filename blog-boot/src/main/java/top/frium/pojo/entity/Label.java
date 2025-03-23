@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Label {
-    long id;
+    Long id;
     String labelName;
     String createTime;
 }

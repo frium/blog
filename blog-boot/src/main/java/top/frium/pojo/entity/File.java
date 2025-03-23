@@ -12,4 +12,7 @@ import lombok.Data;
 public class File {
     Long id;
     String url;
+    String fileName;
+    String createTime;
+    Double size;
 }
