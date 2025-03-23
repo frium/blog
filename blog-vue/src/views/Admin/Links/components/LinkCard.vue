@@ -1,11 +1,8 @@
 <script setup>
 import TimeAndOperation from '@/components/TimeAndOperation.vue';
-
-
 const props = defineProps({
   data: Object
 });
-
 const setLink = () => {
   console.log('编辑友链');
 }
@@ -23,13 +20,15 @@ const operations = [
 
 <template>
   <div class="link-card">
-    <div class="left">
-      <img src="https://static.longfish.site/avatar/avatar1.jpg" alt="">
+    <div class="left" style="width: 30%;">
+      <img :src="props.data.logo" alt="">
       <div class="detail">
-        <span class="title">{{ props.data.title }}</span>
-        <a class="link">{{ props.data.link }}</a>
+        <h4 class="title">{{ props.data.urlName }}</h4>
+        <a class="link">{{ props.data.url }}</a>
       </div>
     </div>
+    <p style="margin-right: auto;">{{ props.data.description }}</p>
+
     <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
 </template>
@@ -43,6 +42,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 55px;
 
   .left {
     display: flex;
@@ -59,11 +59,6 @@ a:hover {
     .detail {
       display: flex;
       flex-direction: column;
-
-      .title {
-        font-size: 16px;
-        color: #000;
-      }
     }
   }
 

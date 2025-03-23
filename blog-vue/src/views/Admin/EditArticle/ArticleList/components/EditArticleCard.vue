@@ -41,7 +41,7 @@ const changeVisible = async () => {
 <template>
   <div class="edit-article-card">
     <div class="edit-left">
-      <span class="title">{{ props.data.title }}</span>
+      <h3 class="title">{{ props.data.title }}</h3>
       <span v-for="(category, index) in props.data.categories" :key="index">
         {{ category }}
       </span>

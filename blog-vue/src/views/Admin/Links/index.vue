@@ -3,44 +3,10 @@ import HeadOperation from '../Layout/components/HeadOperation.vue';
 import LinkCard from './components/LinkCard.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import AddLink from './components/AddLink.vue';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { getLinksAPI } from '@/api/links';
 
-const tableData = [
-  {
-    id: 1,
-    title: 'Vue.js 官方文档',
-    link: 'https://vuejs.org',
-    createTime: ' 2024-10-15 21:49 ',
-  },
-  {
-    id: 2,
-    title: 'Element Plus 组件库',
-    link: 'https://element-plus.org',
-    createTime: ' 2024-10-15 21:49 ',
-
-  },
-  {
-    id: 3,
-    title: 'Longfish 的个人博客',
-    link: 'https://longfish.site',
-    createTime: ' 2024-10-15 21:49 ',
-
-  },
-  {
-    id: 4,
-    title: 'GitHub 主页',
-    link: 'https://github.com',
-    createTime: ' 2024-10-15 21:49 ',
-
-  },
-  {
-    id: 5,
-    title: 'MDN Web 文档',
-    link: 'https://developer.mozilla.org',
-    createTime: ' 2024-10-15 21:49 ',
-
-  },
-];
+const tableData = ref([]);
 
 
 const showAddLink = ref(false);
@@ -59,8 +25,17 @@ const deleteFunction = () => {
 
 const searchFunction = (test) => {
   console.log(test);
-
 }
+const addLinkRef = ref(null);
+const handelShowLink = () => {
+  showAddLink.value = false;
+  addLinkRef.value.resetState();
+}
+
+onMounted(async () => {
+  const res = await getLinksAPI();
+  tableData.value = res.data;
+})
 </script>
 
 <template>
@@ -73,8 +48,8 @@ const searchFunction = (test) => {
         </template>
       </SearchTable>
     </div>
-    <el-dialog title="添加友链" v-model="showAddLink" width="550px" style="overflow: auto;">
-      <AddLink></AddLink>
+    <el-dialog title="添加友链" v-model="showAddLink" width="550px" style="overflow: auto;" @close="handelShowLink">
+      <AddLink :handelShowLink="handelShowLink" ref="addLinkRef"></AddLink>
     </el-dialog>
   </div>
 </template>

@@ -41,7 +41,7 @@ const hiddenChangeImg = () => {
   position: relative;
   overflow: hidden;
   user-select: none;
-  border: 1px solid rgb(193, 189, 189);
+  border: 1px solid rgb(216, 218, 225);
 
   .change-img {
     position: absolute;
@@ -51,7 +51,7 @@ const hiddenChangeImg = () => {
     height: 120px;
     top: 0px;
     left: 0px;
-    background: #000000;
+    background: #656363;
     opacity: 0.9;
     overflow: hidden;
     cursor: pointer;

@@ -24,7 +24,7 @@ const operations = [
   <div class="user-info-card">
     <div class="info-left">
       <img src="https://blog.frium.top/upload/7b914c84-b6ec-4406-8d8b-976eee71e502.png" alt="">
-      <span>{{ props.data.username }}</span>
+      <h4>{{ props.data.username }}</h4>
     </div>
     <div class="info-right">
       <div class="identity">
