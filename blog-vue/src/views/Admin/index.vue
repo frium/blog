@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router';
 import AdminNav from './Layout/components/AdminNav.vue';
 const route = useRoute();
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 
 onMounted(() => {
   updateBodyStyle();

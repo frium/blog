@@ -4,7 +4,8 @@ import LinkCard from './components/LinkCard.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import AddLink from './components/AddLink.vue';
 import { onMounted, ref } from 'vue';
-import { getLinksAPI } from '@/api/links';
+import { deleteLinkAPI, getLinksAPI } from '@/api/links';
+import { ElMessage } from 'element-plus';
 
 const tableData = ref([]);
 
@@ -20,7 +21,8 @@ const buttonArr = [{
 }]
 
 const deleteFunction = () => {
-  console.log('del');
+  deleteLinkAPI();
+  ElMessage.success('删除成功!')
 }
 
 const searchFunction = (test) => {
@@ -31,7 +33,14 @@ const handelShowLink = () => {
   showAddLink.value = false;
   addLinkRef.value.resetState();
 }
+const handleSubmitSuccess = async () => {
+  const res = await getLinksAPI();
+  tableData.value = res.data;
+}
 
+const handleDeleteSuccess = (deletedId) => {
+  tableData.value = tableData.value.filter(item => item.id !== deletedId);
+};
 onMounted(async () => {
   const res = await getLinksAPI();
   tableData.value = res.data;
@@ -44,12 +53,12 @@ onMounted(async () => {
     <div class="edit-article">
       <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
-          <LinkCard :data="row" />
+          <LinkCard :data="row" @delete-success="handleDeleteSuccess" />
         </template>
       </SearchTable>
     </div>
     <el-dialog title="添加友链" v-model="showAddLink" width="550px" style="overflow: auto;" @close="handelShowLink">
-      <AddLink :handelShowLink="handelShowLink" ref="addLinkRef"></AddLink>
+      <AddLink :handelShowLink="handelShowLink" ref="addLinkRef" @submit-success="handleSubmitSuccess"></AddLink>
     </el-dialog>
   </div>
 </template>

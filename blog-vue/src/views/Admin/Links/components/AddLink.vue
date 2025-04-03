@@ -1,12 +1,12 @@
 <script setup>
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import UploadImg from "@/components/UploadImg.vue";
-import { addLinkAPI } from "@/api/links";
+import { addLinkAPI, updateLinkAPI } from "@/api/links";
 import { ElMessage } from "element-plus";
 import { uploadFileAPI } from "@/api/file";
-
 const props = defineProps({
-  handelShowLink: Function
+  handelShowLink: Function,
+  data: Object
 })
 const form = reactive({
   id: null,
@@ -16,20 +16,49 @@ const form = reactive({
   description: ""
 })
 
-
 const resetState = () => {
-  console.log(3231);
-
   form.id = null;
   form.logo = "";
   form.urlName = "";
   form.url = "";
   form.description = "";
 }
+
+const rules = reactive({
+  url: [
+    { required: true, message: '请输入网站地址', trigger: 'blur' },
+    {
+      type: 'url',
+      message: '请输入正确的网址格式 (如 https://example.com)',
+      trigger: ['blur', 'change']
+    }
+  ],
+  urlName: [
+    { required: true, message: '请输入网站名称', trigger: 'blur' },
+    { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+  ]
+})
+const formRef = ref(null)
+
+
 defineExpose({ resetState });
-const onSubmit = async () => {
-  await addLinkAPI(form);
-  ElMessage.success('添加成功!');
+const emit = defineEmits(['submit-success'])
+const onSubmit = () => {
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      if (props.data) {
+        await updateLinkAPI(form);
+        ElMessage.success('修改成功!');
+        Object.assign(props.data, form);
+        props.handelShowLink();
+      } else {
+        await addLinkAPI(form);
+        ElMessage.success('添加成功!');
+        emit('submit-success');
+        props.handelShowLink();
+      }
+    }
+  })
 }
 
 const changeAvatar = () => {
@@ -53,16 +82,19 @@ const changeAvatar = () => {
   input.click();
   document.body.removeChild(input);
 }
+onMounted(() => {
+  Object.assign(form, props.data);
+})
 
 </script>
 
 <template>
   <div class="add-link">
-    <el-form :model="form" label-width="auto" style="max-width: 500px">
-      <el-form-item label="网站地址">
+    <el-form ref="formRef" :rules="rules" :model="form" label-width="auto" style="max-width: 500px">
+      <el-form-item label="网站地址" prop="url">
         <el-input placeholder="https://...." v-model="form.url" />
       </el-form-item>
-      <el-form-item label="网站名称">
+      <el-form-item label="网站名称" prop="urlName">
         <el-input v-model="form.urlName" />
       </el-form-item>
       <el-form-item label="logo">

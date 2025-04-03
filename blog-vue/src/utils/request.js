@@ -2,6 +2,7 @@ import { useUserStore } from "@/stores/userStore";
 import axios from "axios";
 import { ElNotification } from "element-plus";
 import notificationToast from "./notificationToast ";
+import router from "@/router";
 
 export const request = axios.create({
   baseURL: '/api',
@@ -26,6 +27,7 @@ request.interceptors.response.use(res => res.data, error => {
     useUserStore().userInfo.avatar = "";
     useUserStore().userInfo.email = "";
     useUserStore().userInfo.username = "";
+    router.push({ name: 'Home' })
     return Promise.reject(error);
   }
 

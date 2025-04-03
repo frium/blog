@@ -1,19 +1,33 @@
 <script setup>
+import { deleteLinkAPI } from '@/api/links';
+import AddLink from './AddLink.vue';
 import TimeAndOperation from '@/components/TimeAndOperation.vue';
+import { ElMessage } from 'element-plus';
+import { ref } from 'vue';
+
 const props = defineProps({
   data: Object
 });
-const setLink = () => {
+const showAddLink = ref(false);
+const handelShowLink = () => {
+  showAddLink.value = false;
+}
+const updateLink = () => {
+  showAddLink.value = true;
   console.log('编辑友链');
 }
 
-
+const emit = defineEmits(['delete-success']);
 const deleteLink = () => {
-  console.log('删除友链');
+  const arr = [];
+  arr.push(props.data.id);
+  deleteLinkAPI(arr);
+  ElMessage.success('删除成功!');
+  emit('delete-success', props.data.id);
 }
 const operations = [
-  { name: '编辑', operate: setLink },
-  { name: '删除', operate: deleteLink }
+  { name: '编辑', onClick: updateLink },
+  { name: '删除', onClick: deleteLink }
 ]
 
 </script>
@@ -31,6 +45,11 @@ const operations = [
 
     <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
+  <el-dialog title="编辑友链" :append-to-body="true" v-model="showAddLink" width="550px" style="overflow: auto;"
+    @close="handelShowLink">
+    <AddLink :handelShowLink="handelShowLink" :data="data">
+    </AddLink>
+  </el-dialog>
 </template>
 
 <style scoped lang="scss">

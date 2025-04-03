@@ -151,9 +151,7 @@ onUnmounted(() => {
   cleanupUrls();
 });
 const onUploadProgress = (index) => (e) => {
-  console.log(e);
   fileBlodArr.value[index].uploadProgress = Math.round(e.progress * 100);
-  console.log(fileBlodArr.value[index].uploadProgress);
 }
 const resolve = (index) => {
   promiseNum.value = promiseNum.value - 1;
