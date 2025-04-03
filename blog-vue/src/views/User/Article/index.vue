@@ -2,6 +2,7 @@
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import TopArticleCard from '@/views/User/Home/components/TopArticleCard.vue';
 import { ref } from 'vue'
+import CommentArea from './components/CommentArea.vue';
 
 const mdContent = ref(`
 # JVM
@@ -366,6 +367,7 @@ java中映引入自动的垃圾回收(GC)机制,垃圾回收器主要负责对�
   <div class="article">
     <TopArticleCard :isTop="false"></TopArticleCard>
     <MarkdownViewer class="markdown" :source="mdContent" :line-numbers="true" />
+    <CommentArea></CommentArea>
     <div class="last-next">
       <RouterLink to="/article/1">{{ '< 上一篇:文章名字' }}</RouterLink>
           <RouterLink to="/article/1">{{ '下一篇:文章名字 >' }}</RouterLink>
