@@ -1,9 +1,15 @@
 <script setup>
+import { onMounted, ref } from 'vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import UserInfoCard from './components/UserInfoCard.vue';
-const createUser = () => {
+import { getUsersAPI } from '@/api/adminUser';
+import CreatUser from './components/CreatUser.vue';
 
+const showCreateUser = ref(false);
+
+const createUser = () => {
+  showCreateUser.value = true;
 }
 const buttonArr = [
   { name: '添加', onClick: createUser }
@@ -17,11 +23,23 @@ const searchFunction = () => {
 
 }
 
-const tableData = [
-  { username: "张三", auth: 1, createTime: "2024-03-10 12:00:00" },
-  { username: "李四", auth: 2, createTime: "2024-03-11 15:30:00" },
-  { username: "王五", auth: 3, createTime: "2024-03-12 09:45:00" }
-];
+const handelShowDialog = () => {
+  showCreateUser.value = false;
+  console.log("为31313问我");
+
+}
+
+const handleDeleteSuccess = async () => {
+  const res = await getUsersAPI();
+  tableData.value = res.data;
+}
+
+const tableData = ref([]);
+
+onMounted(async () => {
+  const res = await getUsersAPI();
+  tableData.value = res.data;
+})
 </script>
 
 <template>
@@ -30,10 +48,13 @@ const tableData = [
     <div class="manage-user">
       <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
-          <UserInfoCard :data="row" />
+          <UserInfoCard :data="row" @delete-success="handleDeleteSuccess" />
         </template>
       </SearchTable>
     </div>
+    <el-dialog title="创建用户" v-model="showCreateUser" width="550px" style="overflow: auto;">
+      <CreatUser @submit-success="handleDeleteSuccess" :handel-show-dialog="handelShowDialog"></CreatUser>
+    </el-dialog>
   </div>
 </template>
 

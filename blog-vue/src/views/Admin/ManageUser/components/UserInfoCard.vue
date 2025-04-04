@@ -1,17 +1,31 @@
 <script setup>
+import { deleteUsersAPI } from '@/api/adminUser';
 import TimeAndOperation from '@/components/TimeAndOperation.vue';
-
+import { ElMessage } from 'element-plus';
+import { ref } from 'vue';
+import CreatUser from './CreatUser.vue';
 const props = defineProps({
   data: Object
 })
 
 const updateInfo = () => {
+  showDialog.value = true;
   console.log('修改用户信息');
 
 }
+const emit = defineEmits(['delete-success']);
 
-const deleteUser = () => {
-  console.log('删除用户');
+const showDialog = ref(false);
+
+const handelShowDialog = () => {
+  showDialog.value = false;
+}
+const deleteUser = async () => {
+  const arr = [];
+  arr.push(props.data.id);
+  await deleteUsersAPI(arr);
+  ElMessage.success("删除成功");
+  emit('delete-success', props.data.id);
 }
 
 const operations = [
@@ -23,7 +37,7 @@ const operations = [
 <template>
   <div class="user-info-card">
     <div class="info-left">
-      <img src="https://blog.frium.top/upload/7b914c84-b6ec-4406-8d8b-976eee71e502.png" alt="">
+      <img :src="props.data.avatar" alt="">
       <h4>{{ props.data.username }}</h4>
     </div>
     <div class="info-right">
@@ -34,6 +48,10 @@ const operations = [
       </div>
       <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
     </div>
+    <el-dialog title="编辑用户" :append-to-body="true" v-model="showDialog" width="550px" style="overflow: auto;"
+      @close="handelShowDialog">
+      <CreatUser :data="props.data" :handel-show-dialog="handelShowDialog"></CreatUser>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,7 +64,7 @@ const operations = [
   .info-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 
     img {
       width: 40px;
