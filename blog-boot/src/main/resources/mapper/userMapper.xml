@@ -11,6 +11,6 @@
     </select>
     <insert id="addUserPermission">
         insert into user_role (role_id, user_id)
-        values (1,#{id})
+        values (#{permission},#{id})
     </insert>
 </mapper>

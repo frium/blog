@@ -2,11 +2,14 @@ package top.frium.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import top.frium.common.MyException;
 import top.frium.common.R;
+import top.frium.common.StatusCodeEnum;
+import top.frium.pojo.dto.UserDTO;
+import top.frium.pojo.entity.User;
+import top.frium.service.impl.UserServiceImpl;
 
 import java.util.List;
 
@@ -18,10 +21,46 @@ import java.util.List;
 @RestController
 @RequestMapping("/manageUser")
 public class ManageUserController {
+    @Autowired
+    UserServiceImpl userService;
     @ApiOperation("获取所有用户")
-    @PostMapping("/getUsers")
+    @GetMapping("/getUsers")
     public R<?> getUsers() {
         return R.success();
     }
 
+    @ApiOperation("删除用户")
+    @PostMapping("deleteUsers")
+    public R<?> deleteUsers() {
+        return R.success();
+    }
+
+    @ApiOperation("修改用户信息")
+    @PostMapping("updateUserInfo")
+    public R<?> updateUserInfo() {
+        return R.success();
+    }
+
+    @ApiOperation("用户名唯一性校验")
+    @GetMapping("verifyUsername")
+    public R<?> verifyUsername(String username) {
+        boolean exists =userService.lambdaQuery().eq(User::getUsername, username).exists();
+        if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
+        return R.success();
+    }
+
+    @ApiOperation("邮箱唯一性校验")
+    @GetMapping("verifyEmail")
+    public R<?> verifyEmail(String email) {
+        boolean exists =userService.lambdaQuery().eq(User::getEmail, email).exists();
+        if (exists) throw new MyException(StatusCodeEnum.USER_EXIST);
+        return R.success();
+    }
+
+    @ApiOperation("创建用户")
+    @PostMapping("createUser")
+    public R<?> createUser(UserDTO userDTO) {
+        userService.createUser(userDTO);
+        return R.success();
+    }
 }

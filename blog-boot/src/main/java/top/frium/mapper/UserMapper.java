@@ -7,12 +7,12 @@ import top.frium.pojo.entity.User;
 import java.util.List;
 
 /**
- *
  * @date 2024-07-29 23:29:39
  * @description
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    void addUserPermission(Long id);
+    void addUserPermission(Integer Permission, Long id);
+
     List<String> getUserPermission(Long id);
 }

@@ -20,6 +20,7 @@ import top.frium.pojo.LoginUser;
 import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
+import top.frium.pojo.dto.UserDTO;
 import top.frium.pojo.entity.User;
 import top.frium.pojo.vo.LoginVO;
 import top.frium.pojo.vo.UserInfoVO;
@@ -109,7 +110,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.NOT_LOGIN);
         }
+        boolean exists = lambdaQuery().eq(User::getUsername, username).exists();
+        if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
         lambdaUpdate().eq(User::getId, userId).set(User::getUsername, username).update();
+    }
+
+    @Override
+    public void createUser(UserDTO userDTO) {
+        boolean usernameExists = lambdaQuery().eq(User::getUsername, userDTO.getUsername()).exists();
+        if (usernameExists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
+        boolean emailExists = lambdaQuery().eq(User::getEmail, userDTO.getEmail()).exists();
+        if (emailExists) throw new MyException(StatusCodeEnum.USER_EXIST);
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+        user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
+        save(user);
+        userMapper.addUserPermission(userDTO.getPermission(),user.getId());
     }
 
     @Override
@@ -130,7 +146,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
         user.setUsername("用户" + Math.round(100000 + Math.random() * 900000));
         save(user);
-        userMapper.addUserPermission(user.getId());
+        userMapper.addUserPermission(1,user.getId());
     }
 
     @Override
