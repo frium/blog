@@ -23,28 +23,31 @@ import java.util.List;
 public class ManageUserController {
     @Autowired
     UserServiceImpl userService;
+
     @ApiOperation("获取所有用户")
     @GetMapping("/getUsers")
     public R<?> getUsers() {
-        return R.success();
+        return R.success(userService.lambdaQuery().list());
     }
 
     @ApiOperation("删除用户")
     @PostMapping("deleteUsers")
-    public R<?> deleteUsers() {
+    public R<?> deleteUsers(@RequestBody List<Long> userIds) {
+        userService.deleteUsers(userIds);
         return R.success();
     }
 
     @ApiOperation("修改用户信息")
     @PostMapping("updateUserInfo")
-    public R<?> updateUserInfo() {
+    public R<?> updateUserInfo(UserDTO userDTO) {
+        userService.updateUser(userDTO);
         return R.success();
     }
 
     @ApiOperation("用户名唯一性校验")
     @GetMapping("verifyUsername")
     public R<?> verifyUsername(String username) {
-        boolean exists =userService.lambdaQuery().eq(User::getUsername, username).exists();
+        boolean exists = userService.lambdaQuery().eq(User::getUsername, username).exists();
         if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
         return R.success();
     }
@@ -52,7 +55,7 @@ public class ManageUserController {
     @ApiOperation("邮箱唯一性校验")
     @GetMapping("verifyEmail")
     public R<?> verifyEmail(String email) {
-        boolean exists =userService.lambdaQuery().eq(User::getEmail, email).exists();
+        boolean exists = userService.lambdaQuery().eq(User::getEmail, email).exists();
         if (exists) throw new MyException(StatusCodeEnum.USER_EXIST);
         return R.success();
     }

@@ -15,4 +15,7 @@ public interface UserMapper extends BaseMapper<User> {
     void addUserPermission(Integer Permission, Long id);
 
     List<String> getUserPermission(Long id);
+
+    void deleteUserPermissionByUserId(Long userId);
+    void updateUserPermissionByUserId(Integer Permission,Long userId );
 }

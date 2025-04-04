@@ -13,4 +13,14 @@
         insert into user_role (role_id, user_id)
         values (#{permission},#{id})
     </insert>
+    <delete id="deleteUserPermissionByUserId">
+        DELETE FROM user_role
+        WHERE user_id = #{userId}
+    </delete>
+
+    <update id="updateUserPermissionByUserId">
+        UPDATE user_role
+        SET role_id = #{permission}
+        WHERE user_id = #{userId}
+    </update>
 </mapper>

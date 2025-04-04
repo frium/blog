@@ -29,6 +29,7 @@ import top.frium.uitls.JwtUtil;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -123,9 +124,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (emailExists) throw new MyException(StatusCodeEnum.USER_EXIST);
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
+        user.setId(null);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
         save(user);
-        userMapper.addUserPermission(userDTO.getPermission(),user.getId());
+        userMapper.addUserPermission(userDTO.getPermission(), user.getId());
+    }
+
+    @Override
+    public void deleteUsers(List<Long> userIds) {
+        if (userIds != null && !userIds.isEmpty()) {
+            for (Long userId : userIds) {
+                userMapper.deleteUserPermissionByUserId(userId);
+                removeById(userId);
+            }
+        }
+    }
+
+
+    @Override
+    public void updateUser(UserDTO userDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(userDTO, user);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        lambdaUpdate().eq(User::getId, userDTO.getId()).update(user);
+        userMapper.updateUserPermissionByUserId(userDTO.getPermission(), userDTO.getId());
     }
 
     @Override
@@ -146,7 +171,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
         user.setUsername("用户" + Math.round(100000 + Math.random() * 900000));
         save(user);
-        userMapper.addUserPermission(1,user.getId());
+        userMapper.addUserPermission(1, user.getId());
     }
 
     @Override
