@@ -17,7 +17,7 @@ import java.util.List;
  * @date 2025-03-18 16:10:34
  * @description
  */
-@Api("友链管理")
+@Api("用户管理")
 @RestController
 @RequestMapping("/manageUser")
 public class ManageUserController {
@@ -27,7 +27,7 @@ public class ManageUserController {
     @ApiOperation("获取所有用户")
     @GetMapping("/getUsers")
     public R<?> getUsers() {
-        return R.success(userService.lambdaQuery().list());
+        return R.success(userService.getUsers());
     }
 
     @ApiOperation("删除用户")
@@ -39,7 +39,7 @@ public class ManageUserController {
 
     @ApiOperation("修改用户信息")
     @PostMapping("updateUserInfo")
-    public R<?> updateUserInfo(UserDTO userDTO) {
+    public R<?> updateUserInfo(@RequestBody UserDTO userDTO) {
         userService.updateUser(userDTO);
         return R.success();
     }
@@ -62,7 +62,7 @@ public class ManageUserController {
 
     @ApiOperation("创建用户")
     @PostMapping("createUser")
-    public R<?> createUser(UserDTO userDTO) {
+    public R<?> createUser(@RequestBody  UserDTO userDTO) {
         userService.createUser(userDTO);
         return R.success();
     }

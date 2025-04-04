@@ -9,6 +9,7 @@ import top.frium.pojo.dto.UserDTO;
 import top.frium.pojo.entity.User;
 import top.frium.pojo.vo.LoginVO;
 import top.frium.pojo.vo.UserInfoVO;
+import top.frium.pojo.vo.UserVO;
 
 import java.util.List;
 
@@ -36,4 +37,6 @@ public interface UserService extends IService<User> {
     void deleteUsers(List<Long> userIds);
 
     void updateUser(UserDTO userDTO);
+
+    List<UserVO> getUsers();
 }

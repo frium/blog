@@ -24,6 +24,7 @@ import top.frium.pojo.dto.UserDTO;
 import top.frium.pojo.entity.User;
 import top.frium.pojo.vo.LoginVO;
 import top.frium.pojo.vo.UserInfoVO;
+import top.frium.pojo.vo.UserVO;
 import top.frium.service.UserService;
 import top.frium.uitls.JwtUtil;
 
@@ -151,6 +152,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         lambdaUpdate().eq(User::getId, userDTO.getId()).update(user);
         userMapper.updateUserPermissionByUserId(userDTO.getPermission(), userDTO.getId());
+    }
+
+    @Override
+    public List<UserVO> getUsers() {
+        return userMapper.getUserList();
     }
 
     @Override

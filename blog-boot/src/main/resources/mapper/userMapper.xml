@@ -11,7 +11,7 @@
     </select>
     <insert id="addUserPermission">
         insert into user_role (role_id, user_id)
-        values (#{permission},#{id})
+        values (#{permission},#{userId})
     </insert>
     <delete id="deleteUserPermissionByUserId">
         DELETE FROM user_role
@@ -23,4 +23,11 @@
         SET role_id = #{permission}
         WHERE user_id = #{userId}
     </update>
+
+    <select id="getUserList" >
+        SELECT u.*, ur.role_id as auth
+        FROM user u
+                 LEFT JOIN user_role ur ON u.id = ur.user_id
+        ORDER BY auth
+    </select>
 </mapper>
