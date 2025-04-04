@@ -46,23 +46,23 @@ public class ManageUserController {
 
     @ApiOperation("用户名唯一性校验")
     @GetMapping("verifyUsername")
-    public R<?> verifyUsername(String username) {
-        boolean exists = userService.lambdaQuery().eq(User::getUsername, username).exists();
+    public R<?> verifyUsername(String username, Long userId) {
+        boolean exists = userService.lambdaQuery().eq(User::getUsername, username).ne(userId != null, User::getId, userId).exists();
         if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
         return R.success();
     }
 
     @ApiOperation("邮箱唯一性校验")
     @GetMapping("verifyEmail")
-    public R<?> verifyEmail(String email) {
-        boolean exists = userService.lambdaQuery().eq(User::getEmail, email).exists();
+    public R<?> verifyEmail(String email, @RequestParam(required = false) Long userId) {
+        boolean exists = userService.lambdaQuery().eq(User::getEmail, email).ne(userId != null, User::getId, userId) .exists();
         if (exists) throw new MyException(StatusCodeEnum.USER_EXIST);
         return R.success();
     }
 
     @ApiOperation("创建用户")
     @PostMapping("createUser")
-    public R<?> createUser(@RequestBody  UserDTO userDTO) {
+    public R<?> createUser(@RequestBody UserDTO userDTO) {
         userService.createUser(userDTO);
         return R.success();
     }

@@ -13,5 +13,5 @@ public class UserDTO {
     private String password;
     private String email;
     private String avatar;
-    private Integer permission;
+    private Integer auth;
 }

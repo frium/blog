@@ -130,7 +130,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
         save(user);
-        userMapper.addUserPermission(userDTO.getPermission(), user.getId());
+        userMapper.addUserPermission(userDTO.getAuth(), user.getId());
     }
 
     @Override
@@ -151,7 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         lambdaUpdate().eq(User::getId, userDTO.getId()).update(user);
-        userMapper.updateUserPermissionByUserId(userDTO.getPermission(), userDTO.getId());
+        userMapper.updateUserPermissionByUserId(userDTO.getAuth(), userDTO.getId());
     }
 
     @Override
@@ -177,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setCreateTime(LocalDateTime.now().format(DATA_TIME_PATTERN));
         user.setUsername("用户" + Math.round(100000 + Math.random() * 900000));
         save(user);
-        userMapper.addUserPermission(1, user.getId());
+        userMapper.addUserPermission(3, user.getId());
     }
 
     @Override
