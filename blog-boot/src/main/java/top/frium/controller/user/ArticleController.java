@@ -27,9 +27,9 @@ public class ArticleController {
     }
 
     @ApiOperation("获取可见文章列表")
-    @GetMapping("/getArticleList")
-    public R<?> getArticleList() {
-        return R.success(articleService.getArticleList());
+    @GetMapping("/getShowArticleList")
+    public R<?> getArticleList(Long pageNum) {
+        return R.success(articleService.getShowArticleList(pageNum));
     }
 
     @ApiOperation("获取文章内容")

@@ -47,9 +47,10 @@ public class AdminArticleController {
 
     @ApiOperation("获取文章列表")
     @GetMapping("/getArticleList")
-    public R<?> getArticleList(Long pageNum) {
-        return R.success(articleService.getShowArticleList(pageNum));
+    public R<?> getArticleList() {
+        return R.success(articleService.getArticleList());
     }
+
     @ApiOperation("删除文章")
     @PostMapping("/deleteArticle")
     public R<?> deleteArticle(@RequestBody List<Long> articleIds) {

@@ -21,6 +21,7 @@ import top.frium.pojo.vo.ArticleVO;
 import top.frium.service.ArticleService;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,30 +144,30 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<ArticleListVO> getArticleList() {
-        String redisKey = "articleList:all"; // 更改 Redis Key 为查询所有文章
+        String redisKey = "articleList:all";
         String cachedData = (String) redisTemplate.opsForValue().get(redisKey);
         if (cachedData != null) {
-            return JSON.parseArray(cachedData, ArticleListVO.class); // 如果缓存存在，则直接返回缓存数据
+            return JSON.parseArray(cachedData, ArticleListVO.class); // 返回缓存
         }
 
-        // 查询所有文章
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        lambdaQuery().orderByDesc(Article::getIsTop)
-                .orderByDesc(Article::getCreateTime);
-        List<Article> articleList = articleMapper.selectList(queryWrapper); // 查询所有文章
+        // 使用LambdaQueryWrapper确保排序生效
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getIsTop)     // 置顶在前
+                .orderByDesc(Article::getCreateTime); // 时间降序
 
-        // 将文章列表转为 ArticleListVO 列表
+        List<Article> articleList = articleMapper.selectList(queryWrapper); // 查询所有
+
         List<ArticleListVO> articleListVOList = articleList.stream()
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
                     return articleListVO;
-                }).collect(Collectors.toList());
+                })
+                .collect(Collectors.toList());
 
-        // 将查询结果存入 Redis
+        // 存入Redis，过期时间1天
         String jsonString = JSON.toJSONString(articleListVOList);
-        redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS); // 设置过期时间为1天
-
+        redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS);
         return articleListVOList;
     }
 
@@ -178,11 +179,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (cachedData != null) {
             return JSON.parseArray(cachedData, ArticleListVO.class);
         }
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Article::getIsTop)
+                .orderByDesc(Article::getCreateTime)
+                .eq(Article::getIsShow, true);
+
         Page<Article> page = new Page<>(pageNum, 7);
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        lambdaQuery().orderByDesc(Article::getIsTop)
-                .orderByDesc(Article::getCreateTime);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
+
         List<ArticleListVO> articleListVOList = articlePage.getRecords().stream()
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
@@ -190,12 +194,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     return articleListVO;
                 }).collect(Collectors.toList());
 
-        // 3. 将查询结果存入 Redis
+        // 存入Redis，过期时间1天
         String jsonString = JSON.toJSONString(articleListVOList);
-        redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS); // 设置过期时间为1小时
+        redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS);
         return articleListVOList;
     }
-
     @Override
     public void changeArticleShowStatus(Long articleId) {
         articleMapper.changeArticleShowStatus(articleId);
