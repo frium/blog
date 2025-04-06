@@ -1,8 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-const numberOfPage = ref(28);
-const showNum = ref(10);
+
+const props = defineProps({
+  numberOfPage: Number, //总数
+  showNum: Number//最多展示多少个
+})
 const route = useRoute();
 const router = useRouter();
 const pageId = computed(() => {
@@ -21,36 +24,43 @@ const lastPage = async () => {
 
 const allPages = ref([]);
 const updatePages = () => {
-  showNum.value = Math.max(showNum.value, 7)
-  if (pageId.value > numberOfPage.value) {
+  props.showNum = Math.max(props.showNum, 5)
+  if (pageId.value > props.numberOfPage) {
     //TODO 路由到404去
     return;
   }
   const pages = [];
-  if (pageId.value >= showNum.value - 1) {
+  if (props.numberOfPage <= props.showNum) {
+    for (let i = 0; i < props.numberOfPage; i++) {
+      pages.push(i + 1);
+    }
+    allPages.value = pages;
+    return;
+  }
+  if (pageId.value >= props.showNum - 1) {
     pages.push(1, -1);
-    if (pageId.value >= numberOfPage.value - (showNum.value - 3)) {
-      for (let i = numberOfPage.value - (showNum.value - 3); i <= numberOfPage.value; i++) {
+    if (pageId.value >= props.numberOfPage - (props.showNum - 3)) {
+      for (let i = props.numberOfPage - (props.showNum - 3); i <= props.numberOfPage; i++) {
         pages.push(i);
       }
-      hiddenStartPage.value = numberOfPage.value - (showNum.value - 2);
-      hiddenEndPage.value = numberOfPage.value;
+      hiddenStartPage.value = props.numberOfPage - (props.showNum - 2);
+      hiddenEndPage.value = props.numberOfPage;
       allPages.value = pages;
       return;
     }
 
-    const num = (showNum.value - 5) / 2;
+    const num = (props.showNum - 5) / 2;
     let addNum = num;
     let reduceNum = num;
     if (num < Math.ceil(num)) {
       addNum = Math.ceil(num);
       reduceNum = Math.floor(num);
     }
-    for (let i = pageId.value - reduceNum; i <= pageId.value + addNum && i <= numberOfPage.value; i++) {
+    for (let i = pageId.value - reduceNum; i <= pageId.value + addNum && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
-    if (pageId.value + addNum < numberOfPage.value) {
-      pages.push(-2, numberOfPage.value);
+    if (pageId.value + addNum < props.numberOfPage) {
+      pages.push(-2, props.numberOfPage);
     }
 
     hiddenStartPage.value = pageId.value - reduceNum;
@@ -58,17 +68,17 @@ const updatePages = () => {
 
 
   } else {
-    if (showNum.value >= numberOfPage.value) {
-      for (let i = 1; i <= showNum.value; i++) {
+    if (props.showNum >= props.numberOfPage) {
+      for (let i = 1; i <= props.showNum; i++) {
         pages.push(i);
       }
     } else {
-      for (let i = 1; i <= showNum.value - 2; i++) {
+      for (let i = 1; i <= props.showNum - 2; i++) {
         pages.push(i);
       }
-      pages.push(-2, numberOfPage.value);
+      pages.push(-2, props.numberOfPage);
       hiddenStartPage.value = 0;
-      hiddenEndPage.value = showNum.value - 1;
+      hiddenEndPage.value = props.showNum - 1;
     }
   }
   allPages.value = pages;
@@ -76,51 +86,51 @@ const updatePages = () => {
 updatePages();
 const lastNumOfPage = () => {
   const pages = [];
-  if (hiddenStartPage.value <= showNum.value - 2) {
-    for (let i = 1; i <= showNum.value - 2 && i <= numberOfPage.value; i++) {
+  if (hiddenStartPage.value <= props.showNum - 2) {
+    for (let i = 1; i <= props.showNum - 2 && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
     allPages.value = pages;
-    hiddenEndPage.value = showNum.value - 1;
-    pages.push(-2, numberOfPage.value);
+    hiddenEndPage.value = props.showNum - 1;
+    pages.push(-2, props.numberOfPage);
     return;
   }
 
-  if (hiddenStartPage.value <= showNum.value - 2) {
-    for (let i = 1; i <= showNum.value - 2 && i <= numberOfPage.value; i++) {
+  if (hiddenStartPage.value <= props.showNum - 2) {
+    for (let i = 1; i <= props.showNum - 2 && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
   }
   else {
     pages.push(1, -1);
-    for (let i = hiddenStartPage.value - (showNum.value - 5); i <= hiddenStartPage.value && i <= numberOfPage.value; i++) {
+    for (let i = hiddenStartPage.value - (props.showNum - 5); i <= hiddenStartPage.value && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
   }
-  pages.push(-2, numberOfPage.value);
+  pages.push(-2, props.numberOfPage);
   allPages.value = pages;
   hiddenEndPage.value = hiddenStartPage.value + 1;
-  hiddenStartPage.value = Math.max(showNum.value - 2, hiddenStartPage.value - (showNum.value - 3));
+  hiddenStartPage.value = Math.max(props.showNum - 2, hiddenStartPage.value - (props.showNum - 3));
 
 }
 const nextNumOfPage = () => {
   const pages = [];
   pages.push(1, -1);
-  if (hiddenEndPage.value >= numberOfPage.value - (showNum.value - 2)) {
-    for (let i = numberOfPage.value - (showNum.value - 3); i <= numberOfPage.value; i++) {
+  if (hiddenEndPage.value >= props.numberOfPage - (props.showNum - 2)) {
+    for (let i = props.numberOfPage - (props.showNum - 3); i <= props.numberOfPage; i++) {
       pages.push(i);
     }
     allPages.value = pages;
-    hiddenStartPage.value = numberOfPage.value - (showNum.value - 2);
+    hiddenStartPage.value = props.numberOfPage - (props.showNum - 2);
     return;
   }
-  for (let i = hiddenEndPage.value; i <= hiddenEndPage.value + showNum.value - 5 && i <= numberOfPage.value; i++) {
+  for (let i = hiddenEndPage.value; i <= hiddenEndPage.value + props.showNum - 5 && i <= props.numberOfPage; i++) {
     pages.push(i);
   }
-  if (hiddenEndPage.value + showNum.value - 5 < numberOfPage.value) pages.push(-2, numberOfPage.value);
+  if (hiddenEndPage.value + props.showNum - 5 < props.numberOfPage) pages.push(-2, props.numberOfPage);
   allPages.value = pages;
-  hiddenStartPage.value = Math.max(showNum.value - 2, hiddenEndPage.value - 1);
-  hiddenEndPage.value = hiddenEndPage.value + showNum.value - 4;
+  hiddenStartPage.value = Math.max(props.showNum - 2, hiddenEndPage.value - 1);
+  hiddenEndPage.value = hiddenEndPage.value + props.showNum - 4;
 }
 </script>
 
@@ -137,7 +147,7 @@ const nextNumOfPage = () => {
         </RouterLink>
       </template>
     </div>
-    <div v-if="pageId === numberOfPage" :style="{ width: '58px', height: '31px' }"></div>
+    <div v-if="pageId === props.numberOfPage" :style="{ width: '58px', height: '31px' }"></div>
     <button v-else class="next-page" @click="nextPage">下一页</button>
   </div>
 </template>
