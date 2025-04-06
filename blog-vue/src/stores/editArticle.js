@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useEditArticleStore = defineStore('editArticleStore', () => {
   const article = reactive({
-    "id": 32,
+    "id": null,
     "title": "",
     "label": [],
     "coverImg": "",
@@ -12,5 +12,7 @@ export const useEditArticleStore = defineStore('editArticleStore', () => {
     "isTop": false,
     "content": ""
   })
-  return { article }
+  return {
+    article
+  }
 })

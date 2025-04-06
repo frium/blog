@@ -41,6 +41,9 @@ importers:
       pinia-plugin-persistedstate:
         specifier: ^4.2.0
         version: 4.2.0(pinia@2.3.1(vue@3.5.13))
+      vditor:
+        specifier: ^3.10.9
+        version: 3.10.9
       vue:
         specifier: ^3.5.13
         version: 3.5.13
@@ -1001,6 +1004,9 @@ packages:
 
   destr@2.0.3:
     resolution: {integrity: sha512-2N3BOUU4gYMpTP24s5rF5iP7BDr7uNTCs4ozw3kf/eKfvWSIu93GEBi5m427YoyJoeOzQ5smuu4nNAPGb8idSQ==, tarball: https://registry.npmmirror.com/destr/-/destr-2.0.3.tgz}
+
+  diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==, tarball: https://registry.npmmirror.com/diff-match-patch/-/diff-match-patch-1.0.5.tgz}
 
   dom7@3.0.0:
     resolution: {integrity: sha512-oNlcUdHsC4zb7Msx7JN3K0Nro1dzJ48knvBOnDPKJ2GV9wl1i5vydJZUSyOfrkKFDZEud/jBsTk92S/VGSAe/g==, tarball: https://registry.npmmirror.com/dom7/-/dom7-3.0.0.tgz}
@@ -2054,6 +2060,9 @@ packages:
 
   varint@6.0.0:
     resolution: {integrity: sha512-cXEIW6cfr15lFv563k4GuVuW/fiwjknytD37jIOLSdSWuOI6WnO/oKwmP2FQTU2l01LP8/M5TSAJpzUaGe3uWg==, tarball: https://registry.npmmirror.com/varint/-/varint-6.0.0.tgz}
+
+  vditor@3.10.9:
+    resolution: {integrity: sha512-cJE/pMv/kg3dW9TIoAe2VBM4CI1JuTEjsD8YhveqYZm8h4pjcXSmYtu/0QVqH6/KA2BeUXvZilryOXlwho2QZg==, tarball: https://registry.npmmirror.com/vditor/-/vditor-3.10.9.tgz}
 
   vite-hot-client@0.2.4:
     resolution: {integrity: sha512-a1nzURqO7DDmnXqabFOliz908FRmIppkBKsJthS8rbe8hBEXwEwe4C3Pp33Z1JoFCYfVL4kTOMLKk0ZZxREIeA==, tarball: https://registry.npmmirror.com/vite-hot-client/-/vite-hot-client-0.2.4.tgz}
@@ -3128,6 +3137,8 @@ snapshots:
 
   destr@2.0.3: {}
 
+  diff-match-patch@1.0.5: {}
+
   dom7@3.0.0:
     dependencies:
       ssr-window: 3.0.0
@@ -4165,6 +4176,10 @@ snapshots:
   util-deprecate@1.0.2: {}
 
   varint@6.0.0: {}
+
+  vditor@3.10.9:
+    dependencies:
+      diff-match-patch: 1.0.5
 
   vite-hot-client@0.2.4(vite@6.2.1(jiti@2.4.2)(sass-embedded@1.85.1)):
     dependencies:

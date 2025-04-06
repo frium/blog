@@ -1,86 +1,115 @@
-<template>
-  <div style="border: 1px solid #ccc;min-width: 365px; max-width: 100%; ">
-    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editorRef" :defaultConfig="toolbarConfig" />
-    <Editor v-model="editArticleStore.article.content" style="height: calc(100vh - 130px); overflow-y: hidden;"
-      :defaultConfig="editorConfig" @onCreated="handleCreated" />
-  </div>
-</template>
-
 <script setup>
-import { shallowRef, onBeforeUnmount } from 'vue'
-import "@wangeditor/editor/dist/css/style.css";
-import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { useEditArticleStore } from '@/stores/editArticle';
-import { uploadFileAPI } from '@/api/file';
+import Vditor from 'vditor'
+import 'vditor/dist/index.css';
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue';
+
+const vditor = ref()
 const editArticleStore = useEditArticleStore();
-const editorRef = shallowRef()
 
-// 工具栏配置
-const toolbarConfig = {
-  toolbarKeys: [
-    "headerSelect",  // 标题选择
-    'bold', // 加粗
-    'italic', // 斜体
-    'through', // 删除线
-    'underline', // 下划线
-    'justifyCenter', // 居中对齐
-    'justifyJustify', // 两端对齐
-    'justifyLeft', // 左对齐
-    'justifyRight', // 右对齐
-    'bulletedList', // 无序列表
-    'numberedList', // 有序列表
-    'color', // 文字颜色
-    'insertLink', // 插入链接
-    'fontSize', // 字体大小
-    'lineHeight', // 行高
-    'delIndent', // 缩进
-    'indent', // 增进
-    'divider', // 分割线
-    'insertTable', // 插入表格
-    'undo', // 撤销
-    'redo', // 重做
-    'clearStyle', // 清除格式
-    'fullScreen', // 全屏
-    "blockquote", // 引用
-    "codeBlock", // 代码块
-    "insertImage", // 插入图片
-    "uploadImage", // 上传图片
-  ]
-}
-
-
-// 编辑器配置
-const editorConfig = {
-  placeholder: '请输入内容...',
-  MENU_CONF: {}
-};
-
-// 上传图片配置
-editorConfig.MENU_CONF['uploadImage'] = {
-  async customUpload(file, insertFn) {
-    try {
-      const res = await uploadFileAPI(file, null, null); // 假设 uploadAvatarAPI 是一个返回 Promise 的函数
-      insertFn(res.data); // 插入图片 URL
-    } catch (error) {
-      console.error('上传图片失败:', error); // 打印错误信息
-    }
+// 监听 store 中内容的变化，更新编辑器
+watch(() => editArticleStore.article.content, (newVal) => {
+  if (vditor.value && vditor.value.getValue() !== newVal) {
+    vditor.value.setValue(newVal);
   }
-};
+});
 
-// 组件销毁时，也及时销毁编辑器
+onMounted(() => {
+  vditor.value = new Vditor('vditor', {
+    value: editArticleStore.article.content,
+    height: 'calc(100vh - 88px)',
+    width: '100%',
+    placeholder: '开始创作吧...',
+    theme: 'classic',
+    mode: 'ir',
+    toolbar: [
+      'emoji',
+      'headings',
+      'bold',
+      'italic',
+      'strike',
+      '|',
+      'line',
+      'quote',
+      'list',
+      'ordered-list',
+      'check',
+      'outdent',
+      'indent',
+      '|',
+      'code',
+      'inline-code',
+      'insert-after',
+      'insert-before',
+      '|',
+      'table',
+      'link',
+      '|',
+      'undo',
+      'redo',
+      '|',
+      'fullscreen',
+      'preview',
+      'both',
+      'export',
+    ],
+    toolbarConfig: {
+      pin: true,
+    },
+    counter: {
+      enable: true,
+      type: 'markdown',
+    },
+    preview: {
+      delay: 500,
+      mode: 'editor',
+      url: '/api/markdown',
+      parse: (element) => {
+        console.log(element);
+      },
+    },
+    tab: '  ',
+    typewriterMode: true,
+    select: {
+      enable: true,
+    },
+    outline: {
+      enable: true,
+      position: 'right',
+    },
+    after: () => {
+      console.log('编辑器初始化完成');
+    },
+    cdn: '',
+    icon: 'material',
+    debugger: true,
+    adjustToolbarPosition: true,
+    resize: {
+      enable: true,
+      position: 'bottom',
+    },
+    classes: {
+      preview: 'custom-preview-class',
+    },
+    lang: 'zh_CN',
+    input: (value) => {
+      // 当编辑器内容变化时更新 store
+      editArticleStore.article.content = value;
+    },
+    blur: (value) => {
+      // 编辑器失去焦点时也更新 store
+      editArticleStore.article.content = value;
+    },
+  });
+})
 onBeforeUnmount(() => {
   editArticleStore.article.content = '';
-  const editor = editorRef.value
-  if (editor == null) return
-  editor.destroy();
+  if (vditor.value == null) return;
+  vditor.value.destroy();
 })
-
-
-const handleCreated = (editor) => {
-  editorRef.value = editor
-}
-
 
 </script>
 
-<style lang='scss' scoped></style>
+<template>
+  <div id="vditor"></div>
+</template>

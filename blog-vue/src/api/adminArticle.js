@@ -17,7 +17,7 @@ export const updateArticleAPI = (data) => {
 
 export const getArticleListAPI = () => {
   return request({
-    url: '/article/getArticleList'
+    url: '/adminArticle/getArticleList'
   })
 }
 export const changeArticleShowStatusAPI = (articleId) => {
