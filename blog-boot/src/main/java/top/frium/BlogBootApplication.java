@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootApplication
 @MapperScan("top.frium.mapper")
 @EnableTransactionManagement
-@Transactional
 public class BlogBootApplication {
 
     public static void main(String[] args) {

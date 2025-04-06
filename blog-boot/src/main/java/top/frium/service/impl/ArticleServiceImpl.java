@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
 import top.frium.mapper.ArticleMapper;
@@ -44,6 +45,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     RedisTemplate<Object, Object> redisTemplate;
 
     @Override
+    @Transactional
     public void uploadArticle(ArticleDTO articleDTO) {
         try {
             Article article = new Article();
@@ -67,12 +69,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public boolean save(Article entity) {
         entity.setId(null);
         return super.save(entity);
     }
 
     @Override
+    @Transactional
     public ArticleVO getArticle(Long articleId) {
         Article article = getById(articleId);
         if (article == null) throw new MyException(StatusCodeEnum.NOT_FOUND);
@@ -83,6 +87,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public void updateArticle(ArticleDTO articleDTO) {
         try {
             Article article = new Article();
@@ -102,6 +107,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public void deleteArticle(List<Long> articleIds) {
         for (Long id : articleIds) {
             removeById(id);
@@ -116,6 +122,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public void addLabel(String label) {
         Long count = labelMapper.selectCount(new LambdaQueryWrapper<Label>()
                 .eq(Label::getLabelName, label));
@@ -124,6 +131,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public void deleteLabel(List<Long> labelIds) {
         if (labelIds != null && !labelIds.isEmpty()) {
             articleMapper.deleteLabelRelations(labelIds);
@@ -132,6 +140,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public void updateLabel(Label label) {
         if (label == null) throw new MyException(StatusCodeEnum.VALUE_ERROR);
         Long count = labelMapper.selectCount(new LambdaQueryWrapper<Label>()
@@ -143,6 +152,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public List<ArticleListVO> getArticleList() {
         String redisKey = "articleList:all";
         String cachedData = (String) redisTemplate.opsForValue().get(redisKey);
@@ -173,6 +183,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
+    @Transactional
     public List<ArticleListVO> getShowArticleList(Long pageNum) {
         if (pageNum == null) pageNum = 1L;
         String redisKey = "articleList:page:" + pageNum;
@@ -202,6 +213,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articleListVOList;
     }
     @Override
+    @Transactional
     public void changeArticleShowStatus(Long articleId) {
         articleMapper.changeArticleShowStatus(articleId);
         redisTemplate.delete("articleList:all");

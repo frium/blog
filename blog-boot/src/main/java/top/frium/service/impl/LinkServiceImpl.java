@@ -3,6 +3,7 @@ package top.frium.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
 import top.frium.mapper.LinkMapper;
@@ -22,12 +23,14 @@ import static top.frium.context.CommonConstant.DATA_TIME_PATTERN;
 @Service
 public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements LinkService {
     @Override
+    @Transactional
     public boolean save(Link entity) {
         entity.setId(null);
         return super.save(entity);
     }
 
     @Override
+    @Transactional
     public void addLink(LinkDTO linkDTO) {
         if (linkDTO == null) throw new MyException(StatusCodeEnum.FAIL);
         Link link = new Link();
@@ -38,12 +41,14 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
 
 
     @Override
+    @Transactional
     public void deleteLink(List<Long> linksIds) {
         if (linksIds == null || linksIds.isEmpty()) throw new MyException(StatusCodeEnum.FAIL);
         removeByIds(linksIds);
     }
 
     @Override
+    @Transactional
     public void updateLink(LinkDTO linkDTO) {
         Link link = getById(linkDTO.getId());
         if (link == null) throw new MyException(StatusCodeEnum.FAIL);

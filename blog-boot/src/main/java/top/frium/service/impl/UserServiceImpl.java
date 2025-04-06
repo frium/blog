@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
 import top.frium.context.RabbitMQConstant;
@@ -85,6 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void updateEmail(EmailDTO emailDTO) {
         if (emailDTO.getEmail() == null) throw new MyException(StatusCodeEnum.FAIL);
         Long userId;
@@ -104,6 +106,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void updateUsername(String username) {
         Long userId;
         try {
@@ -118,6 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void createUser(UserDTO userDTO) {
         boolean usernameExists = lambdaQuery().eq(User::getUsername, userDTO.getUsername()).exists();
         if (usernameExists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
@@ -134,6 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void deleteUsers(List<Long> userIds) {
         if (userIds != null && !userIds.isEmpty()) {
             for (Long userId : userIds) {
@@ -145,6 +150,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     @Override
+    @Transactional
     public void updateUser(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
@@ -160,6 +166,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    @Transactional
     public void registerByEmail(RegisterEmailDTO registerEmailDTO) {
         //在redis中检查是否数据匹配
         Object o = redisTemplate.opsForValue().get(registerEmailDTO.getEmail());

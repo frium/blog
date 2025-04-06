@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
@@ -42,6 +43,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     String fileUrl;
 
     @Override
+    @Transactional
     public String uploadFile(MultipartFile file) {
         String fileName = Objects.requireNonNull(file.getOriginalFilename());
         Path filePath = Paths.get(directoryPath, fileName);
@@ -71,6 +73,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
     @Override
+    @Transactional
     public void deleteFile(List<Long> fileIds) {
         fileIds.forEach(fileId -> {
             File file = fileMapper.selectById(fileId);
