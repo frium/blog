@@ -9,7 +9,6 @@ import { useEditArticleStore } from '@/stores/editArticle';
 import { updateArticleAPI } from '@/api/adminArticle';
 import { ElMessage } from 'element-plus';
 import { useRouter } from 'vue-router';
-
 const route = useRoute();
 const router = useRouter();
 const showArticleSetting = ref(false);

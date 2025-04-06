@@ -9,11 +9,19 @@ import LyricStrip from '@/components/LyricStrip.vue';
 import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted, watch } from 'vue';
+
 const isHidden = ref(false);
 const observer = ref(null);
 
 const route = useRoute();
 const isChanging = ref(false);
+
+const markdownCatalogue = ref(null);
+
+
+const handleComponentLoaded = () => {
+  markdownCatalogue.value.handleLoadCatalogue();
+};
 
 watch(route, () => {
   isChanging.value = true;
@@ -86,13 +94,14 @@ const updateBodyStyle = () => {
           <div class="router-view"
             :style="{ opacity: isChanging ? '0' : '1', transform: isChanging ? 'translateY(20px)' : 'translateY(0px)' }">
             <div id="trigger" style="height: 1px; width: 100%;"></div>
-            <router-view></router-view>
+            <router-view @component-loaded="handleComponentLoaded"></router-view>
           </div>
           <div class="right" v-if="!isTimeRoute">
             <div class="content" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
               <PersonalCard class="personal-card">
               </PersonalCard>
-              <MarkdownCatalogue class="markdown-catalogue" v-if="route.path.includes('article')"></MarkdownCatalogue>
+              <MarkdownCatalogue ref="markdownCatalogue" class="markdown-catalogue"
+                v-if="route.path.includes('article')"></MarkdownCatalogue>
             </div>
           </div>
         </div>

@@ -1,15 +1,20 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
+
 const headers = ref([]);
-onMounted(() => {
+const handleLoadCatalogue = () => {
   const markdownContainer = document.getElementById('markdown-container');
+  console.log(headers.value);
   if (markdownContainer) updateCatalogue(markdownContainer);
-});
+}
+defineExpose({ handleLoadCatalogue });
 const updateCatalogue = (markdownContainer) => {
+
   headers.value = markdownContainer.querySelectorAll('h1, h2, h3');
   headers.value.forEach((header, index) => {
     header.id = index;
   });
+
   let lastActiveIndex = -1;
   const observer = new IntersectionObserver((entries) => {
 
