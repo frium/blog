@@ -63,7 +63,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }
-        redisTemplate.delete("articleList:all");
+        redisTemplate.delete("articleList");
     }
 
     @Override
@@ -161,6 +161,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
+                    articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
                     return articleListVO;
                 })
                 .collect(Collectors.toList());
@@ -191,6 +192,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
+                    articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
                     return articleListVO;
                 }).collect(Collectors.toList());
 

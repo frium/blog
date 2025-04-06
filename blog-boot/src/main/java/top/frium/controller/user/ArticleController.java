@@ -15,7 +15,7 @@ import top.frium.service.ArticleService;
  */
 @Api("获取文章")
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/user/article")
 public class ArticleController {
     @Autowired
     ArticleService articleService;

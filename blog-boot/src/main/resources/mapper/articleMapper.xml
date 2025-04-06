@@ -20,8 +20,8 @@
         SELECT 1 FROM label WHERE id = #{labelId} LIMIT 1
     </select>
 
-    <select id="getLabelsByArticleId" parameterType="Long" resultType="top.frium.pojo.entity.Label">
-        SELECT id, label_name
+    <select id="getLabelsByArticleId" resultType="top.frium.pojo.entity.Label" >
+        SELECT *
         FROM label
                  JOIN article_label al ON label.id = al.label_id
         WHERE al.article_id = #{articleId}
