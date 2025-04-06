@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted } from "vue"
 
 
-const text = ref('单看外形似乎只是个古灵精怪的快乐少女，实际上是往生堂第七十七代堂主，掌管堂中事务的少女。身居堂主之位，却没有半分架子。既是“往生堂”堂主，也是璃月“著名”诗人，胡桃的每一重身份都堪称奇妙。她总是飞快地出现又消失，犹如闪电与火花并行，甫一现身便点燃一切')
-
+const props = defineProps({
+  data: Object
+})
 
 </script>
 
@@ -12,30 +13,35 @@ const text = ref('单看外形似乎只是个古灵精怪的快乐少女，实�
     <div class="left-div">
       <RouterLink to="/article/1">
         <span class="title">
-          胡桃万岁
+          {{ props.data.title }}
         </span>
       </RouterLink>
       <div style="flex-basis: 70%;">
-        <div class="label">#胡桃 #原神 #好看</div>
+        <div class="label">
+          <span v-for="label in props.data.label" :key="label">
+            {{ '&nbsp;#' + label.labelName }}
+          </span>
+
+        </div>
         <div style="text-indent: 2em;
            display: -webkit-box;
            -webkit-box-orient: vertical;
            -webkit-line-clamp: 4;
            overflow: hidden;">
           <span class="describe">
-            {{ text }}
+            {{ props.data.summary }}
           </span>
         </div>
       </div>
       <hr style="background-color: rgba(90, 90, 90,0.7);height: 2px; border: none; ">
       <div class="footer">
-        <span class="views">❤100</span>
-        <span class="message">❤17</span>
-        <span class="time"> 2024-10-15 21:49</span>
+        <span class="views">{{ props.data.viewNum }}</span>
+        <span class="message">{{ props.data.commentNum }}</span>
+        <span class="time">{{ props.data.createTime }}</span>
       </div>
     </div>
     <div class="right-div">
-      <img src="https://static.frium.top/blog/hutao.jpg" alt="">
+      <img :src="props.data.coverImg" alt="">
     </div>
   </div>
 </template>
@@ -73,7 +79,7 @@ span {
     .title {
       display: block;
       word-wrap: none;
-      font-size: 30px;
+      font-size: 26px;
       flex-basis: 10%;
     }
 
