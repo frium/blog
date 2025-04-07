@@ -2,7 +2,6 @@ package top.frium.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -22,10 +21,10 @@ import top.frium.pojo.vo.ArticleVO;
 import top.frium.service.ArticleService;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -65,7 +64,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
         }
-        redisTemplate.delete("articleList");
+        Set<Object> keys = redisTemplate.keys("articleList*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 
     @Override
@@ -207,11 +209,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     return articleListVO;
                 }).collect(Collectors.toList());
 
-        // 存入Redis，过期时间1天
         String jsonString = JSON.toJSONString(articleListVOList);
         redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS);
         return articleListVOList;
     }
+
     @Override
     @Transactional
     public void changeArticleShowStatus(Long articleId) {
