@@ -1,12 +1,22 @@
 <script setup>
 import XScroll from '@/components/XScroll.vue';
+import { onMounted, ref } from 'vue';
 import TimeLineCard from './components/TimeLineCard.vue';
+import { getArticleByTimeAPI } from '@/api/article';
+
+const articles = ref([]);
+onMounted(async () => {
+  const res = await getArticleByTimeAPI();
+  articles.value = res.data;
+
+})
 </script>
 
 <template>
   <XScroll class="x-scroll">
     <div class="time-line-cards">
-      <TimeLineCard v-for="index in 60" :key="index" :class="['card', { even: index % 2 === 0 }]" />
+      <TimeLineCard v-for="(article, index) in articles" :key="article.id" :class="['card', { even: index % 2 === 0 }]"
+        :data="article" />
     </div>
   </XScroll>
 </template>
@@ -14,11 +24,12 @@ import TimeLineCard from './components/TimeLineCard.vue';
 <style scoped lang="scss">
 .x-scroll {
   position: relative;
+  height: 80vh;
 
   &::before {
     content: '';
     position: absolute;
-    top: 41vh;
+    top: 39vh;
     width: 100%;
     height: 2px;
     background: #525151;
@@ -26,7 +37,7 @@ import TimeLineCard from './components/TimeLineCard.vue';
 
   .time-line-cards {
     --card-width: 460px;
-    --cards-count: 60;
+    --cards-count: v-bind('articles.length');
 
     position: relative;
     min-height: 400px;

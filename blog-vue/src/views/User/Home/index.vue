@@ -34,7 +34,9 @@ onMounted(async () => {
       <TopArticleCard v-if="data.isTop" :data="data"></TopArticleCard>
       <ArticleCard v-else :data="data"></ArticleCard>
     </template>
-    <CardPaginator v-if="articleNum > 7" :number-of-page="Math.ceil(articleNum / 7)" :show-num="7"></CardPaginator>
+    <CardPaginator style="margin: 10px 0 20px 0" v-if="articleNum > 7" :number-of-page="Math.ceil(articleNum / 7)"
+      :show-num="7">
+    </CardPaginator>
   </div>
 </template>
 

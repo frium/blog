@@ -1,56 +1,56 @@
 <script setup>
 const props = defineProps({
-  // id:{
-  //   type: String,
-  // },
-  // title: {
-  //   type: String,
-  // },
-  // img: {
-  //   type: String,
-  // },
-  // describe: {
-  //   type: String,
-  // },
-  // time: {
-  //   type: String,
-  // }
+  data: Object
 });
 </script>
 
 <template>
   <div class="time-line-card">
-    <RouterLink to="/time">
-      <img src="https://static.frium.top/blog/head.png" alt="">
+    <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
+      <img :src="props.data.coverImg" alt="">
     </RouterLink>
-    <div class="time">2024-10-15</div>
-    <span class="describe">如果你停止,就是谷底 如果你还在继续果你还在继续如果你停止还在继续如果你停止还在继续如果你停止还在继续如果你停止还在继续如果你停止,就是谷底 如果你还在继续,就是上坡</span>
+    <span class="time">{{ props.data.createTime.split(' ')[0] }}</span>
+    <span class="title">{{ props.data.title }}</span>
+
+    <span class="describe">{{ props.data.summary }}</span>
   </div>
 </template>
 
 <style scoped lang="scss">
 .time-line-card {
   position: relative;
-  width: 30vw;
+  width: 33vw;
   min-width: 350px;
-  height: 46vh;
+  height: 40vh;
   padding: 0 50px;
   overflow: hidden;
 
   img {
     width: 100%;
-    height: 65%;
+    height: 66%;
     object-fit: cover;
     object-position: 0 25%;
     border-radius: 5px;
 
   }
 
+  .title {
+    position: absolute;
+    top: 53%;
+    left: 70px;
+    font-size: 20px;
+    font-weight: bold;
+    max-width: 35%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   .time {
     position: absolute;
     top: 52%;
-    left: 70px;
-    font-size: 28px;
+    right: 70px;
+    font-size: 26px;
     font-weight: bold;
   }
 

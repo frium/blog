@@ -27,3 +27,9 @@ export const getLabelsAPI = () => {
   })
 }
 
+export const getArticleByTimeAPI = () => {
+  return request({
+    url: '/user/article/getArticleByTime'
+  })
+}
+
