@@ -23,6 +23,12 @@ public class AdminArticleController {
     @Autowired
     ArticleService articleService;
 
+    @ApiOperation("获取文章数量")
+    @GetMapping("/getArticleNum")
+    public R<?> getArticleNum() {
+        return R.success(articleService.count());
+    }
+
     @ApiOperation("添加文章")
     @PostMapping("/uploadArticle")
     public R<?> uploadArticle(@RequestBody ArticleDTO articleDTO) {

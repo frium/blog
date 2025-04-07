@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.frium.mapper.LabelMapper">
+
+    <select id="selectLabelsWithArticleCount" resultType="top.frium.pojo.vo.LabelVO">
+        SELECT
+            l.id,
+            l.label_name as labelName,
+            l.create_time as createTime,
+            COUNT(al.article_id) as articleCount
+        FROM
+            label l
+                LEFT JOIN
+            article_label al ON l.id = al.label_id
+        GROUP BY
+            l.id, l.label_name, l.create_time
+    </select>
+
+</mapper>
