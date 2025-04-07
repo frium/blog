@@ -16,6 +16,7 @@ import top.frium.mapper.LabelMapper;
 import top.frium.pojo.dto.ArticleDTO;
 import top.frium.pojo.entity.Article;
 import top.frium.pojo.entity.Label;
+import top.frium.pojo.vo.ArticleByTimeVO;
 import top.frium.pojo.vo.ArticleListVO;
 import top.frium.pojo.vo.ArticleVO;
 import top.frium.service.ArticleService;
@@ -219,5 +220,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void changeArticleShowStatus(Long articleId) {
         articleMapper.changeArticleShowStatus(articleId);
         redisTemplate.delete("articleList:all");
+    }
+
+    @Override
+    public List<ArticleByTimeVO> getArticleByTime() {
+        List<Article> articles = lambdaQuery()
+                .select(Article::getId,
+                        Article::getCoverImg,
+                        Article::getSummary,
+                        Article::getTitle,
+                        Article::getCreateTime)
+                .list();
+        return articles.stream()
+                .map(article -> {
+                    ArticleByTimeVO vo = new ArticleByTimeVO();
+                    vo.setId(article.getId());
+                    vo.setCoverImg(article.getCoverImg());
+                    vo.setSummary(article.getSummary());
+                    vo.setCreateTime(article.getCreateTime());
+                    vo.setTitle(article.getTitle());
+                    return vo;
+                })
+                .collect(Collectors.toList());
     }
 }

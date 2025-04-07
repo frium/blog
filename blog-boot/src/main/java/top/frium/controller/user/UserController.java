@@ -12,6 +12,7 @@ import top.frium.common.R;
 import top.frium.pojo.dto.EmailDTO;
 import top.frium.pojo.dto.LoginEmailDTO;
 import top.frium.pojo.dto.RegisterEmailDTO;
+import top.frium.service.LinkService;
 import top.frium.service.UserService;
 
 /**
@@ -25,6 +26,8 @@ import top.frium.service.UserService;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    LinkService linkService;
     @Autowired
     RedisTemplate<Object, Object> redisTemplate;
 
@@ -73,5 +76,12 @@ public class UserController {
     @GetMapping("/getUserInfo")
     public R<?> getUserInfo() {
         return R.success(userService.getUserInfo());
+    }
+
+
+    @ApiOperation("获取友链")
+    @GetMapping("/getLinks")
+    public R<?> getLinks() {
+        return R.success(linkService.getLinkVOs());
     }
 }

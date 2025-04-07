@@ -50,4 +50,10 @@ public class ArticleController {
     public R<?> getLabels() {
         return R.success(labelMapper.selectLabelsWithArticleCount());
     }
+
+    @ApiOperation("获取归档")
+    @GetMapping("/getArticleByTime")
+    public R<?> getArticleByTime() {
+        return R.success(articleService.getArticleByTime());
+    }
 }

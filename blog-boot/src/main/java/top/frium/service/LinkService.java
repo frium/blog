@@ -3,6 +3,7 @@ package top.frium.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.frium.pojo.dto.LinkDTO;
 import top.frium.pojo.entity.Link;
+import top.frium.pojo.vo.LinkVO;
 
 import java.util.List;
 
@@ -18,4 +19,5 @@ public interface LinkService extends IService<Link> {
     void updateLink(LinkDTO linkDTO);
 
     List<Link> getLinks();
+    List<LinkVO> getLinkVOs();
 }

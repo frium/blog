@@ -9,9 +9,11 @@ import top.frium.common.StatusCodeEnum;
 import top.frium.mapper.LinkMapper;
 import top.frium.pojo.dto.LinkDTO;
 import top.frium.pojo.entity.Link;
+import top.frium.pojo.vo.LinkVO;
 import top.frium.service.LinkService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static top.frium.context.CommonConstant.DATA_TIME_PATTERN;
@@ -59,5 +61,17 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
     @Override
     public List<Link> getLinks() {
        return list();
+    }
+
+    @Override
+    public List<LinkVO> getLinkVOs() {
+        List<Link> list = list();
+        List<LinkVO> voList = new ArrayList<>(list.size());
+        for (Link link : list) {
+            LinkVO vo = new LinkVO();
+            BeanUtils.copyProperties(link, vo);
+            voList.add(vo);
+        }
+        return voList;
     }
 }
