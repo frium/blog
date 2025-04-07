@@ -11,7 +11,7 @@ const props = defineProps({
 <template>
   <div class="article-card">
     <div class="left-div">
-      <RouterLink to="/article/1">
+      <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
         <span class="title">
           {{ props.data.title }}
         </span>
@@ -41,7 +41,10 @@ const props = defineProps({
       </div>
     </div>
     <div class="right-div">
-      <img :src="props.data.coverImg" alt="">
+      <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
+        <img :src="props.data.coverImg" alt="">
+
+      </RouterLink>
     </div>
   </div>
 </template>

@@ -19,9 +19,9 @@ setInterval(getTime, 1000);
 <template>
   <div class="container">
     <div class="title">
-      <span>
-        frium's blog
-      </span>
+      <RouterLink :to="{ name: 'Home' }">
+        <span>frium's blog</span>
+      </RouterLink>
     </div>
     <div class="detail">
       <p>

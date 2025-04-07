@@ -38,9 +38,9 @@ const handelLogout = async () => {
 
 <template>
   <div class="container">
-    <div>
+    <RouterLink :to="{ name: 'Home' }">
       <span class="title">frium's blog</span>
-    </div>
+    </RouterLink>
     <div class="menu">
       <div>
         <ul class="sub-menu">

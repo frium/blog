@@ -8,9 +8,9 @@ export const getShowArticleListAPI = (pageNum) => {
     }
   })
 }
-export const getArticleNumAPI = () => {
+export const getShowArticleNumAPI = () => {
   return request({
-    url: '/user/article/getArticleNum'
+    url: '/user/article/getShowArticleNum'
   })
 }
 export const getArticleAPI = (articleId) => {

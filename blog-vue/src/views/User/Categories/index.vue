@@ -1,5 +1,13 @@
 <script setup>
+import { getLabelsAPI } from "@/api/article";
+import { onMounted, ref } from "vue";
 
+
+const labels = ref([]);
+onMounted(async () => {
+  const res = await getLabelsAPI();
+  labels.value = res.data;
+})
 </script>
 
 <template>
@@ -10,10 +18,10 @@
     </div>
     <hr>
     <ul>
-      <li v-for="index in 24" :key="index">
+      <li v-for="label in labels" :key="label.id">
         <RouterLink to="/" class="categorie">
-          <span class="categorie-name">dui1d</span>
-          <div class="categorie-number">2</div>
+          <span class="categorie-name">{{ label.labelName }}</span>
+          <div class="categorie-number">{{ label.articleCount }}</div>
         </RouterLink>
       </li>
     </ul>

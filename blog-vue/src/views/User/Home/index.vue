@@ -2,14 +2,19 @@
 import CardPaginator from '@/components/CardPaginator.vue';
 import ArticleCard from './components/ArticleCard.vue';
 import TopArticleCard from './components/TopArticleCard.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { getArticleNumAPI, getShowArticleListAPI } from '@/api/article';
+import { getShowArticleListAPI, getShowArticleNumAPI } from '@/api/article';
 
 const route = useRoute();
 
 const pageId = computed(() => {
   return parseInt(route.params.pageId) || 1;
+});
+
+watch(pageId, async (newId) => {
+  const res = await getShowArticleListAPI(newId);
+  dataArr.value = res.data;
 });
 
 const articleNum = ref(0);
@@ -18,7 +23,7 @@ const dataArr = ref([]);
 onMounted(async () => {
   const res = await getShowArticleListAPI(pageId.value);
   dataArr.value = res.data;
-  const numRes = await getArticleNumAPI();
+  const numRes = await getShowArticleNumAPI();
   articleNum.value = numRes.data;
 })
 </script>
