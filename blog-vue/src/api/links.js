@@ -33,3 +33,9 @@ export const getLinksAPI = () => {
     url: '/links/getLinks',
   })
 }
+
+export const getShowLinksAPI = () => {
+  return request({
+    url: '/user/getLinks',
+  })
+}

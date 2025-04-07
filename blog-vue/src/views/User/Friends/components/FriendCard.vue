@@ -1,16 +1,17 @@
 <script setup>
-
+const props = defineProps({
+  data: Object
+})
 </script>
 
 <template>
   <div class="friend-card">
-    <a href="/" class="a-box">
+    <a :href="props.data.url" class="a-box">
       <div>
-        <span class="name">longfish's blog</span>
-        <span class="detail">常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常常的鱼常的鱼常常的鱼常常的鱼常的鱼常常的鱼常常的鱼常常的鱼常常的鱼</span>
+        <span class="name">{{ props.data.urlName }}</span>
+        <span class="detail">{{ props.data.description }}</span>
       </div>
-      <img src="https://static.longfish.site/avatar/avatar1.jpg" alt="">
-
+      <img :src="props.data.logo" alt="">
     </a>
   </div>
 </template>

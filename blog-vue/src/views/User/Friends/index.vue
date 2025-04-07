@@ -1,5 +1,13 @@
 <script setup>
+import { onMounted, ref } from 'vue';
 import FriendCard from './components/FriendCard.vue';
+import { getShowLinksAPI } from '@/api/links';
+
+const links = ref([]);
+onMounted(async () => {
+  const res = await getShowLinksAPI();
+  links.value = res.data;
+})
 </script>
 
 <template>
@@ -8,7 +16,7 @@ import FriendCard from './components/FriendCard.vue';
     <div class="content">
       <h3>frium的小伙伴们</h3>
       <div class="friend-cards">
-        <FriendCard v-for="index in 5" :key="index"></FriendCard>
+        <FriendCard v-for="link in links" :key="link" :data="link"></FriendCard>
       </div>
       <hr>
       <div class="friend-link">
@@ -27,6 +35,7 @@ import FriendCard from './components/FriendCard.vue';
 
 <style scoped lang="scss">
 .friend-out-box {
+  margin-bottom: 24px;
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
