@@ -92,7 +92,7 @@ const updateBodyStyle = () => {
       <div class="container">
         <div class="cloumns">
           <div class="router-view"
-            :style="{ opacity: isChanging ? '0' : '1', transform: isChanging ? 'translateY(20px)' : 'translateY(0px)' }">
+            :style="{ opacity: isChanging ? '0.5' : '1', transform: isChanging ? 'translateY(20px)' : 'translateY(0px)' }">
             <div id="trigger" style="height: 1px; width: 100%;"></div>
             <router-view @component-loaded="handleComponentLoaded"></router-view>
           </div>
@@ -119,9 +119,9 @@ const updateBodyStyle = () => {
 <style scoped lang="scss">
 .selection {
   position: relative;
-  padding: 80px 5vw 40px 5vw;
+  padding: 80px 5vw 0 5vw;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 75px);
 
   .container {
     margin: 0 auto;
