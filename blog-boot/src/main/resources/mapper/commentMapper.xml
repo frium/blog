@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.frium.mapper.CommentMapper">
+    <resultMap id="CommentVOMap" type="top.frium.pojo.vo.CommentVO">
+        <id column="id" property="id" />
+        <result column="comment_content" property="commentContent" />
+        <result column="user_id" property="userId" />
+        <result column="create_time" property="createTime" />
+        <result column="username" property="username" />
+        <result column="avatar" property="avatar" />
+    </resultMap>
+
+    <!-- 查询文章下的评论及用户信息 -->
+    <select id="getArticleComment" resultMap="CommentVOMap">
+        SELECT
+            c.comment_content,
+            c.create_time,
+            u.username,
+            u.avatar
+        FROM
+            comment c
+                LEFT JOIN
+            user u ON c.user_id = u.id
+        WHERE
+            c.article_id = #{articleId}
+    </select>
+
+</mapper>

@@ -42,7 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        if ((requestURI.contains("/user/") && !requestURI.contains("/user/getUserInfo"))||requestURI.contains("/visit/")) {
+        if ((requestURI.contains("/user/")||requestURI.contains("/visit/") && !requestURI.contains("/user/getUserInfo")) && !requestURI.contains("/addComment")) {
             filterChain.doFilter(request, response);
             return;
         }
