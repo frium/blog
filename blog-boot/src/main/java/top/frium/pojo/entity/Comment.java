@@ -17,5 +17,6 @@ public class Comment {
     Long articleId;
     String commentContent;
     String createTime;
+    Boolean status;
 
 }

@@ -12,19 +12,39 @@
         <result column="avatar" property="avatar" />
     </resultMap>
 
-    <!-- 查询文章下的评论及用户信息 -->
+
     <select id="getArticleComment" resultMap="CommentVOMap">
         SELECT
-            c.comment_content,
-            c.create_time,
-            u.username,
-            u.avatar
+        c.comment_content,
+        c.create_time,
+        u.username,
+        u.avatar
+        FROM
+        comment c
+        LEFT JOIN
+        user u ON c.user_id = u.id
+        WHERE
+        c.article_id = #{articleId}
+        AND c.status = 1
+    </select>
+
+    <select id="getAllComments" resultType="top.frium.pojo.vo.CommentAllDetailVO">
+        SELECT
+            c.id AS Id,
+            u.username AS username,
+            u.email AS email,
+            u.avatar AS avatar,
+            a.title AS articleTitle,
+            c.comment_content AS commentContent,
+            c.create_time AS createTime,
+            c.status AS status
         FROM
             comment c
                 LEFT JOIN
             user u ON c.user_id = u.id
-        WHERE
-            c.article_id = #{articleId}
+                LEFT JOIN
+            article a ON c.article_id = a.id
     </select>
+
 
 </mapper>

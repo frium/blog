@@ -11,6 +11,7 @@ import top.frium.pojo.LoginUser;
 import top.frium.pojo.dto.CommentDTO;
 import top.frium.pojo.entity.Article;
 import top.frium.pojo.entity.Comment;
+import top.frium.pojo.vo.CommentAllDetailVO;
 import top.frium.pojo.vo.CommentVO;
 import top.frium.service.ArticleService;
 import top.frium.service.CommentService;
@@ -56,7 +57,25 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.NOT_LOGIN);
         }
-        Comment comment = new Comment(null, userId, articleId, commentDTO.getCommentContent(), LocalDateTime.now().format(DATA_TIME_PATTERN));
+        Comment comment = new Comment(null, userId, articleId, commentDTO.getCommentContent(), LocalDateTime.now().format(DATA_TIME_PATTERN),false);
         save(comment);
     }
+
+    @Override
+    public List<CommentAllDetailVO> getAllComments() {
+        return commentMapper.getAllComments();
+    }
+
+    @Override
+    public void deleteComment( List<Long>  commentIds) {
+        for (Long commentId : commentIds) {
+            removeById(commentId);
+        }
+    }
+
+    @Override
+    public void pauseComment(Integer commentId) {
+        lambdaUpdate().eq(Comment::getId,commentId).set(Comment::getStatus,true).update();
+    }
+
 }

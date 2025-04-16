@@ -3,6 +3,7 @@ package top.frium.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import top.frium.pojo.entity.Comment;
+import top.frium.pojo.vo.CommentAllDetailVO;
 import top.frium.pojo.vo.CommentVO;
 
 import java.util.List;
@@ -14,5 +15,6 @@ import java.util.List;
 @Mapper
 public interface CommentMapper  extends BaseMapper<Comment> {
     List<CommentVO> getArticleComment(Long articleId);
+    List<CommentAllDetailVO> getAllComments();
 
 }

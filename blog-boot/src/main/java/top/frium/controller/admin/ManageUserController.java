@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import top.frium.common.MyException;
 import top.frium.common.R;
 import top.frium.common.StatusCodeEnum;
+import top.frium.mapper.UserMapper;
 import top.frium.pojo.dto.UserDTO;
 import top.frium.pojo.entity.User;
 import top.frium.service.impl.UserServiceImpl;
@@ -24,11 +25,19 @@ public class ManageUserController {
     @Autowired
     UserServiceImpl userService;
 
+
     @ApiOperation("获取所有用户")
     @GetMapping("/getUsers")
     public R<?> getUsers() {
         return R.success(userService.getUsers());
     }
+
+    @ApiOperation("获取用户数量")
+    @GetMapping("/getUserNum")
+    public R<?> getUserNum() {
+        return R.success(userService.count());
+    }
+
 
     @ApiOperation("删除用户")
     @PostMapping("deleteUsers")
