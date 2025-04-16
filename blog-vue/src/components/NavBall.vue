@@ -8,9 +8,11 @@ const newScrollProportion = ref(0);
 const oldScrollProportion = ref(0);
 
 watch(() => scrollStore.scrollProportion, (newValue, oldValue) => {
-  newScrollProportion.value = newValue;
-  oldScrollProportion.value = oldValue;
+  newScrollProportion.value = Number.isFinite(newValue) ? newValue : 0;
+  oldScrollProportion.value = Number.isFinite(oldValue) ? oldValue : 0;
 });
+
+
 
 </script>
 

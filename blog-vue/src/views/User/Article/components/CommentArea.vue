@@ -1,5 +1,5 @@
 <script setup>
-import { addComment, getComments } from '@/api/comment';
+import { addCommentAPI, getCommentsAPI } from '@/api/comment';
 import { useUserStore } from '@/stores/userStore';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
@@ -14,14 +14,14 @@ const addCommentHandel = async () => {
   const data = {};
   data.commentContent = comment.value;
   data.articleId = route.params.articleId;
-  await addComment(data);
-  const res = await getComments(route.params.articleId);
+  await addCommentAPI(data);
+  const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
   ElMessage.success('评论成功!');
   comment.value = '';
 }
 onMounted(async () => {
-  const res = await getComments(route.params.articleId);
+  const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
   console.log(commentArr.value);
 

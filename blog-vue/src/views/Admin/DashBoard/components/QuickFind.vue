@@ -30,7 +30,7 @@ a:hover {
 }
 
 .quick-find {
-  background: #f4f4f4;
+  background: #f6f6f6;
   width: 190px;
   height: 130px;
   padding: 20px 15px;
@@ -38,7 +38,7 @@ a:hover {
   transition: all 0.2s;
 
   &:hover {
-    background: #edebeb;
+    background: #f3f3f3;
 
     .head .arrow {
       opacity: 0.8;

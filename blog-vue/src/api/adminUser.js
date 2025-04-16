@@ -46,3 +46,9 @@ export const updateUserInfoAPI = (data) => {
     data
   })
 }
+
+export const getUserNumAPI = () => {
+  return request({
+    url: '/manageUser/getUserNum',
+  })
+}

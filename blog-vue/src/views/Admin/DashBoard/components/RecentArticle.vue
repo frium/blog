@@ -1,16 +1,18 @@
 <script setup>
-//获取文章接口
+const props = defineProps({
+  data: Object
+})
 </script>
 
 <template>
   <div class="recent-article">
-    <RouterLink to="/">
-      <h4>jvm基础</h4>
+    <RouterLink :to="{ name: 'Article', params: { 'articleId': data.id } }">
+      <h4>{{ props.data.title }}</h4>
     </RouterLink>
     <div style="margin-top: 3px;">
-      <span>访问量 12</span>
-      <span>评论 2132</span>
-      <span>发布日期 2024-09-23 21:53 </span>
+      <span>{{ '访问量 ' + props.data.viewNum }}</span>
+      <span>{{ '评论 ' + props.data.commentNum }}</span>
+      <span>{{ '发布日期 ' + props.data.createTime }} </span>
     </div>
   </div>
 </template>

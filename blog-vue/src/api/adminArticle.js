@@ -59,3 +59,9 @@ export const updateLabelAPI = (label) => {
     data: label
   })
 }
+
+export const getArticleNumAPI = () => {
+  return request({
+    url: '/adminArticle/getArticleNum',
+  })
+}
