@@ -1,7 +1,7 @@
 <template>
-    <span>
-      {{displayValue+"%"}}
-    </span>
+  <span>
+    {{ displayValue + "%" }}
+  </span>
 </template>
 <script>
 import { requestAnimationFrame, cancelAnimationFrame } from './requestAnimationFrame.js'

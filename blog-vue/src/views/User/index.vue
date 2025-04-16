@@ -9,6 +9,7 @@ import LyricStrip from '@/components/LyricStrip.vue';
 import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { useScrollStore } from "@/stores/scrollStore";
 
 const isHidden = ref(false);
 const observer = ref(null);
@@ -18,6 +19,7 @@ const isChanging = ref(false);
 
 const markdownCatalogue = ref(null);
 
+const scrollStore = useScrollStore();
 
 const handleComponentLoaded = () => {
   markdownCatalogue.value.handleLoadCatalogue();
@@ -65,6 +67,8 @@ onMounted(() => {
   );
   const target = document.querySelector("#trigger");
   if (target) observer.value.observe(target);
+  console.log(scrollStore.scrollProportion);
+
 });
 
 onUnmounted(() => {
@@ -107,11 +111,14 @@ const updateBodyStyle = () => {
         </div>
       </div>
     </div>
-    <BackToTop class="back-to-top"></BackToTop>
-    <NavBall class="nav-ball"></NavBall>
+    <div class="control-container" :style="{ 'opacity': scrollStore.scrollProportion == 0 ? 0 : 1 }">
+      <BackToTop class="back-to-top"></BackToTop>
+      <NavBall class="nav-ball"></NavBall>
+    </div>
     <MusicPlayerStrip ref="playerRef"></MusicPlayerStrip>
     <LyricStrip @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
-      @turn-off-lrc="trunOffLrc"></LyricStrip>
+      @turn-off-lrc="trunOffLrc">
+    </LyricStrip>
     <LayoutFooter></LayoutFooter>
   </div>
 </template>
@@ -212,15 +219,19 @@ const updateBodyStyle = () => {
   }
 }
 
-.back-to-top {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-}
+.control-container {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
 
-.nav-ball {
-  position: fixed;
-  bottom: 30px;
-  right: 20px;
+  .back-to-top {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+  }
+
+  .nav-ball {
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+  }
 }
 </style>

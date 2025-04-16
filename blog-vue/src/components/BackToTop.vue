@@ -30,7 +30,7 @@ const checkScroll = () => {
   const scrollHeight = document.body.scrollHeight;
   const innerHeight = window.innerHeight;
   isVisible.value = height > scrollHeight * 0.05;
-  scrollStore.scrollProportion = Math.max(0, Math.min(100, +(height / (scrollHeight - innerHeight) * 100).toFixed(0)));
+  scrollStore.scrollProportion = Math.max(0, Math.min(100, +(height / (scrollHeight - innerHeight) * 100).toFixed(0))) || 0;
   document.body.classList.add('scrolling');
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
@@ -48,7 +48,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="back-to-top" :style="{ opacity: isVisible ? 1 : 0 }" ref="backToTop" @click="scrollToTop">
+  <div class="back-to-top" ref="backToTop" @click="scrollToTop">
     <button>
       <img src="@/assets/icons/rocket.svg">
     </button>
@@ -63,6 +63,5 @@ onUnmounted(() => {
   padding: 7px;
   background: rgb(77, 74, 74);
   border-radius: 50%;
-  transition: ease-in 0.3s;
 }
 </style>
