@@ -3,6 +3,7 @@ package top.frium.controller.admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.frium.common.R;
 import top.frium.service.CommentService;
@@ -16,6 +17,7 @@ import java.util.List;
 @Api("评论管理")
 @RestController
 @RequestMapping("/adminComment")
+@PreAuthorize("hasAuthority('superAdmin')")
 public class AdminCommentController {
 
     @Autowired
@@ -34,7 +36,7 @@ public class AdminCommentController {
     }
 
     @ApiOperation("通过评论")
-    @PostMapping("/pauseComment")
+    @PostMapping("/passComment")
     public R<?> pauseComment(Integer commentId) {
         commentService.pauseComment(commentId);
         return  R.success();

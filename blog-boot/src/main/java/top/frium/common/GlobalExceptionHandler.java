@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,13 +53,21 @@ public class GlobalExceptionHandler {
     /**
      * 服务器异常
      */
+    // 处理业务异常
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public R<String> exception(Exception e) {
         log.error("未知异常！ msg: -> ", e);
-        return R.error("服务器异常!"+e.getMessage());
+        return R.error("服务器异常!" + e.getMessage());
     }
 
+    // 单独处理权限异常（返回403）
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public R<String> handleAccessDenied(AccessDeniedException e) {
+        log.warn("权限拒绝: {}", e.getMessage());
+        return R.error(StatusCodeEnum.NO_PERMISSION);
+    }
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public R<?> runtimeExceptionHandler(RuntimeException e) {
