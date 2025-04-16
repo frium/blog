@@ -1,38 +1,50 @@
 <script setup>
+import { deleteCommentAPI, passCommentAPI } from '@/api/comment';
 import TimeAndOperation from '@/components/TimeAndOperation.vue';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   data: Object
 })
-const passComment = () => {
-  console.log('审核通过');
+const passComment = async () => {
+  await passCommentAPI(props.data.id);
+  ElMessage.success('审核通过!');
+  emit('pass-success', props.data.id);
 }
-const deleteComment = () => {
-  console.log('审核通过');
+const deleteComment = async () => {
+  const arr = [props.data.id];
+  await deleteCommentAPI(arr);
+  ElMessage.success('删除成功!')
+  emit('delete-success', props.data.id);
 }
+const emit = defineEmits(['pass-success', 'delete-success'])
 
 const operations = [
-  { name: '审核通过', operate: passComment },
-  { name: '删除', operate: deleteComment }
+  { name: '审核通过', onClick: passComment },
+  { name: '删除', onClick: deleteComment }
 ]
 
+const deleteOperations = [
+  { name: '删除', onClick: deleteComment }
+]
 
 </script>
 
 <template>
   <div class="comment-card">
     <div class="left">
-      <img src="https://static.frium.top/blog/hutao.jpg" alt="">
+      <img :src="props.data.avatar" alt="">
       <div style="width: 20%;">
         <h4 class="username">{{ props.data.username }}</h4>
         <p class="text">{{ props.data.email }}</p>
       </div>
       <div style="width: 70%; margin-left: 20px;">
         <h4>{{ props.data.articleTitle }}</h4>
-        <p class="text">{{ props.data.comment }}</p>
+        <p class="text">{{ props.data.commentContent }}</p>
       </div>
     </div>
-    <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
+    <TimeAndOperation v-if="props.data.status" :create-time="props.data.createTime" :operations="deleteOperations" />
+    <TimeAndOperation v-else :create-time="props.data.createTime" :operations="operations" />
   </div>
 </template>
 

@@ -38,9 +38,9 @@ export const deleteCommentAPI = (data) => {
 }
 
 
-export const pauseCommentAPI = (commentId) => {
+export const passCommentAPI = (commentId) => {
   return request({
-    url: '/adminComment/pauseComment',
+    url: '/adminComment/passComment',
     method: 'POST',
     params: {
       commentId

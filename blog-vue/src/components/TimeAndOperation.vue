@@ -35,7 +35,11 @@ const handleClose = (done) => {
         <el-dropdown-menu style="padding: 10px 0px; width: 120px;">
           <template v-for="(operate, index) in operations" :key="index">
             <el-dropdown-item @click="handleOperateClick(operate)">
-              <p :style="{ color: index === props.operations.length - 1 ? 'red' : '#606266', width: '120px' }">
+              <p :style="{
+                color: index === props.operations.length - 1 ? 'red' : '#606266',
+                width: '120px',
+                cursor: 'url(/src/assets/cursor/Hand.cur), pointer !important'
+              }">
                 {{ operate.name }}
               </p>
             </el-dropdown-item>
@@ -64,7 +68,7 @@ const handleClose = (done) => {
   gap: 20px;
 
   .el-dropdown-link {
-    cursor: pointer;
+    cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
     font-size: 20px;
     font-weight: 800;
   }

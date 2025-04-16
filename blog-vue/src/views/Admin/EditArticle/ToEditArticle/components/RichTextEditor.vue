@@ -113,3 +113,19 @@ onBeforeUnmount(() => {
 <template>
   <div id="vditor"></div>
 </template>
+
+<style lang="scss" scoped>
+:deep(.vditor-toolbar) {
+  display: flex;
+  padding-right: 250px;
+  padding-left: 7% !important;
+  justify-content: space-around;
+
+}
+
+
+
+:deep(.vditor-reset) {
+  padding: 8px 9% !important;
+}
+</style>

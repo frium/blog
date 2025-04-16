@@ -35,7 +35,7 @@ const closeArticleSetting = () => {
 }
 
 const getCategories = () => {
-  console.log('getCategories')
+  router.push({ name: 'LabelList' });
 }
 const buttonArr = [
   { name: "分类", onClick: getCategories },

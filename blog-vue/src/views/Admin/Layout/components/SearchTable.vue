@@ -58,6 +58,15 @@ const toDelete = () => {
 </template>
 
 <style scoped lang="scss">
+:deep(.el-table__header-wrapper .el-checkbox__inner) {
+  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
+}
+
+/* 表格内容的复选框 */
+:deep(.el-table__body-wrapper .el-checkbox__inner) {
+  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
+}
+
 .search-table {
   position: relative;
 

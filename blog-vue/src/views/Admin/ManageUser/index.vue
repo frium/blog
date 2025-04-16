@@ -25,8 +25,6 @@ const searchFunction = () => {
 
 const handelShowDialog = () => {
   showCreateUser.value = false;
-  console.log("为31313问我");
-
 }
 
 const handleDeleteSuccess = async () => {

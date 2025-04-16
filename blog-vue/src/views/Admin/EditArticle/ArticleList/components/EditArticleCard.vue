@@ -91,13 +91,13 @@ const changeVisible = async () => {
     gap: 30px;
 
     .el-dropdown-link {
-      cursor: pointer;
+      cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
       font-size: 20px;
       font-weight: 800;
     }
 
     img {
-      cursor: pointer;
+      cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
     }
   }
 }
