@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { nextTick, onMounted, ref, watchEffect } from 'vue'
+import { nextTick, ref, watchEffect } from 'vue'
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.min.css'

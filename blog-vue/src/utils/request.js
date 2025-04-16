@@ -27,6 +27,9 @@ request.interceptors.response.use(res => res.data, error => {
     useUserStore().userInfo.avatar = "";
     useUserStore().userInfo.email = "";
     useUserStore().userInfo.username = "";
+    return Promise.reject(error);
+  } else if (error.response?.status === 403) {
+    notificationToast.error('您暂无权限访问');
     router.push({ name: 'Home' })
     return Promise.reject(error);
   }

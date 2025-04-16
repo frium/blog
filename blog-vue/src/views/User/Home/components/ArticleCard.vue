@@ -50,6 +50,10 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
+img {
+  filter: brightness(0.8);
+}
+
 span {
   user-select: text;
 }

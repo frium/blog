@@ -65,6 +65,8 @@ onMounted(async () => {
     background: rgba(40, 44, 52, 0.6);
     border-radius: 8px;
     color: #999;
+    margin-bottom: 20px;
+
   }
 }
 </style>

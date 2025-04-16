@@ -17,6 +17,10 @@ const props = defineProps({
 </template>
 
 <style scoped lang="scss">
+img {
+  filter: brightness(0.8);
+}
+
 .time-line-card {
   position: relative;
   width: 33vw;

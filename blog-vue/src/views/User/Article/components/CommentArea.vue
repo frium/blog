@@ -1,8 +1,31 @@
 <script setup>
+import { addComment, getComments } from '@/api/comment';
 import { useUserStore } from '@/stores/userStore';
+import { ElMessage } from 'element-plus';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
-
+const route = useRoute();
 const userStore = useUserStore();
+const commentArr = ref([]);
+
+const comment = ref('');
+const addCommentHandel = async () => {
+  const data = {};
+  data.commentContent = comment.value;
+  data.articleId = route.params.articleId;
+  await addComment(data);
+  const res = await getComments(route.params.articleId);
+  commentArr.value = res.data;
+  ElMessage.success('评论成功!');
+  comment.value = '';
+}
+onMounted(async () => {
+  const res = await getComments(route.params.articleId);
+  commentArr.value = res.data;
+  console.log(commentArr.value);
+
+})
 </script>
 
 <template>
@@ -11,44 +34,29 @@ const userStore = useUserStore();
     <div class="top">
       <img :src="userStore.userInfo.avatar" alt="">
       <div class="add-comment">
+        <textarea placeholder="写点评论~" maxlength="300" v-model="comment"></textarea>
+        <el-button color="#35363c" style="margin-left: calc(100% - 60px); margin-top: 6px;" @click="addCommentHandel">
+          <span style="color: #c4c4c4;">提交</span>
+        </el-button>
+      </div>
+    </div>
+    <template v-if="commentArr.length > 0">
+      <hr class="middle">
+      <div class="bottom">
+        <div class="user-comments" v-for="(commentInfo, index) in commentArr" :key="index">
+          <img :src="commentInfo.avatar" alt="">
+          <div class="comment">
+            <p style=" max-height: 4.5em; line-height: 1.5em;   overflow-y: auto; padding: 6px 0;">
+              {{ commentInfo.commentContent }}
+            </p>
+            <hr>
+            <p style="font-size: 14px;  color:#a5a5a5 ;">{{ commentInfo.username + ' | ' + commentInfo.createTime }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </template>
 
-        <textarea placeholder="写点评论~" maxlength="300"></textarea>
-        <el-button color="pink" style="margin-left: calc(100% - 60px); margin-top: 6px;">提交</el-button>
-      </div>
-    </div>
-    <hr class="middle">
-    <div class="bottom">
-      <div class="user-comments">
-        <img :src="userStore.userInfo.avatar" alt="">
-        <div class="comment">
-          <p style=" max-height: 4.5em; line-height: 1.5em;   overflow-y: auto;  ">
-            我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌
-          </p>
-          <hr>
-          <p style="font-size: 14px;  color:#a5a5a5 ;">我是你的超级大跌 | 2024-10-15 21:49 </p>
-        </div>
-      </div>
-      <div class="user-comments">
-        <img :src="userStore.userInfo.avatar" alt="">
-        <div class="comment">
-          <p style=" max-height: 4.5em; line-height: 1.5em;   overflow-y: auto;  ">
-            我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌
-          </p>
-          <hr>
-          <p style="font-size: 14px;  color:#a5a5a5 ;">我是你的超级大跌 | 2024-10-15 21:49 </p>
-        </div>
-      </div>
-      <div class="user-comments">
-        <img :src="userStore.userInfo.avatar" alt="">
-        <div class="comment">
-          <p style=" max-height: 4.5em; line-height: 1.5em;   overflow-y: auto;  ">
-            我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌我是你的超级大跌
-          </p>
-          <hr>
-          <p style="font-size: 14px;  color:#a5a5a5 ;">我是你的超级大跌 | 2024-10-15 21:49 </p>
-        </div>
-      </div>
-    </div>
   </div>
 
 </template>
