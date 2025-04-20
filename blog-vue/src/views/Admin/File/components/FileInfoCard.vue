@@ -59,9 +59,10 @@ const operations = [
     }
 
     img {
-      width: 40px;
-      height: 40px;
+      width: 60px;
+      height: 45px;
       border-radius: 4px;
+      object-fit: contain;
     }
   }
 

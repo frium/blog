@@ -1,5 +1,4 @@
 import { request } from "@/utils/request";
-
 export const uploadFileAPI = (file, onUploadProgress, signal) => {
   const formData = new FormData();
   formData.append('file', file);

@@ -156,7 +156,8 @@ const onUploadProgress = (index) => (e) => {
 const resolve = (index) => {
   promiseNum.value = promiseNum.value - 1;
   fileNameSet.value.delete(fileBlodArr.value[index].file.name);
-  ElMessage.success(fileBlodArr.value[index].file.name + '上传成功')
+  ElMessage.success(fileBlodArr.value[index].file.name + '上传成功');
+  fileBlodArr.value[index].uploadProgress = 100;
 }
 
 let queue = [];
