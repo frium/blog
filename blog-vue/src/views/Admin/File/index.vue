@@ -4,12 +4,17 @@ import FileInfoCard from './components/FileInfoCard.vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import { onMounted, ref } from 'vue';
 import UploadFileDialog from './components/UploadFileDialog.vue';
-import { getAllFilesAPI } from '@/api/file';
+import { deleteFileAPI, getAllFilesAPI } from '@/api/file';
+import { ElMessage } from 'element-plus';
 
 const fileData = ref([]);
 const uploadFileDialog = ref(null);
 
-const deleteFunction = () => {
+const deleteFunction = async (selectedRows) => {
+  const idsToDelete = selectedRows.map(item => item.id);
+  await deleteFileAPI(idsToDelete);
+  fileData.value = fileData.value.filter(item => !idsToDelete.includes(item.id));
+  ElMessage.success('删除成功!');
 }
 
 const searchFunction = () => {
@@ -45,7 +50,7 @@ onMounted(async () => {
   <HeadOperation :title="'附件'" :icon="'file.svg'" :button-arr="buttonArr"></HeadOperation>
   <div class="admin-container">
     <div class="file">
-      <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="fileData">
+      <SearchTable @to-delete="deleteFunction" @to-search="searchFunction" :table-data="fileData">
         <template v-slot:default="{ row }">
           <FileInfoCard :data="row" @delete-success="handleDeleteSuccess" />
         </template>

@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import UserInfoCard from './components/UserInfoCard.vue';
-import { getUsersAPI } from '@/api/adminUser';
+import { deleteUsersAPI, getUsersAPI } from '@/api/adminUser';
 import CreatUser from './components/CreatUser.vue';
 
 const showCreateUser = ref(false);
@@ -15,8 +15,11 @@ const buttonArr = [
   { name: '添加', onClick: createUser }
 ];
 
-const deleteFunction = () => {
-
+const deleteFunction = async (selectedRows) => {
+  const idsToDelete = selectedRows.map(item => item.id);
+  await deleteUsersAPI(idsToDelete);
+  tableData.value = tableData.value.filter(item => !idsToDelete.includes(item.id));
+  ElMessage.success('删除成功!');
 }
 
 const searchFunction = () => {
@@ -44,7 +47,7 @@ onMounted(async () => {
   <HeadOperation :title="'用户'" :icon="'manageUser.svg'" :button-arr="buttonArr"></HeadOperation>
   <div class="admin-container">
     <div class="manage-user">
-      <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
+      <SearchTable @to-delete="deleteFunction" @to-search="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
           <UserInfoCard :data="row" @delete-success="handleDeleteSuccess" />
         </template>

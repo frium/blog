@@ -77,9 +77,6 @@ onMounted(() => {
       enable: true,
       position: 'right',
     },
-    after: () => {
-      console.log('编辑器初始化完成');
-    },
     cdn: '',
     icon: 'material',
     debugger: true,

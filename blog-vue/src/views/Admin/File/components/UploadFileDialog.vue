@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
-import { ElMessage, translate } from "element-plus";
+import { ElMessage } from "element-plus";
 import { uploadFileAPI } from "@/api/file";
 import ProgressCircle from "./ProgressCircle.vue";
 import { SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";

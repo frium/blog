@@ -3,12 +3,15 @@ import CommentCard from './components/CommentCard.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import { onMounted, ref } from 'vue';
-import { getAllCommentAPI } from '@/api/comment';
+import { deleteCommentAPI, getAllCommentAPI } from '@/api/comment';
 
 const tableData = ref([]);
 
-const deleteFunction = () => {
-
+const deleteFunction = async (selectedRows) => {
+  const idsToDelete = selectedRows.map(item => item.id);
+  await deleteCommentAPI(idsToDelete);
+  tableData.value = tableData.value.filter(item => !idsToDelete.includes(item.id));
+  ElMessage.success('删除成功!');
 }
 
 const searchFunction = () => {
@@ -32,7 +35,7 @@ onMounted(async () => {
   <HeadOperation :title="'评论'" :icon="'comment.svg'"></HeadOperation>
   <div class="admin-container">
     <div class="comment">
-      <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
+      <SearchTable @to-delete="deleteFunction" @to-search="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
           <CommentCard :data="row" @delete-success="handleDeleteSuccess" @pass-success="handlePassSuccess" />
         </template>

@@ -67,8 +67,6 @@ onMounted(() => {
   );
   const target = document.querySelector("#trigger");
   if (target) observer.value.observe(target);
-  console.log(scrollStore.scrollProportion);
-
 });
 
 onUnmounted(() => {
@@ -79,7 +77,7 @@ onMounted(() => {
   updateBodyStyle();
 });
 const updateBodyStyle = () => {
-  document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://static.frium.top/blog/sea%20of%20flowers.jpg") no-repeat';
+  document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://static.frium.top/blog/sea_of_flowers.jpg") no-repeat';
   document.body.style.backgroundSize = 'cover';
   document.body.style.backgroundPosition = 'center';
   document.body.style.backgroundAttachment = 'fixed';

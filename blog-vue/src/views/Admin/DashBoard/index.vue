@@ -40,8 +40,6 @@ onMounted(async () => {
     { ...numberData.value[3], number: UVPVRes.data.uv }
   ];
   articleList.value = articleListRes.data;
-  console.log(articleList.value);
-
 })
 
 </script>

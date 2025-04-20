@@ -14,7 +14,6 @@ const handelShowLink = () => {
 }
 const updateLink = () => {
   showAddLink.value = true;
-  console.log('编辑友链');
 }
 
 const emit = defineEmits(['delete-success']);

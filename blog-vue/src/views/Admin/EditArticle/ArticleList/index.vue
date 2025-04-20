@@ -3,7 +3,7 @@ import EditArticleCard from './components/EditArticleCard.vue';
 import HeadOperation from '../../Layout/components/HeadOperation.vue';
 import SearchTable from '../../Layout/components/SearchTable.vue';
 import { onMounted, ref } from 'vue';
-import { getArticleListAPI } from '@/api/adminArticle';
+import { deleteArticleAPI, getArticleListAPI } from '@/api/adminArticle';
 import { useRouter } from 'vue-router';
 
 const tableData = ref([]);
@@ -20,9 +20,13 @@ const buttonArr = [
   { name: "新建", onClick: creatArticle },
 ];
 
-const deleteFunction = () => {
-
+const deleteFunction = async (selectedRows) => {
+  const idsToDelete = selectedRows.map(item => item.id);
+  await deleteArticleAPI(idsToDelete);
+  tableData.value = tableData.value.filter(item => !idsToDelete.includes(item.id));
+  ElMessage.success('删除成功!');
 }
+
 const searchFunction = () => {
 
 }
@@ -41,7 +45,7 @@ onMounted(async () => {
   </HeadOperation>
   <div class="admin-container">
     <div class="edit-article">
-      <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
+      <SearchTable @to-delete="deleteFunction" @to-search="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
           <EditArticleCard :data="row" @delete-success="handleDeleteSuccess"></EditArticleCard>
         </template>

@@ -4,8 +4,6 @@ import { ref, watch } from 'vue';
 const inputValue = ref('');
 
 const props = defineProps({
-  searchFunction: Function,
-  deleteFunction: Function,
   tableData: Array,
 });
 
@@ -23,13 +21,13 @@ watch(() => selectedRows.value.length, newLength => {
   if (newLength > 0) showSearch.value = false;
   else showSearch.value = true;
 })
-
+const emit = defineEmits(['to-delete', 'to-search'])
 const toSearch = () => {
-  props.searchFunction('321321');
+  emit('to-search');
 }
 
 const toDelete = () => {
-  props.deleteFunction();
+  emit('to-delete', selectedRows.value);
 }
 
 </script>

@@ -4,7 +4,6 @@ import { ref } from 'vue';
 const headers = ref([]);
 const handleLoadCatalogue = () => {
   const markdownContainer = document.getElementById('markdown-container');
-  console.log(headers.value);
   if (markdownContainer) updateCatalogue(markdownContainer);
 }
 defineExpose({ handleLoadCatalogue });

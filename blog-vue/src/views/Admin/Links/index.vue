@@ -20,9 +20,11 @@ const buttonArr = [{
   onClick: addLink
 }]
 
-const deleteFunction = () => {
-  deleteLinkAPI();
-  ElMessage.success('删除成功!')
+const deleteFunction = async (selectedRows) => {
+  const idsToDelete = selectedRows.map(item => item.id);
+  await deleteLinkAPI(idsToDelete);
+  tableData.value = tableData.value.filter(item => !idsToDelete.includes(item.id));
+  ElMessage.success('删除成功!');
 }
 
 const searchFunction = (test) => {
@@ -51,7 +53,7 @@ onMounted(async () => {
   <HeadOperation :title="'友链'" :icon="'links.svg'" :button-arr="buttonArr"></HeadOperation>
   <div class="admin-container">
     <div class="edit-article">
-      <SearchTable :delete-function="deleteFunction" :search-function="searchFunction" :table-data="tableData">
+      <SearchTable @to-delete="deleteFunction" @to-search="searchFunction" :table-data="tableData">
         <template v-slot:default="{ row }">
           <LinkCard :data="row" @delete-success="handleDeleteSuccess" />
         </template>
