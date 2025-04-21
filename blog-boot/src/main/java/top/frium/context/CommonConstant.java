@@ -10,5 +10,5 @@ import java.time.format.DateTimeFormatter;
 public interface CommonConstant {
     String LOGIN_USER = "loginUser";
     String USER_ID = "userId";
-    DateTimeFormatter DATA_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    DateTimeFormatter DATA_TIME_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 }

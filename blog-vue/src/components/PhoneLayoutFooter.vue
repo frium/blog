@@ -18,7 +18,6 @@ setInterval(getTime, 1000);
 
 <template>
   <div class="phone-layout-footer">
-    <h3>frium's blog</h3>
     <div class="detail">
       <p>
         © 2025 frium's blog
@@ -44,15 +43,9 @@ setInterval(getTime, 1000);
   display: none;
   flex-direction: column;
   align-items: center;
+  height: 75px;
   background: var(--bg-color);
-  padding: 10px 0 12px 0;
-
-  h3 {
-    color: var(--primary-color);
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
+  padding: 12px 0 12px 0;
 
   .detail {
     font-size: 12px;

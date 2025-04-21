@@ -75,20 +75,10 @@ onUnmounted(() => {
   if (observer.value) observer.value.disconnect();
 });
 
-onMounted(() => {
-  updateBodyStyle();
-});
-const updateBodyStyle = () => {
-  document.body.style.background = 'linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("https://static.frium.top/blog/sea_of_flowers.jpg") no-repeat';
-  document.body.style.backgroundSize = 'cover';
-  document.body.style.backgroundPosition = 'center';
-  document.body.style.backgroundAttachment = 'fixed';
-  document.body.style.color = '#c4c4c4';
-}
 </script>
 
 <template>
-  <div id="app">
+  <div class="user-out-box">
     <LayoutNav
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
     </LayoutNav>
@@ -128,118 +118,142 @@ const updateBodyStyle = () => {
 </template>
 
 <style scoped lang="scss">
-.selection {
-  position: relative;
-  padding: 80px 5vw 0 5vw;
-  width: 100%;
-  min-height: calc(100vh - 75px);
+.user-out-box {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('https://static.frium.top/blog/sea_of_flowers.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
 
-  .container {
-    margin: 0 auto;
+  .selection {
+    position: relative;
+    padding: 80px 5vw 0 5vw;
+    width: 100%;
+    min-height: calc(100vh - 75px);
 
-    .cloumns {
-      display: flex;
-      justify-content: space-between;
+    .container {
+      margin: 0 auto;
 
-      .right {
-        width: 270px;
+      .cloumns {
+        display: flex;
+        justify-content: space-between;
 
-        .content {
-          position: sticky;
+        .right {
+          width: 270px;
 
-          .personal-card,
-          .markdown-catalogue {
-            transform: translateZ(0) scale(0.95);
-            transform-origin: top;
-            transition: transform 1s ease;
+          .content {
+            position: sticky;
 
-            @media (max-width: 1440px) {
-              & {
-                transform: scale(0.8);
+            .personal-card,
+            .markdown-catalogue {
+              transform: translateZ(0) scale(0.95);
+              transform-origin: top;
+              transition: transform 1s ease;
+
+              @media (max-width: 1440px) {
+                & {
+                  transform: scale(0.8);
+                }
+              }
+
+              @media (max-width: 1180px) {
+                & {
+                  transform: scale(0.7);
+                }
               }
             }
+          }
 
-            @media (max-width: 1180px) {
-              & {
-                transform: scale(0.7);
-              }
+          @media (max-width: 1180px) {
+            & {
+              width: 240px;
+            }
+          }
+
+          @media (max-width: 1050px) {
+            & {
+              display: none;
+            }
+          }
+
+          @media (max-width: 500px) {
+            & {
+              display: none;
             }
           }
         }
 
-        @media (max-width: 1180px) {
-          & {
-            width: 240px;
+        .router-view {
+          transition: opacity 0.5s ease, transform 0.5s ease;
+          transform-origin: top;
+          width: v-bind('isTimeRoute ? "100%" : "77%"');
+
+          @media (min-width: 1920px) {
+            & {
+              width: v-bind('isTimeRoute ? "100%" : "80%"');
+            }
           }
-        }
 
-        @media (max-width: 1050px) {
-          & {
-            display: none;
+          @media (max-width: 1440px) {
+            & {
+              width: v-bind('isTimeRoute ? "100%" : "80%"');
+            }
           }
-        }
 
-        @media (max-width: 500px) {
-          & {
-            display: none;
+
+
+          @media (max-width: 1050px) {
+            & {
+              width: 100%
+            }
           }
-        }
-      }
 
-      .router-view {
-        transition: opacity 0.5s ease, transform 0.5s ease;
-        transform-origin: top;
-        width: v-bind('isTimeRoute ? "100%" : "77%"');
-
-        @media (min-width: 1920px) {
-          & {
-            width: v-bind('isTimeRoute ? "100%" : "80%"');
-          }
-        }
-
-        @media (max-width: 1440px) {
-          & {
-            width: v-bind('isTimeRoute ? "100%" : "80%"');
-          }
-        }
-
-
-
-        @media (max-width: 1050px) {
-          & {
-            width: 100%
-          }
-        }
-
-        @media (max-width: 500px) {
-          & {
-            width: 100%;
+          @media (max-width: 500px) {
+            & {
+              width: 100%;
+            }
           }
         }
       }
     }
+
+    @media (max-width: 500px) {
+      & {
+        padding: 60px 2vw 0 2vw;
+      }
+    }
   }
 
-  @media (max-width: 500px) {
-    & {
-      padding: 60px 2vw 0 2vw;
+  .control-container {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+
+    .back-to-top {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+    }
+
+    .nav-ball {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
     }
   }
 }
 
-.control-container {
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
-
-  .back-to-top {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-  }
-
-  .nav-ball {
-    position: fixed;
-    bottom: 30px;
-    right: 20px;
+@media (max-width:500px) {
+  .user-out-box {
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url('https://static.frium.top/blog/start.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    min-height: 100vh;
+    margin: 0;
   }
 }
 </style>

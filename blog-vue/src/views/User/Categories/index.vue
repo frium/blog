@@ -78,14 +78,13 @@ onMounted(async () => {
   ul {
 
     .categorie {
-      padding: 3px 25px;
-      margin-bottom: 5px;
+      padding: 7px 25px;
       display: flex;
       justify-content: space-between;
       border-radius: 3px;
 
       &:hover {
-        background: #2c3039;
+        background: #373d48;
       }
 
       .categorie-name {
