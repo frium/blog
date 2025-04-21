@@ -82,7 +82,6 @@ img {
     margin-top: 15px;
     gap: 20px;
 
-
     .add-comment {
       width: 100%;
 
@@ -95,16 +94,7 @@ img {
         border-radius: 7px;
         color: var(--text-color);
       }
-
-      @media (max-width: 500px) {
-        .input-area {
-          min-height: 70px;
-        }
-      }
-
-
     }
-
   }
 
   .middle {
@@ -127,7 +117,6 @@ img {
 
       .comment {
         position: relative;
-
         background: rgba(64, 65, 70, 0.7);
         width: 100%;
         border-radius: 7px;
@@ -146,6 +135,14 @@ img {
           border-right: 50%;
         }
       }
+    }
+  }
+}
+
+@media (max-width: 750px) {
+  .comment-area {
+    .top .add-comment .input-area {
+      min-height: 70px;
     }
   }
 }

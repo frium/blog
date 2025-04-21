@@ -8,17 +8,14 @@ const props = defineProps({
 <template>
   <div class="article-card">
     <div class="left-div">
-      <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
-        <span class="title">
-          {{ props.data.title }}
-        </span>
+      <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }" class="title">
+        {{ props.data.title }}
       </RouterLink>
       <div style="flex-basis: 66%;">
         <div class="label">
           <span v-for="label in props.data.label" :key="label">
             {{ '&nbsp;#' + label.labelName }}
           </span>
-
         </div>
         <div class="describe-out-box">
           <span class="describe">
@@ -28,7 +25,9 @@ const props = defineProps({
       </div>
       <hr style="background-color: rgba(90, 90, 90,0.7);height: 2px; border: none; ">
       <div class="footer">
+        <img class="eye" src="@/assets/icons/eye.svg" alt="">
         <span class="views">{{ props.data.viewNum }}</span>
+        <img class="chat" src="@/assets/icons/chat.svg" alt="">
         <span class="message">{{ props.data.commentNum }}</span>
         <span class="time">{{ props.data.createTime }}</span>
       </div>
@@ -36,17 +35,12 @@ const props = defineProps({
     <div class="right-div">
       <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
         <img :src="props.data.coverImg" alt="">
-
       </RouterLink>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-img {
-  filter: brightness(0.8);
-}
-
 span {
   user-select: text;
 }
@@ -59,6 +53,12 @@ span {
   border-radius: 10px;
   transition: 0.5s;
   margin-bottom: 24px;
+
+  .right-div {
+    img {
+      filter: brightness(0.8);
+    }
+  }
 
   &:hover {
     background: rgba(44, 47, 54, 0.7);
@@ -85,21 +85,9 @@ span {
       font-size: 26px;
     }
 
-    @media (max-width:500px) {
-      .title {
-        font-size: 20px;
-      }
-    }
-
     .label {
       margin: 5px 0 10px 0;
       color: #d57c7a;
-    }
-
-    @media (max-width:500px) {
-      .label {
-        margin: 3px 0 4px 0;
-      }
     }
 
     .describe-out-box {
@@ -122,29 +110,25 @@ span {
       }
     }
 
-    @media (max-width: 500px) {
-      .describe-out-box {
-        -webkit-line-clamp: 2;
-      }
-    }
-
-
     .footer {
       flex-basis: 20%;
       display: flex;
       align-items: center;
-      gap: 20px;
       padding: 0 10px;
+      gap: 5px;
+
+      .eye {
+        width: 24px;
+      }
+
+      .chat {
+        margin-top: 2px;
+        margin-left: 12px;
+        width: 24px;
+      }
 
       .time {
         margin-left: auto;
-      }
-    }
-
-    @media (max-width: 500px) {
-      .footer {
-        margin-top: 2px;
-        font-size: 14px;
       }
     }
   }
@@ -165,9 +149,41 @@ span {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   .article-card {
     height: 165px;
+
+    .left-div {
+      .title {
+        font-size: 20px;
+      }
+
+      .label {
+        margin: 3px 0 4px 0;
+      }
+
+      .describe-out-box {
+        -webkit-line-clamp: 2;
+      }
+
+      .footer {
+        margin-top: 2px;
+        font-size: 14px;
+
+
+      }
+    }
   }
+}
+
+@media (max-width:450px) {
+  .message {
+    display: none;
+  }
+
+  .chat {
+    display: none;
+  }
+
 }
 </style>

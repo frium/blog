@@ -183,7 +183,7 @@ onMounted(() => {
   background: rgba(69, 69, 73, 0.8) !important;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   .player {
     display: none;
   }

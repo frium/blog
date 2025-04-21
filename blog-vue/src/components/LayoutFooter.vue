@@ -50,10 +50,10 @@ setInterval(getTime, 1000);
   width: 100%;
   height: 75px;
   padding: 10px 100px;
-  min-width: 900px;
+  min-width: 750px;
   gap: 40px;
 
-  @media (max-width: 500px) {
+  @media (max-width: 750px) {
     & {
       display: none;
     }

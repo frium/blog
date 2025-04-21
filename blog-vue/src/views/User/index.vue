@@ -126,7 +126,6 @@ onUnmounted(() => {
   background-position: center;
   background-attachment: fixed;
   min-height: 100vh;
-  margin: 0;
 
   .selection {
     position: relative;
@@ -152,36 +151,6 @@ onUnmounted(() => {
               transform: translateZ(0) scale(0.95);
               transform-origin: top;
               transition: transform 1s ease;
-
-              @media (max-width: 1440px) {
-                & {
-                  transform: scale(0.8);
-                }
-              }
-
-              @media (max-width: 1180px) {
-                & {
-                  transform: scale(0.7);
-                }
-              }
-            }
-          }
-
-          @media (max-width: 1180px) {
-            & {
-              width: 240px;
-            }
-          }
-
-          @media (max-width: 1050px) {
-            & {
-              display: none;
-            }
-          }
-
-          @media (max-width: 500px) {
-            & {
-              display: none;
             }
           }
         }
@@ -190,39 +159,7 @@ onUnmounted(() => {
           transition: opacity 0.5s ease, transform 0.5s ease;
           transform-origin: top;
           width: v-bind('isTimeRoute ? "100%" : "77%"');
-
-          @media (min-width: 1920px) {
-            & {
-              width: v-bind('isTimeRoute ? "100%" : "80%"');
-            }
-          }
-
-          @media (max-width: 1440px) {
-            & {
-              width: v-bind('isTimeRoute ? "100%" : "80%"');
-            }
-          }
-
-
-
-          @media (max-width: 1050px) {
-            & {
-              width: 100%
-            }
-          }
-
-          @media (max-width: 500px) {
-            & {
-              width: 100%;
-            }
-          }
         }
-      }
-    }
-
-    @media (max-width: 500px) {
-      & {
-        padding: 60px 2vw 0 2vw;
       }
     }
   }
@@ -244,7 +181,61 @@ onUnmounted(() => {
   }
 }
 
-@media (max-width:500px) {
+@media (max-width: 1920px) {
+  .user-out-box .selection .container .cloumns .router-view {
+    width: v-bind('isTimeRoute ? "100%" : "79%"');
+  }
+}
+
+@media (max-width: 1440px) {
+  .user-out-box {
+    .selection .container .cloumns {
+      .right .content {
+
+        .personal-card,
+        .markdown-catalogue {
+          transform: scale(0.8);
+        }
+      }
+
+      .router-view {
+        width: v-bind('isTimeRoute ? "100%" : "80%"');
+      }
+    }
+  }
+}
+
+@media (max-width: 1180px) {
+  .user-out-box {
+    .selection .container .cloumns {
+      .right {
+        width: 240px;
+
+        .content {
+
+          .personal-card,
+          .markdown-catalogue {
+            transform: scale(0.7);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1050px) {
+  .user-out-box .selection .container .cloumns {
+    .right {
+      display: none;
+    }
+
+    .router-view {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 750px) {
   .user-out-box {
     background:
       linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
@@ -254,6 +245,20 @@ onUnmounted(() => {
     background-attachment: fixed;
     min-height: 100vh;
     margin: 0;
+
+    .selection {
+      padding: 60px 2vw 0 2vw;
+
+      .container .cloumns {
+        .right {
+          display: none;
+        }
+
+        .router-view {
+          width: 100%;
+        }
+      }
+    }
   }
 }
 </style>

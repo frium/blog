@@ -21,20 +21,20 @@
 /* HTML & Body 基础设置 */
 html,
 body {
-  height: 100%;
-  width: 100%;
   font-size: 16px;
   line-height: 1.5;
-  background-color: #fff;
   color: var(--text-color);
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   cursor: url('/src/assets/cursor/Arrow.cur'), default !important;
-  overflow-y: overlay;
   scroll-behavior: smooth;
 }
 
+html {
+  background-color: rgb(14, 14, 14);
+  overflow-y: overlay;
+}
 
 /* 超链接默认样式 */
 a {
@@ -102,7 +102,7 @@ img {
   height: 5px;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   ::-webkit-scrollbar {
     width: 0px;
     height: 0px;

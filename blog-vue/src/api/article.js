@@ -33,3 +33,9 @@ export const getArticleByTimeAPI = () => {
   })
 }
 
+export const getLabelNumAPI = () => {
+  return request({
+    url: '/user/article/getLabelNum'
+  })
+}
+

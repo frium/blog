@@ -2,15 +2,7 @@
 import { useRoute } from 'vue-router';
 import AdminNav from './Layout/components/AdminNav.vue';
 const route = useRoute();
-import { onMounted } from 'vue';
 
-onMounted(() => {
-  updateBodyStyle();
-});
-const updateBodyStyle = () => {
-  document.body.style.background = '#f0f4f8';
-  document.body.style.color = 'black';
-}
 </script>
 
 <template>
@@ -24,8 +16,10 @@ const updateBodyStyle = () => {
 
 <style scoped lang="scss">
 .admin {
+  background: #f0f4f8;
   position: relative;
   display: flex;
+  color: black;
 
   .admin-nav {
     position: sticky;

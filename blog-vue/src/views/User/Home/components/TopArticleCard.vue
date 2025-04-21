@@ -32,8 +32,6 @@ span {
   user-select: text;
 }
 
-
-
 .top-aticle-card {
   position: relative;
   overflow: hidden;
@@ -41,8 +39,6 @@ span {
   height: 270px;
   margin-bottom: 24px;
   border-radius: 10px;
-
-
 
   .bg-img {
     width: 100%;
@@ -64,8 +60,6 @@ span {
     position: absolute;
     top: 186px;
     left: 20px;
-
-
 
     .top {
       display: inline-block;
@@ -107,8 +101,6 @@ span {
     position: absolute;
     top: 230px;
     left: 20px;
-
-
   }
 
   .labels {
@@ -128,7 +120,7 @@ span {
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 750px) {
     height: 165px;
 
     .detail {

@@ -183,7 +183,7 @@ const handleMusicToggle = () => {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   .lyc-box {
     display: none;
   }

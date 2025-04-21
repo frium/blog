@@ -105,7 +105,7 @@ const handelLogout = async () => {
   display: flex;
   justify-content: center;
   background: var(--bg-color);
-  min-width: 900px;
+  min-width: 750px;
   align-items: center;
   text-align: center;
   z-index: 1;
@@ -194,7 +194,7 @@ const handelLogout = async () => {
   }
 }
 
-@media (max-width: 500px) {
+@media (max-width: 750px) {
   .layout-nav {
     display: none;
   }

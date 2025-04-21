@@ -1,5 +1,23 @@
 <script setup>
+import { getLabelNumAPI, getShowArticleNumAPI } from "@/api/article";
+import { getUVPVAPI } from "@/api/uvpv";
+import { onMounted, ref } from "vue";
 
+
+const articleNum = ref(0);
+const labelNum = ref(0);
+const viewNum = ref(0);
+
+onMounted(async () => {
+  const [articleNumRes, labelNumRes, viewNumRes] = await Promise.all([
+    getShowArticleNumAPI(),
+    getLabelNumAPI(),
+    getUVPVAPI()
+  ])
+  articleNum.value = articleNumRes.data;
+  labelNum.value = labelNumRes.data;
+  viewNum.value = viewNumRes.data.uv;
+})
 
 </script>
 
@@ -10,19 +28,18 @@
     <div class="detail">
       <p class="name">frium</p>
       <span class="signature">欲买桂花同载酒 终不似 少年游</span>
-
       <div style="display: flex; justify-content: space-between;padding: 15px 10px 10px 10px; width: 240px;">
         <div>
           <p class="title">文章</p>
-          <p class="number">2</p>
+          <p class="number">{{ articleNum }}</p>
         </div>
         <div>
           <p class="title">分类</p>
-          <p class="number">222</p>
+          <p class="number">{{ labelNum }}</p>
         </div>
         <div>
           <p class="title">访问</p>
-          <p class="number">222</p>
+          <p class="number">{{ viewNum }}</p>
         </div>
       </div>
       <button class="about-button">About Me</button>
