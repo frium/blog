@@ -63,7 +63,7 @@ setInterval(getTime, 1000);
       text-align: center;
 
       .time {
-        color: #f6cac9;
+        color: var(--primary-color);
       }
     }
 

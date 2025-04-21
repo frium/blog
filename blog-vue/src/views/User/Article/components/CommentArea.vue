@@ -73,7 +73,7 @@ img {
   user-select: text;
   padding: 8px 20px;
   margin-top: 20px;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   border-radius: 7px;
   width: 100%;
 
@@ -93,7 +93,7 @@ img {
         padding: 10px;
         min-height: 150px;
         border-radius: 7px;
-        color: #c4c4c4;
+        color: var(--text-color);
       }
 
       @media (max-width: 500px) {

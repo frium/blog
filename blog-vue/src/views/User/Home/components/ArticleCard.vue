@@ -1,7 +1,4 @@
 <script setup>
-import { onMounted } from "vue"
-
-
 const props = defineProps({
   data: Object
 })
@@ -16,18 +13,14 @@ const props = defineProps({
           {{ props.data.title }}
         </span>
       </RouterLink>
-      <div style="flex-basis: 70%;">
+      <div style="flex-basis: 66%;">
         <div class="label">
           <span v-for="label in props.data.label" :key="label">
             {{ '&nbsp;#' + label.labelName }}
           </span>
 
         </div>
-        <div style="text-indent: 2em;
-           display: -webkit-box;
-           -webkit-box-orient: vertical;
-           -webkit-line-clamp: 4;
-           overflow: hidden;">
+        <div class="describe-out-box">
           <span class="describe">
             {{ props.data.summary }}
           </span>
@@ -62,7 +55,7 @@ span {
   display: flex;
   width: 100%;
   height: 250px;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   border-radius: 10px;
   transition: 0.5s;
   margin-bottom: 24px;
@@ -76,7 +69,8 @@ span {
   }
 
   .left-div {
-    flex-basis: 66%;
+    flex-basis: 65%;
+    width: 65%;
     display: flex;
     justify-content: flex-end;
     flex-direction: column;
@@ -85,9 +79,16 @@ span {
 
     .title {
       display: block;
-      word-wrap: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-size: 26px;
-      flex-basis: 10%;
+    }
+
+    @media (max-width:500px) {
+      .title {
+        font-size: 20px;
+      }
     }
 
     .label {
@@ -95,18 +96,38 @@ span {
       color: #d57c7a;
     }
 
-    .describe {
-      margin-top: 10px;
-      transition: transform 0.8s ease-out;
-      background: linear-gradient(to right, #deb1b1 10%, rgba(222, 177, 177, 0.25) 100%) no-repeat left bottom;
-      background-size: 0px 2px;
-      transition: 1s;
-      width: 480px;
-
-      &:hover {
-        background-size: 100% 2px;
+    @media (max-width:500px) {
+      .label {
+        margin: 3px 0 4px 0;
       }
     }
+
+    .describe-out-box {
+      text-indent: 2em;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 4;
+      overflow: hidden;
+
+      .describe {
+        margin-top: 10px;
+        transition: transform 0.8s ease-out;
+        background: linear-gradient(to right, #deb1b1 10%, rgba(222, 177, 177, 0.25) 100%) no-repeat left bottom;
+        background-size: 0px 2px;
+        transition: 1s;
+
+        &:hover {
+          background-size: 100% 2px;
+        }
+      }
+    }
+
+    @media (max-width: 500px) {
+      .describe-out-box {
+        -webkit-line-clamp: 2;
+      }
+    }
+
 
     .footer {
       flex-basis: 20%;
@@ -119,12 +140,19 @@ span {
         margin-left: auto;
       }
     }
+
+    @media (max-width: 500px) {
+      .footer {
+        margin-top: 2px;
+        font-size: 14px;
+      }
+    }
   }
 
   .right-div {
+    flex-shrink: 0;
     flex-basis: 35%;
     height: 100%;
-    width: 100%;
     overflow: hidden;
     border-radius: 10px;
 
@@ -134,6 +162,12 @@ span {
       object-fit: cover;
       transition: 0.5s;
     }
+  }
+}
+
+@media (max-width: 500px) {
+  .article-card {
+    height: 165px;
   }
 }
 </style>

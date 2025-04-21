@@ -39,7 +39,7 @@ onMounted(async () => {
   width: 100%;
   border-radius: 10px;
   overflow: hidden;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   transition: 0.6s ease-out;
 
   &:hover {
@@ -86,9 +86,9 @@ onMounted(async () => {
 
     .friend-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); // 自动适应列数
-      justify-content: center; // 整体居中
-      gap: 15px 30px; // 行间距 15px，列间距 30px
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      justify-content: center;
+      gap: 15px 30px;
       width: 100%;
       margin-top: 15px;
     }
@@ -126,14 +126,14 @@ onMounted(async () => {
             left: -19px;
             width: 9px;
             height: 9px;
-            border: 1px solid #f6cac9;
+            border: 1px solid var(--primary-color);
             transform: rotate(45deg);
             transition: 0.7s ease-out;
           }
 
           a {
             position: absolute;
-            color: #f6cac9;
+            color: var(--primary-color);
             text-indent: 0.5rem;
 
             &:hover {
@@ -147,7 +147,7 @@ onMounted(async () => {
               position: absolute;
               width: 0;
               height: 2%;
-              background: #f6cac9;
+              background: var(--primary-color);
               top: 100%;
               transition: 0.5s;
             }

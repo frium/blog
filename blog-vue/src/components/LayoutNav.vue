@@ -65,8 +65,8 @@ const handelLogout = async () => {
           </li>
         </ul>
       </div>
-      <el-button :icon="Search" round color="#f6cac9"
-        style="color: white; width: 50px; font-size: 18px;margin-left: auto; margin-right: 25px;" />
+      <img class="search" src="@/assets/icons/search.svg" alt="">
+
       <el-dropdown v-if=(userStore.userInfo.avatar)>
         <img class="user-head" :src="userStore.userInfo.avatar" alt="">
         <template #dropdown>
@@ -104,7 +104,7 @@ const handelLogout = async () => {
   padding: 10px 5vw 10px 6vw;
   display: flex;
   justify-content: center;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   min-width: 900px;
   align-items: center;
   text-align: center;
@@ -114,7 +114,7 @@ const handelLogout = async () => {
     white-space: nowrap;
     font-size: 21px;
     font-weight: 600;
-    color: #f6cac9;
+    color: var(--primary-color);
     letter-spacing: 2px;
     margin-right: 10px;
   }
@@ -153,7 +153,7 @@ const handelLogout = async () => {
         .router-link-active::after {
           position: absolute;
           content: "";
-          background-color: #f6cac9;
+          background-color: var(--primary-color);
           left: 0;
           right: 0;
           z-index: 1;
@@ -164,14 +164,20 @@ const handelLogout = async () => {
       }
     }
 
+    .search {
+      width: 32px;
+      margin-left: auto;
+      margin-right: 25px;
+    }
+
     .login {
       width: 36px;
       height: 36px;
-      color: #c4c4c4;
+      color: var(--text-color);
       transition: all 0.6s ease;
 
       &:hover {
-        color: #f6cac9;
+        color: var(--primary-color);
       }
     }
 

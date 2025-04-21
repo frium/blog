@@ -26,7 +26,7 @@ body {
   font-size: 16px;
   line-height: 1.5;
   background-color: #fff;
-  color: #c4c4c4;
+  color: var(--text-color);
   background:
     linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url('https://static.frium.top/blog/sea_of_flowers.jpg') no-repeat;
@@ -49,7 +49,7 @@ a {
 }
 
 a:hover {
-  color: #f6cac9;
+  color: var(--primary-color);
 }
 
 /* 表单元素 */
@@ -130,14 +130,14 @@ img {
 
 /* 选中文本样式 */
 ::selection {
-  background: #f6cac9;
+  background: var(--primary-color);
   color: #fff;
 }
 
 /* 根变量 */
 :root {
   --primary-color: #f6cac9;
-  --text-color: #333;
+  --text-color: #c4c4c4;
   --bg-color: rgba(40, 44, 52, 0.6);
 }
 

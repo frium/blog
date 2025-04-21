@@ -70,7 +70,7 @@
     border-radius: 50%;
     background-position: center;
     background-size: cover;
-    border: 4px solid rgba(40, 44, 52, 0.6);
+    border: 4px solid var(--bg-color);
     transition: transform 0.8s ease-out;
 
     &:hover {
@@ -128,7 +128,7 @@
 
     .number {
       font-size: 25px;
-      color: #f6cac9;
+      color: var(--primary-color);
 
     }
 

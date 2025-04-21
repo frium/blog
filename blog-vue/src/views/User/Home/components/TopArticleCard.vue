@@ -90,7 +90,7 @@ span {
       left: 0;
       width: 42px;
       height: 3.6px;
-      background: #f6cac9;
+      background: var(--primary-color);
       border-radius: 2px;
       transition: width 0.3s;
     }

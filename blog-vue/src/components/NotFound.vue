@@ -16,7 +16,7 @@
 
 <style scoped lang="scss">
 .not-found {
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   height: 600px;
   border-radius: 7px;
 

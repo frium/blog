@@ -35,7 +35,7 @@ onMounted(async () => {
   width: 100%;
   padding: 60px 18px 20px 18px;
   border-radius: 10px;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   transition: 0.6s ease-out;
 
   &:hover {

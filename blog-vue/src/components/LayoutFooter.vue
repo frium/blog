@@ -46,7 +46,7 @@ setInterval(getTime, 1000);
 .container {
   display: flex;
   align-items: center;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   width: 100%;
   height: 75px;
   padding: 10px 100px;
@@ -66,7 +66,7 @@ setInterval(getTime, 1000);
     white-space: nowrap;
     font-size: 20px;
     font-weight: 600;
-    color: #f6cac9;
+    color: var(--primary-color);
     letter-spacing: 2px;
   }
 
@@ -75,7 +75,7 @@ setInterval(getTime, 1000);
     color: #777;
 
     .time {
-      color: #f6cac9;
+      color: var(--primary-color);
     }
   }
 }

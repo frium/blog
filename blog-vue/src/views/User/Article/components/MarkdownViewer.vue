@@ -157,7 +157,7 @@ const emit = defineEmits(['component-loaded']);
 
 <style scoped lang="scss">
 #markdown-container {
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   padding: .6rem 1rem 1rem;
   border-radius: 10px;
   user-select: text;
@@ -232,10 +232,12 @@ const emit = defineEmits(['component-loaded']);
 
     p {
       margin: 1em 0;
+      color: rgb(166, 166, 166);
+
     }
 
     a {
-      color: #f6cac9;
+      color: var(--primary-color);
       text-decoration: none;
 
       &:hover {

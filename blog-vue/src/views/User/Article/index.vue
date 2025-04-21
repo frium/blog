@@ -57,7 +57,7 @@ onMounted(async () => {
     margin-top: 20px;
     width: 100%;
     padding: 14px;
-    background: rgba(40, 44, 52, 0.6);
+    background: var(--bg-color);
     border-radius: 8px;
     color: #999;
     margin-bottom: 20px;

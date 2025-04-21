@@ -81,7 +81,7 @@ const scrollToHeader = (index) => {
   position: relative;
   width: 100%;
   height: 36vh;
-  background: rgba(40, 44, 52, 0.6);
+  background: var(--bg-color);
   padding: 12px 15px;
   color: #999;
   border-radius: 7px;
@@ -116,7 +116,7 @@ const scrollToHeader = (index) => {
     }
 
     .active {
-      color: #f6cac9;
+      color: var(--primary-color);
       background: #444a55;
     }
 

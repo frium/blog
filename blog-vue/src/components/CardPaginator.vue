@@ -166,7 +166,7 @@ const nextNumOfPage = () => {
       text-align: center;
       margin: 3.5px;
       border-radius: 4px;
-      background: rgba(40, 44, 52, 0.6);
+      background: var(--bg-color);
       color: rgb(222, 226, 231);
       width: 32px;
       height: 32px;
@@ -179,7 +179,7 @@ const nextNumOfPage = () => {
 
   .last-page,
   .next-page {
-    background: rgba(40, 44, 52, 0.6);
+    background: var(--bg-color);
     width: 58px;
     height: 31px;
     padding: 4.5px 7px;
