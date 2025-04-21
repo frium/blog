@@ -49,12 +49,7 @@ onMounted(async () => {
 .article {
   width: 100%;
 
-  .markdown {
-    background: rgba(40, 44, 52, 0.6);
-    padding: 6px 25px;
-    width: 100%;
-    border-radius: 10px;
-  }
+
 
   .last-next {
     display: flex;

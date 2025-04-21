@@ -88,7 +88,6 @@ onMounted(() => {
     classes: {
       preview: 'custom-preview-class',
     },
-    lang: 'zh_CN',
     input: (value) => {
       // 当编辑器内容变化时更新 store
       editArticleStore.article.content = value;

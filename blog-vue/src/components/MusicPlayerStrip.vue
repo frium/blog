@@ -182,4 +182,10 @@ onMounted(() => {
 :deep(.aplayer .aplayer-miniswitcher) {
   background: rgba(69, 69, 73, 0.8) !important;
 }
+
+@media (max-width: 500px) {
+  .player {
+    display: none;
+  }
+}
 </style>

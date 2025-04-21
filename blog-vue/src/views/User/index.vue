@@ -10,6 +10,8 @@ import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue
 import { useRoute } from 'vue-router'
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useScrollStore } from "@/stores/scrollStore";
+import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
+import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
 
 const isHidden = ref(false);
 const observer = ref(null);
@@ -88,8 +90,11 @@ const updateBodyStyle = () => {
 <template>
   <div id="app">
     <LayoutNav
-      :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }"
-      id="nav"></LayoutNav>
+      :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
+    </LayoutNav>
+    <PhoneLayuoutNav
+      :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
+    </PhoneLayuoutNav>
     <div class="selection">
       <div class="container">
         <div class="cloumns">
@@ -113,11 +118,12 @@ const updateBodyStyle = () => {
       <BackToTop class="back-to-top"></BackToTop>
       <NavBall class="nav-ball"></NavBall>
     </div>
-    <MusicPlayerStrip ref="playerRef"></MusicPlayerStrip>
-    <LyricStrip @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
+    <MusicPlayerStrip class="music" ref="playerRef"></MusicPlayerStrip>
+    <LyricStrip class="music" @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
       @turn-off-lrc="trunOffLrc">
     </LyricStrip>
     <LayoutFooter></LayoutFooter>
+    <PhoneLayoutFooter></PhoneLayoutFooter>
   </div>
 </template>
 
@@ -181,7 +187,6 @@ const updateBodyStyle = () => {
       }
 
       .router-view {
-        margin-left: 1vw;
         transition: opacity 0.5s ease, transform 0.5s ease;
         transform-origin: top;
         width: v-bind('isTimeRoute ? "100%" : "77%"');
@@ -208,12 +213,17 @@ const updateBodyStyle = () => {
 
         @media (max-width: 500px) {
           & {
-            width: 400px;
+            width: 100%;
           }
         }
       }
     }
+  }
 
+  @media (max-width: 500px) {
+    & {
+      padding: 60px 2vw 0 2vw;
+    }
   }
 }
 

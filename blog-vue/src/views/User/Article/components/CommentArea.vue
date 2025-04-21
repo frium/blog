@@ -34,7 +34,7 @@ onMounted(async () => {
     <div class="top">
       <img :src="userStore.userInfo.avatar" alt="">
       <div class="add-comment">
-        <textarea placeholder="写点评论~" maxlength="300" v-model="comment"></textarea>
+        <textarea class="input-area" placeholder="写点评论~" maxlength="300" v-model="comment"></textarea>
         <el-button color="#35363c" style="margin-left: calc(100% - 60px); margin-top: 6px;" @click="addCommentHandel">
           <span style="color: #c4c4c4;">提交</span>
         </el-button>
@@ -86,7 +86,7 @@ img {
     .add-comment {
       width: 100%;
 
-      textarea {
+      .input-area {
         width: 100%;
         resize: none;
         background: rgba(64, 65, 70, 0.7);
@@ -95,6 +95,14 @@ img {
         border-radius: 7px;
         color: #c4c4c4;
       }
+
+      @media (max-width: 500px) {
+        .input-area {
+          min-height: 70px;
+        }
+      }
+
+
     }
 
   }
@@ -138,10 +146,7 @@ img {
           border-right: 50%;
         }
       }
-
     }
-
-
   }
 }
 </style>

@@ -157,7 +157,9 @@ const emit = defineEmits(['component-loaded']);
 
 <style scoped lang="scss">
 #markdown-container {
-
+  background: rgba(40, 44, 52, 0.6);
+  padding: .6rem 1rem 1rem;
+  border-radius: 10px;
   user-select: text;
   width: 100%;
   overflow-wrap: break-word;
@@ -337,6 +339,7 @@ const emit = defineEmits(['component-loaded']);
       border-radius: 8px;
       margin: 1em 0;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 15px auto;
     }
 
     /* 响应式表格 */

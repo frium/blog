@@ -42,6 +42,8 @@ span {
   margin-bottom: 24px;
   border-radius: 10px;
 
+
+
   .bg-img {
     width: 100%;
     height: 100%;
@@ -98,12 +100,15 @@ span {
         width: 100%;
       }
     }
+
   }
 
   .time {
     position: absolute;
     top: 230px;
     left: 20px;
+
+
   }
 
   .labels {
@@ -120,6 +125,23 @@ span {
       padding: 4px 10px;
       background: rgba(45, 45, 45, 0.7);
       border-radius: 4px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    height: 165px;
+
+    .detail {
+      top: 85px;
+
+      .title {
+        font-size: 20px;
+      }
+    }
+
+    .time {
+      top: 132px;
+      font-size: 15px;
     }
   }
 }

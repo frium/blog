@@ -37,7 +37,7 @@ const handelLogout = async () => {
 </script>
 
 <template>
-  <div class="container">
+  <div class="layout-nav">
     <RouterLink :to="{ name: 'Home' }">
       <span class="title">frium's blog</span>
     </RouterLink>
@@ -61,7 +61,7 @@ const handelLogout = async () => {
           </li>
 
           <li class="hover-show">
-            <a href="">网盘</a>
+            <a href="https://alist.frium.top">网盘</a>
           </li>
         </ul>
       </div>
@@ -96,7 +96,7 @@ const handelLogout = async () => {
 </template>
 
 <style scoped lang="scss">
-.container {
+.layout-nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -186,8 +186,12 @@ const handelLogout = async () => {
       }
     }
   }
+}
 
-
+@media (max-width: 500px) {
+  .layout-nav {
+    display: none;
+  }
 
 }
 </style>

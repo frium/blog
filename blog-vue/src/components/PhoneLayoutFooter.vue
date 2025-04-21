@@ -17,18 +17,14 @@ setInterval(getTime, 1000);
 </script>
 
 <template>
-  <div class="container">
-    <div class="title">
-      <RouterLink :to="{ name: 'Home' }">
-        <span>frium's blog</span>
-      </RouterLink>
-    </div>
+  <div class="phone-layout-footer">
+    <h3>frium's blog</h3>
     <div class="detail">
       <p>
         © 2025 frium's blog
         <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action">粤ICP备2024234516号</a>
       </p>
-      <p> 建站
+      <p class="time-datail"> 建站
         <span class="time">{{ day }}</span>
         天
         <span class="time">{{ hours }}</span>
@@ -40,43 +36,45 @@ setInterval(getTime, 1000);
       </p>
     </div>
   </div>
+
 </template>
 
 <style scoped lang="scss">
-.container {
-  display: flex;
+.phone-layout-footer {
+  display: none;
+  flex-direction: column;
   align-items: center;
-  background: rgba(40, 44, 52, 0.6);
-  width: 100%;
-  height: 75px;
-  padding: 10px 100px;
-  min-width: 900px;
-  gap: 40px;
+  background: var(--bg-color);
+  padding: 10px 0 12px 0;
 
-  @media (max-width: 500px) {
-    & {
-      display: none;
-    }
-
-  }
-
-  .title {
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
+  h3 {
+    color: var(--primary-color);
     font-size: 20px;
     font-weight: 600;
-    color: #f6cac9;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
   }
 
   .detail {
     font-size: 12px;
     color: #777;
+    margin-top: 5px;
 
-    .time {
-      color: #f6cac9;
+    .time-datail {
+      text-align: center;
+
+      .time {
+        color: #f6cac9;
+      }
     }
+
+
   }
+}
+
+@media (max-width: 500px) {
+  .phone-layout-footer {
+    display: flex;
+  }
+
 }
 </style>

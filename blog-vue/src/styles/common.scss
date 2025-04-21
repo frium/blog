@@ -105,6 +105,13 @@ img {
   height: 5px;
 }
 
+@media (max-width: 500px) {
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+}
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
@@ -131,7 +138,7 @@ img {
 :root {
   --primary-color: #f6cac9;
   --text-color: #333;
-  --bg-color: #fff;
+  --bg-color: rgba(40, 44, 52, 0.6);
 }
 
 /* 额外优化 */
