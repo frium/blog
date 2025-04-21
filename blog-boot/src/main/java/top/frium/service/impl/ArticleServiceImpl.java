@@ -12,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
 import top.frium.mapper.ArticleMapper;
+import top.frium.mapper.CommentMapper;
 import top.frium.mapper.LabelMapper;
 import top.frium.pojo.dto.ArticleDTO;
 import top.frium.pojo.entity.Article;
+import top.frium.pojo.entity.Comment;
 import top.frium.pojo.entity.Label;
 import top.frium.pojo.vo.ArticleByTimeVO;
 import top.frium.pojo.vo.ArticleListVO;
@@ -43,6 +45,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     ArticleMapper articleMapper;
     @Autowired
     RedisTemplate<Object, Object> redisTemplate;
+    @Autowired
+    CommentMapper commentMapper;
 
     @Override
     @Transactional
@@ -83,9 +87,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public ArticleVO getArticle(Long articleId) {
         Article article = getById(articleId);
         if (article == null) throw new MyException(StatusCodeEnum.NOT_FOUND);
+        lambdaUpdate().setSql("view_num = view_num + 1").eq(Article::getId, articleId).update();
         ArticleVO articleVO = new ArticleVO();
         BeanUtils.copyProperties(article, articleVO);
         articleVO.setLabel(articleMapper.getLabelsByArticleId(articleId));
+        redisTemplate.delete("articleList:all");
+        Set<Object> keys = redisTemplate.keys("articleList*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
         return articleVO;
     }
 
@@ -105,6 +115,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             updateById(article);
         } catch (Exception e) {
             throw new MyException(StatusCodeEnum.ERROR);
+        }
+        Set<Object> keys = redisTemplate.keys("articleList*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
         }
         redisTemplate.delete("articleList:all");
     }
@@ -207,6 +221,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
                     articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
+                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId())  .eq(Comment::getStatus, 1) );
+                    articleListVO.setCommentNum(commentCount);
                     return articleListVO;
                 }).collect(Collectors.toList());
 

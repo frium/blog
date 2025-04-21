@@ -50,6 +50,11 @@ public class ArticleController {
     public R<?> getLabels() {
         return R.success(labelMapper.selectLabelsWithArticleCount());
     }
+    @ApiOperation("获取标签数量")
+    @GetMapping("/getLabelNum")
+    public R<?> getLabelNum() {
+        return R.success(labelMapper.selectCount(null));
+    }
 
     @ApiOperation("获取归档")
     @GetMapping("/getArticleByTime")

@@ -2,6 +2,7 @@ package top.frium.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import top.frium.common.MyException;
@@ -18,6 +19,7 @@ import top.frium.service.CommentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static top.frium.context.CommonConstant.DATA_TIME_PATTERN;
 
@@ -31,6 +33,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     ArticleService articleService;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    RedisTemplate<Object, Object> redisTemplate;
+
 
     @Override
     public List<CommentVO> getShowArticleComment(Long articleId) {
@@ -71,11 +76,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         for (Long commentId : commentIds) {
             removeById(commentId);
         }
+        Set<Object> keys = redisTemplate.keys("articleList*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 
     @Override
     public void pauseComment(Integer commentId) {
         lambdaUpdate().eq(Comment::getId,commentId).set(Comment::getStatus,true).update();
+        Set<Object> keys = redisTemplate.keys("articleList*");
+        if (keys != null && !keys.isEmpty()) {
+            redisTemplate.delete(keys);
+        }
     }
 
 }

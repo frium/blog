@@ -13,5 +13,4 @@ public class Article {
     private String createTime;
     private String content;
     private Long viewNum;
-    private Long commentNum;
 }

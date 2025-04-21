@@ -17,7 +17,7 @@ const addCommentHandel = async () => {
   await addCommentAPI(data);
   const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
-  ElMessage.success('评论成功!');
+  ElMessage.success('评论成功,请等待管理员审核!');
   comment.value = '';
 }
 onMounted(async () => {
