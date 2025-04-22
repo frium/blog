@@ -56,9 +56,7 @@ onMounted(async () => {
         </div>
       </div>
     </template>
-
   </div>
-
 </template>
 
 <style scoped lang="scss">
