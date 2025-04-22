@@ -174,26 +174,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         String redisKey = "articleList:all";
         String cachedData = (String) redisTemplate.opsForValue().get(redisKey);
         if (cachedData != null) {
-            return JSON.parseArray(cachedData, ArticleListVO.class); // 返回缓存
+            return JSON.parseArray(cachedData, ArticleListVO.class);
         }
-
-        // 使用LambdaQueryWrapper确保排序生效
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Article::getIsTop)     // 置顶在前
-                .orderByDesc(Article::getCreateTime); // 时间降序
-
-        List<Article> articleList = articleMapper.selectList(queryWrapper); // 查询所有
-
+        queryWrapper.orderByDesc(Article::getIsTop)
+                .orderByDesc(Article::getCreateTime);
+        List<Article> articleList = articleMapper.selectList(queryWrapper);
         List<ArticleListVO> articleListVOList = articleList.stream()
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
+                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId())  .eq(Comment::getStatus, 1) );
                     articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
                     return articleListVO;
                 })
                 .collect(Collectors.toList());
-
-        // 存入Redis，过期时间1天
         String jsonString = JSON.toJSONString(articleListVOList);
         redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS);
         return articleListVOList;
@@ -212,10 +207,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         queryWrapper.orderByDesc(Article::getIsTop)
                 .orderByDesc(Article::getCreateTime)
                 .eq(Article::getIsShow, true);
-
         Page<Article> page = new Page<>(pageNum, 7);
         Page<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
-
         List<ArticleListVO> articleListVOList = articlePage.getRecords().stream()
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
@@ -225,7 +218,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     articleListVO.setCommentNum(commentCount);
                     return articleListVO;
                 }).collect(Collectors.toList());
-
         String jsonString = JSON.toJSONString(articleListVOList);
         redisTemplate.opsForValue().set(redisKey, jsonString, 1, TimeUnit.DAYS);
         return articleListVOList;
