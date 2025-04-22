@@ -108,7 +108,7 @@ const handelLogout = async () => {
   min-width: 750px;
   align-items: center;
   text-align: center;
-  z-index: 1;
+  z-index: 9;
 
   .title {
     white-space: nowrap;

@@ -27,7 +27,8 @@ const handelSearch = () => {
     zIndex: personalCard ? '99' : '-1',
   }"></div>
   <PhonePersonalCard class="phone-personal-card-out"
-    :style="{ transform: personalCard ? 'translateX(0)' : 'translateX(-100%)' }" @off-persoal-card="offPersonalCard" />
+    :style="{ transform: personalCard ? 'translateX(0)' : 'translateX(-100%)', boxShadow: personalCard ? ' 2px 0px 30px 2px #262626' : '0px 0px 0px 0px' }"
+    @off-persoal-card="offPersonalCard" />
 </template>
 
 <style scoped lang="scss">
@@ -58,6 +59,7 @@ const handelSearch = () => {
 .blur-bg {
   z-index: 99;
   position: fixed;
+  display: none;
   width: 100vw;
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
@@ -73,6 +75,14 @@ const handelSearch = () => {
 
 @media (max-width:750px) {
   .phone-layout-nav {
+    display: flex;
+  }
+
+  .blur-bg {
+    display: block;
+  }
+
+  .phone-personal-card-out {
     display: flex;
   }
 }

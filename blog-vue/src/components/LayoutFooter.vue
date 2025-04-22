@@ -17,7 +17,7 @@ setInterval(getTime, 1000);
 </script>
 
 <template>
-  <div class="container">
+  <div class="layout-footer">
     <div class="title">
       <RouterLink :to="{ name: 'Home' }">
         <span>frium's blog</span>
@@ -43,7 +43,7 @@ setInterval(getTime, 1000);
 </template>
 
 <style scoped lang="scss">
-.container {
+.layout-footer {
   display: flex;
   align-items: center;
   background: var(--bg-color);

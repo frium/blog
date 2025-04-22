@@ -127,6 +127,11 @@ const router = createRouter({
 
         }
       ]
+    },
+    {
+      name: 'Start',
+      path: '/star',
+      component: () => import('@/components/StarSky.vue'),
     }
   ],
 });

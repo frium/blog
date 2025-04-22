@@ -52,7 +52,6 @@ const handelOffPersonalCard = () => {
   background: #303030;
   color: #999;
   font-size: 15px;
-  box-shadow: 2px 0px 30px 2px #262626;
 
   .avatar {
     width: 60px;

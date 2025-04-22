@@ -12,6 +12,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useScrollStore } from "@/stores/scrollStore";
 import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
 import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
+import StarSky from "@/components/StarSky.vue";
 
 const isHidden = ref(false);
 const observer = ref(null);
@@ -79,6 +80,7 @@ onUnmounted(() => {
 
 <template>
   <div class="user-out-box">
+    <StarSky class="star-sky"></StarSky>
     <LayoutNav
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
     </LayoutNav>
@@ -112,26 +114,37 @@ onUnmounted(() => {
     <LyricStrip class="music" @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
       @turn-off-lrc="trunOffLrc">
     </LyricStrip>
-    <LayoutFooter></LayoutFooter>
-    <PhoneLayoutFooter></PhoneLayoutFooter>
+    <LayoutFooter class="footer"></LayoutFooter>
+    <PhoneLayoutFooter class="footer"></PhoneLayoutFooter>
   </div>
 </template>
 
 <style scoped lang="scss">
 .user-out-box {
+  position: relative;
+  min-height: 100vh;
   background:
     linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url('https://static.frium.top/blog/sea_of_flowers.jpg') no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  min-height: 100vh;
+
+  .star-sky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+  }
 
   .selection {
     position: relative;
     padding: 80px 5vw 0 5vw;
     width: 100%;
     min-height: calc(100vh - 75px);
+    z-index: 1;
 
     .container {
       margin: 0 auto;
@@ -166,6 +179,7 @@ onUnmounted(() => {
 
   .control-container {
     transition: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+    z-index: 2;
 
     .back-to-top {
       position: fixed;
@@ -178,6 +192,12 @@ onUnmounted(() => {
       bottom: 30px;
       right: 20px;
     }
+  }
+
+  .footer {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
   }
 }
 
@@ -247,7 +267,7 @@ onUnmounted(() => {
     margin: 0;
 
     .selection {
-      padding: 60px 2vw 0 2vw;
+      padding: 60px 4vw 0 4vw;
 
       .container .cloumns {
         .right {
