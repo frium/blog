@@ -58,7 +58,9 @@ const changeAvatar = () => {
   input.click();
   document.body.removeChild(input);
 }
-
+const selectImg = (url) => {
+  article.coverImg = url;
+}
 
 </script>
 
@@ -76,7 +78,9 @@ const changeAvatar = () => {
         </el-select>
       </el-form-item>
       <el-form-item label="封面">
-        <UploadImg :border-radius="'0'" :avatar-img="article.coverImg" :change-avatar="changeAvatar"></UploadImg>
+        <UploadImg :border-radius="'0'" :avatar-img="article.coverImg" :change-avatar="changeAvatar"
+          @select-img="selectImg">
+        </UploadImg>
       </el-form-item>
       <el-form-item label="摘要">
         <el-input v-model="article.summary" type="textarea" maxlength="200" show-word-limit />
