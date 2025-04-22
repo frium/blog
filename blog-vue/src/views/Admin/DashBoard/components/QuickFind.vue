@@ -19,7 +19,7 @@ const iconSrc = computed(() => {
         </div>
         <img class="arrow" style="" src="@/assets/icons/toRightArrow.svg" alt="">
       </div>
-      <h4 style="margin-top: 20px;">{{ props.data.title }}</h4>
+      <h4 style="margin-top: 15px;">{{ props.data.title }}</h4>
     </RouterLink>
   </div>
 </template>
@@ -32,7 +32,7 @@ a:hover {
 .quick-find {
   background: #f6f6f6;
   width: 190px;
-  height: 130px;
+  height: 120px;
   padding: 20px 15px;
   border-radius: 8px;
   transition: all 0.2s;

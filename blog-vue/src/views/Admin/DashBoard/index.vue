@@ -93,6 +93,7 @@ onMounted(async () => {
     background: #fff;
     border-radius: 5px;
     padding: 12px 14px;
+    min-height: 580px;
 
     hr {
       margin: 6px 0;
@@ -105,7 +106,8 @@ onMounted(async () => {
       display: grid;
       max-height: calc(100vh - 270px);
       grid-template-columns: repeat(auto-fill, 190px);
-      gap: 10px;
+      justify-content: space-between;
+      row-gap: 12px;
       margin-top: 12px;
     }
 
