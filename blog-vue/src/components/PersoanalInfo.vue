@@ -147,7 +147,7 @@ const changeAvatar = () => {
 <style scoped lang="scss">
 .personal-info {
   user-select: none;
-  width: 23.5vw;
+  width: 100%;
   height: 100vh;
   background: rgba(59, 62, 69, 0.95);
   color: #fff;

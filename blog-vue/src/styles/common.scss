@@ -29,6 +29,7 @@ body {
   background-attachment: fixed;
   cursor: url('/src/assets/cursor/Arrow.cur'), default !important;
   scroll-behavior: smooth;
+  width: 100% !important;
 }
 
 html {
@@ -153,4 +154,8 @@ i {
   background-color: #fff;
   min-height: 500px;
   border-radius: 5px;
+}
+
+.el-popup-parent--hidden {
+  overflow: visible !important;
 }

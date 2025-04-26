@@ -84,9 +84,9 @@ const handelLogout = async () => {
         </div>
       </el-dialog>
     </div>
-    <el-dialog
-      style="width:23.5vw; padding : 0px; margin: 0px 0px 0px 76.5vw;   background-color: transparent;   height: 100vh;"
-      v-model="showPersonalInfo" @before-close="handleClose" :append-to-body="true">
+    <el-dialog class="no-scroll-dialog"
+      style="width:calc(23.5vw - 5px); padding : 0px; margin: 0px 0px 0px 76.5vw;   background-color: transparent;   height: 100vh;"
+      v-model="showPersonalInfo" @before-close="handleClose" :append-to-body="true" :lock-scroll="false">
       <div style="margin-top: -16px;">
         <PersoanalInfo></PersoanalInfo>
       </div>
@@ -96,6 +96,10 @@ const handelLogout = async () => {
 </template>
 
 <style scoped lang="scss">
+.no-scroll-dialog :deep(.el-overlay-dialog) {
+  overflow: hidden !important;
+}
+
 .layout-nav {
   position: fixed;
   top: 0;

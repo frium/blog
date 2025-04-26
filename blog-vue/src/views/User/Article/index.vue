@@ -5,7 +5,8 @@ import { onMounted, reactive, ref } from 'vue'
 import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
-
+import { useUserStore } from '@/stores/userStore';
+const token = useUserStore().jwt;
 const route = useRoute();
 const article = reactive({
   "id": null,
@@ -20,7 +21,6 @@ const article = reactive({
   "viewNum": null,
   "commentNum": null
 });
-
 const handleComponentLoaded = () => {
   emit('component-loaded');
 }
@@ -37,7 +37,7 @@ onMounted(async () => {
     <TopArticleCard :isTop="false" :data="article"></TopArticleCard>
     <MarkdownViewer @component-loaded="handleComponentLoaded" class="markdown" :source="article.content"
       :line-numbers="true" />
-    <CommentArea></CommentArea>
+    <CommentArea v-if="token"></CommentArea>
     <div class="last-next">
       <RouterLink to="/article/1">{{ '< 上一篇:文章名字' }}</RouterLink>
           <RouterLink to="/article/1">{{ '下一篇:文章名字 >' }}</RouterLink>

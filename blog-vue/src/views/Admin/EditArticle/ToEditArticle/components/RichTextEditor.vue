@@ -65,7 +65,7 @@ onMounted(() => {
       mode: 'editor',
       url: '/api/markdown',
       parse: (element) => {
-        console.log(element);
+
       },
     },
     tab: '  ',

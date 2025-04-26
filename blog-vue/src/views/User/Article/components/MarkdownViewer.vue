@@ -1,5 +1,6 @@
 <template>
-  <div id="markdown-container" v-html="htmlContent" />
+  <el-skeleton class="skeleton" v-if="isLoading" :rows="10" />
+  <div id="markdown-container" v-html="htmlContent" v-show="!isLoading" />
 </template>
 
 <script setup>
@@ -9,6 +10,8 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.min.css'
 import multimdTable from 'markdown-it-multimd-table'
 
+const htmlContent = ref('');
+const isLoading = ref(true);
 
 const props = defineProps({
   source: {
@@ -75,6 +78,8 @@ const md = new MarkdownIt({
     </svg>
   </div>
 `;
+        isLoading.value = false;
+
         return '<pre class="hljs">' + a + '<code>' +
           html +
           '</code></pre>'
@@ -135,7 +140,7 @@ const handleCopyCode = async (event) => {
   }
 };
 
-const htmlContent = ref('');
+
 watchEffect(() => {
   htmlContent.value = md.render(props.source);
   nextTick(() => {
@@ -156,6 +161,15 @@ const emit = defineEmits(['component-loaded']);
 </script>
 
 <style scoped lang="scss">
+.skeleton {
+  border-radius: 10px;
+  padding: 1.6rem 1rem 1rem;
+  --el-skeleton-color: #4c4c4d;
+  --el-skeleton-to-color: #2c272d;
+  background: var(--bg-color);
+  width: 100%;
+}
+
 #markdown-container {
   background: var(--bg-color);
   padding: .6rem 1rem 1rem;
