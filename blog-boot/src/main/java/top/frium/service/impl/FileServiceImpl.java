@@ -2,7 +2,7 @@ package top.frium.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,19 @@ import top.frium.pojo.entity.File;
 import top.frium.service.FileService;
 import top.frium.uitls.FtpUtils;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageWriter;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +51,13 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     @Value("${ecs.exposePath}")
     String fileUrl;
 
+    private static final long MAX_IMAGE_SIZE_BYTES = 1024 * 1024; // 1MB
+    private static final int MAX_COMPRESSION_ATTEMPTS = 5;
+    private static final double MIN_QUALITY = 0.3;
+    private static final double QUALITY_STEP = 0.15;
+    private static final double MIN_SCALE = 0.5;
+    private static final double SCALE_STEP = 0.9;
+
     @Override
     @Transactional
     public String uploadFile(MultipartFile file) {
@@ -61,11 +73,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 processImageFile(file, targetFilePath);
             } else {
                 try (InputStream in = file.getInputStream()) {
-                    Files.copy(in, targetFilePath);
+                    Files.copy(in, targetFilePath, StandardCopyOption.REPLACE_EXISTING);
                 }
             }
             return saveFileRecord(targetFilePath);
         } catch (IOException e) {
+            log.error("File upload failed: {}", e.getMessage(), e);
             throw new MyException(StatusCodeEnum.FAIL);
         }
     }
@@ -82,49 +95,79 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
     private void processImageFile(MultipartFile file, Path targetPath) throws IOException {
-        Path originalTempFile = Files.createTempFile("img_", "_original");
-        Path compressedTempFile = Files.createTempFile("img_", "_compressed");
+        BufferedImage inputImage = null;
+        BufferedImage outputImage = null;
 
-        try {
-            try (InputStream in = file.getInputStream()) {
-                Files.copy(in, originalTempFile, StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream in = file.getInputStream()) {
+            inputImage = ImageIO.read(in);
+            if (inputImage == null) {
+                throw new IOException("Failed to read image file.");
             }
 
             double quality = 0.9;
             double scale = 1.0;
             boolean success = false;
+            int attempt = 0;
 
-            for (int i = 0; i < 5 && !success; i++) {
-                try (InputStream in = Files.newInputStream(originalTempFile);
-                     OutputStream out = Files.newOutputStream(compressedTempFile)) {
-                    Thumbnails.of(in)
-                            .scale(scale)
-                            .outputFormat("jpg")
-                            .outputQuality(quality)
-                            .toOutputStream(out);
-                }
+            while (attempt < MAX_COMPRESSION_ATTEMPTS && !success) {
+                int width = (int) (inputImage.getWidth() * scale);
+                int height = (int) (inputImage.getHeight() * scale);
 
-                long compressedSize = Files.size(compressedTempFile);
-                if (compressedSize <= 1024 * 1024) {
+                outputImage = Scalr.resize(inputImage, Scalr.Method.QUALITY, width, height);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(outputImage, "jpg", baos);
+                baos.flush();
+                byte[] imageBytes = baos.toByteArray();
+                baos.close();
+
+                if (imageBytes.length <= MAX_IMAGE_SIZE_BYTES) {
+                    Files.write(targetPath, imageBytes);
                     success = true;
                 } else {
-                    if (quality > 0.5) {
-                        quality = Math.max(0.3, quality - 0.15);
+                    if (quality > MIN_QUALITY) {
+                        quality = Math.max(MIN_QUALITY, quality - QUALITY_STEP);
                     } else {
-                        scale = Math.max(0.5, scale * 0.9);
+                        scale = Math.max(MIN_SCALE, scale * SCALE_STEP);
                     }
                 }
 
-                Files.move(compressedTempFile, originalTempFile, StandardCopyOption.REPLACE_EXISTING);
+                attempt++;
             }
 
-            Files.move(originalTempFile, targetPath, StandardCopyOption.REPLACE_EXISTING);
+            if (!success) {
+                log.warn("Image compression did not reach target size after {} attempts: {}", MAX_COMPRESSION_ATTEMPTS, targetPath.getFileName());
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(outputImage, "jpg", baos);
+                baos.flush();
+                Files.write(targetPath, baos.toByteArray());
+                baos.close();
+            }
         } finally {
-            Files.deleteIfExists(originalTempFile);
-            Files.deleteIfExists(compressedTempFile);
+            // 主动清理图片对象，帮助 GC
+            if (inputImage != null) {
+                inputImage.flush();
+            }
+            if (outputImage != null) {
+                outputImage.flush();
+            }
+            cleanUpImageIO();
         }
     }
-    
+
+    private void cleanUpImageIO() {
+        // 主动清理 ImageIO 缓存
+        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("jpg");
+        while (readers.hasNext()) {
+            readers.next();
+        }
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+        while (writers.hasNext()) {
+            writers.next();
+        }
+        ImageIO.scanForPlugins();
+    }
+
     private String saveFileRecord(Path filePath) throws IOException {
         String url = fileUrl + filePath.getFileName();
         double sizeKB = Files.size(filePath) / 1024.0;
@@ -138,6 +181,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         ));
         return url;
     }
+
+    private String addSuffixToFileName(String fileName, int count) {
+        int dotIndex = fileName.lastIndexOf(".");
+        if (dotIndex != -1) {
+            String name = fileName.substring(0, dotIndex);
+            String extension = fileName.substring(dotIndex);
+            return name + "_" + count + extension;
+        }
+        return fileName + "_" + count;
+    }
+
 
     @Override
     public List<File> getAllFiles() {
@@ -162,13 +216,5 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
 
-    private String addSuffixToFileName(String fileName, int count) {
-        int dotIndex = fileName.lastIndexOf(".");
-        if (dotIndex != -1) {
-            String name = fileName.substring(0, dotIndex);
-            String extension = fileName.substring(dotIndex);
-            return name + "_" + count + extension;
-        }
-        return fileName + "_" + count;
-    }
+
 }
