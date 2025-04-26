@@ -26,7 +26,7 @@ const operations = [
       <img :src="props.data.url" alt="">
       <div class="detail">
         <p class="text">{{ props.data.fileName }}</p>
-        <span>{{ 'size: ' + props.data.size + 'MB' }}</span>
+        <span>{{ 'size: ' + props.data.size + 'KB' }}</span>
       </div>
     </div>
     <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />

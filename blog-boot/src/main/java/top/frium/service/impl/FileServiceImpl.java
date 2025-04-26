@@ -51,14 +51,18 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     public String uploadFile(MultipartFile file) {
         String originalFileName = Objects.requireNonNull(file.getOriginalFilename());
         Path targetFilePath = resolveUniqueFilePath(originalFileName);
+
         try {
             Files.createDirectories(Paths.get(directoryPath));
             String contentType = file.getContentType();
             boolean isImage = contentType != null && contentType.startsWith("image");
+
             if (isImage) {
                 processImageFile(file, targetFilePath);
             } else {
-                Files.copy(file.getInputStream(), targetFilePath);
+                try (InputStream in = file.getInputStream()) {
+                    Files.copy(in, targetFilePath);
+                }
             }
             return saveFileRecord(targetFilePath);
         } catch (IOException e) {
@@ -80,12 +84,17 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     private void processImageFile(MultipartFile file, Path targetPath) throws IOException {
         Path originalTempFile = Files.createTempFile("img_", "_original");
         Path compressedTempFile = Files.createTempFile("img_", "_compressed");
+
         try {
-            Files.copy(file.getInputStream(), originalTempFile, StandardCopyOption.REPLACE_EXISTING);
+            try (InputStream in = file.getInputStream()) {
+                Files.copy(in, originalTempFile, StandardCopyOption.REPLACE_EXISTING);
+            }
+
             double quality = 0.9;
             double scale = 1.0;
-            boolean needCompression = true;
-            while (needCompression && quality >= 0.3) {
+            boolean success = false;
+
+            for (int i = 0; i < 5 && !success; i++) {
                 try (InputStream in = Files.newInputStream(originalTempFile);
                      OutputStream out = Files.newOutputStream(compressedTempFile)) {
                     Thumbnails.of(in)
@@ -94,22 +103,28 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                             .outputQuality(quality)
                             .toOutputStream(out);
                 }
+
                 long compressedSize = Files.size(compressedTempFile);
                 if (compressedSize <= 1024 * 1024) {
-                    needCompression = false;
+                    success = true;
                 } else {
-                    if (quality > 0.5)quality = Math.max(0.3, quality - 0.15);
-                    else scale = Math.max(0.5, scale * 0.9);
+                    if (quality > 0.5) {
+                        quality = Math.max(0.3, quality - 0.15);
+                    } else {
+                        scale = Math.max(0.5, scale * 0.9);
+                    }
                 }
+
                 Files.move(compressedTempFile, originalTempFile, StandardCopyOption.REPLACE_EXISTING);
             }
+
             Files.move(originalTempFile, targetPath, StandardCopyOption.REPLACE_EXISTING);
         } finally {
             Files.deleteIfExists(originalTempFile);
             Files.deleteIfExists(compressedTempFile);
         }
     }
-
+    
     private String saveFileRecord(Path filePath) throws IOException {
         String url = fileUrl + filePath.getFileName();
         double sizeKB = Files.size(filePath) / 1024.0;
@@ -119,7 +134,7 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
                 url,
                 filePath.getFileName().toString(),
                 LocalDateTime.now().format(DATA_TIME_PATTERN),
-                sizeKB 
+                sizeKB
         ));
         return url;
     }
