@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import top.frium.common.MyException;
 import top.frium.common.StatusCodeEnum;
 import top.frium.context.RabbitMQConstant;
@@ -154,8 +155,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUser(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        if(StringUtils.hasText(userDTO.getPassword())) {
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        } else user.setPassword(null);
         lambdaUpdate().eq(User::getId, userDTO.getId()).update(user);
         userMapper.updateUserPermissionByUserId(userDTO.getAuth(), userDTO.getId());
     }
