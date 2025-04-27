@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/userStore';
 import UploadImg from './UploadImg.vue';
 import notificationToast from '@/utils/notificationToast ';
 import { onMounted, reactive, ref } from 'vue';
-import { getUserInfoAPI, getVerifyAPI, updateEmailAPI, updateUsernameAPI } from '@/api/user';
+import { getUserInfoAPI, getVerifyAPI, updateAvatarAPI, updateEmailAPI, updateUsernameAPI } from '@/api/user';
 import { uploadFileAPI } from '@/api/file';
 
 const userStore = useUserStore();
@@ -102,12 +102,18 @@ const changeAvatar = () => {
   input.click();
   document.body.removeChild(input);
 }
+const selectImg = async (url) => {
+  userStore.userInfo.avatar = url;
+  await updateAvatarAPI(url);
+  notificationToast.success('修改成功!');
+}
 </script>
 
 <template>
   <div class="personal-info">
     <h2>用户中心</h2>
-    <UploadImg class="user-avatar" :avatar-img="userStore.userInfo.avatar" :change-avatar="changeAvatar"></UploadImg>
+    <UploadImg class="user-avatar" :avatar-img="userStore.userInfo.avatar" :change-avatar="changeAvatar"
+      @select-img="selectImg"></UploadImg>
     <ul class="basic-information-ul" id="infoList">
       <li>
         <div class="content-show-l">用户名</div>

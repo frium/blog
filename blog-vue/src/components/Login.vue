@@ -20,6 +20,8 @@ const passwordErrorMsg = ref('');
 const regEmailErrorMsg = ref('');
 const regPasswordErrorMsg = ref('');
 const regVerifyErrorMsg = ref('');
+const isDisabledEmail = ref(false);
+const countdownEmail = ref(5);
 
 const router = useRouter();
 
@@ -136,6 +138,15 @@ const checkRegVerify = () => {
 const getVerify = () => {
   checkRegEmail();
   if (!regEmailCheck.value) return;
+  isDisabledEmail.value = true;
+  countdownEmail.value = 5;
+  const timer = setInterval(() => {
+    countdownEmail.value--;
+    if (countdownEmail.value <= 0) {
+      clearInterval(timer);
+      isDisabledEmail.value = false;
+    }
+  }, 1000);
   getVerifyAPI(register.value.email);
   ElNotification.success('发送成功');
 }
@@ -144,7 +155,6 @@ const signin = async () => {
   checkEmail();
   checkPassword();
   if (!emailCheck.value || !passwordCheck.value) return;
-
   const res = await loginAPI(login.value);
   if (res.code != 200) {
     ElNotification.error({
@@ -204,8 +214,9 @@ const signup = async () => {
           <div class="input-container verify">
             <input class="verify-input" type="text" placeholder="verify" v-model="register.verify"
               @blur="checkRegVerify()">
-            <button class="verify-button" @click="getVerify">
-              获取验证码
+            <button class="verify-button" :disabled="isDisabledEmail" @click="getVerify"
+              :style="{ backgroundColor: isDisabledEmail ? '#bdc0c2' : '#4B70E2' }">
+              {{ isDisabledEmail ? `${countdownEmail}s 后重试` : '获取验证码' }}
             </button>
             <div v-if="!regVerifyCheck" class="error-msg">
               <span>{{ regVerifyErrorMsg }}</span>
@@ -363,7 +374,7 @@ const signup = async () => {
           height: 36px;
           border-radius: 8px;
           margin: 0;
-          background-color: rgba($color: #000000, $alpha: 0.2);
+          background-color: #bdc0c2;
         }
       }
 

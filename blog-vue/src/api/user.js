@@ -47,6 +47,13 @@ export const updateEmailAPI = (data) => {
   })
 }
 
+export const updateAvatarAPI = (url) => {
+  return request({
+    url: `/user/updateAvatar?avatarUrl=${url}`,
+    method: 'POST',
+  })
+}
+
 export const logoutAPI = () => {
   return request({
     url: '/user/logout'

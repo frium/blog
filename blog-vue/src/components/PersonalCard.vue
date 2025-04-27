@@ -42,7 +42,7 @@ onMounted(async () => {
           <p class="number">{{ viewNum }}</p>
         </div>
       </div>
-      <button class="about-button">About Me</button>
+      <a class="about-me" href="https://frium.top">About Me</a>
       <div class="relate">
         <a href="https://github.com/frium">
           <img src="@/assets/icons/GitHub.svg" alt="" style="height: 18px;">
@@ -110,12 +110,17 @@ onMounted(async () => {
       line-height: 30px;
     }
 
-    .about-button {
+    .about-me {
       width: 100%;
       background: #f8c0bf;
       padding: 4.25px;
       color: white;
       border-radius: 20px;
+      text-align: center;
+
+      &:hover {
+        color: white;
+      }
     }
 
     .signature {
