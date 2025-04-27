@@ -7,7 +7,9 @@ import { uploadArticleAPI } from '@/api/adminArticle';
 import { ElMessage } from 'element-plus';
 import { uploadFileAPI } from '@/api/file';
 import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
 const article = reactive({});
 const props = defineProps({
@@ -16,11 +18,18 @@ const props = defineProps({
 const editArticleStore = useEditArticleStore();
 
 const labels = ref([]);
-const onSubmit = async () => {
+const creatArticle = async () => {
   await uploadArticleAPI(article);
   ElMessage.success('发布成功!')
   editArticleStore.article = article;
   router.push({ name: 'ArticleList' })
+}
+
+const updateArticle = async () => {
+  console.log(article);
+
+  editArticleStore.article = article;
+  props.closeArticleSetting();
 }
 
 const cancle = () => {
@@ -89,7 +98,8 @@ const selectImg = (url) => {
         <el-switch v-model="article.isTop" />
       </el-form-item>
       <el-form-item>
-        <button @click="onSubmit" class="release">发布</button>
+        <button @click="updateArticle" class="release" v-if="route.params.editArticleId">修改</button>
+        <button @click="creatArticle" class="release" v-else>发布</button>
         <button @click="cancle">取消</button>
       </el-form-item>
     </el-form>
