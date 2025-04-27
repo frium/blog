@@ -41,7 +41,6 @@ const operations = [
       </div>
     </div>
     <p style="margin-right: auto;">{{ props.data.description }}</p>
-
     <TimeAndOperation :create-time="props.data.createTime" :operations="operations" />
   </div>
   <el-dialog title="编辑友链" :append-to-body="true" v-model="showAddLink" width="550px" style="overflow: auto;"
@@ -70,7 +69,7 @@ a:hover {
     img {
       width: 40px;
       height: 40px;
-      object-fit: cover;
+      object-fit: contain;
       border-radius: 4px;
     }
 

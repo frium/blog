@@ -62,8 +62,6 @@ img {
   object-fit: cover;
   object-position: center;
   cursor: url('/src/assets/cursor/Hand.cur'), pointer;
-
-
 }
 
 .upload-img {

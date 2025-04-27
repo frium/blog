@@ -86,6 +86,9 @@ onMounted(() => {
   Object.assign(form, props.data);
 })
 
+const selectImg = async (url) => {
+  form.logo = url;
+}
 </script>
 
 <template>
@@ -98,7 +101,8 @@ onMounted(() => {
         <el-input v-model="form.urlName" />
       </el-form-item>
       <el-form-item label="logo">
-        <UploadImg :border-radius="'0%'" :avatar-img="form.logo" :change-avatar="changeAvatar"></UploadImg>
+        <UploadImg :border-radius="'0%'" :avatar-img="form.logo" :change-avatar="changeAvatar" @select-img="selectImg">
+        </UploadImg>
       </el-form-item>
       <el-form-item label="描述">
         <el-input v-model="form.description" type="textarea" maxlength="20" show-word-limit />

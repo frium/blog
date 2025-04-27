@@ -31,10 +31,7 @@ const rules = reactive({
       trigger: 'blur'
     }
   ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
-  ],
+
   email: [
     { required: true, message: '请输入邮箱', trigger: 'blur' },
     { type: 'email', message: '请输入正确的邮箱格式', trigger: 'blur' },
@@ -91,6 +88,10 @@ const onSubmit = () => {
   })
 }
 
+
+const selectImg = async (url) => {
+  form.avatar = url;
+}
 onMounted(() => {
   Object.assign(form, props.data);
   form.password = '';
@@ -101,7 +102,8 @@ onMounted(() => {
   <div class="create-user">
     <el-form ref="formRef" :rules="rules" :model="form" label-width="auto" style="max-width: 500px">
       <el-form-item label="头像">
-        <UploadImg :border-radius="'0%'" :avatar-img="form.avatar" :change-avatar="changeAvatar"></UploadImg>
+        <UploadImg :border-radius="'0%'" :avatar-img="form.avatar" :change-avatar="changeAvatar"
+          @select-img="selectImg"></UploadImg>
       </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" />
