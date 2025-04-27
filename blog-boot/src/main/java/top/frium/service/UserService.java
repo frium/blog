@@ -39,4 +39,6 @@ public interface UserService extends IService<User> {
     void updateUser(UserDTO userDTO);
 
     List<UserVO> getUsers();
+
+    void updateAvatar(String url);
 }

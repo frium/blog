@@ -166,6 +166,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public void updateAvatar(String url) {
+        Long userId;
+        try {
+            LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            userId = loginUser.getUser().getId();
+        } catch (Exception e) {
+            throw new MyException(StatusCodeEnum.NOT_LOGIN);
+        }
+        boolean exists = lambdaQuery().eq(User::getAvatar, url).exists();
+        if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
+        lambdaUpdate().eq(User::getId, userId).set(User::getAvatar, url).update();
+    }
+
+    @Override
     @Transactional
     public void registerByEmail(RegisterEmailDTO registerEmailDTO) {
         //在redis中检查是否数据匹配

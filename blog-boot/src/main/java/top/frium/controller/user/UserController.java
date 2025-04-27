@@ -58,6 +58,13 @@ public class UserController {
         return R.success();
     }
 
+    @ApiOperation("修改用户头像")
+    @PostMapping("/updateAvatar")
+    public R<?> updateAvatar(String avatarUrl) {
+        userService.updateAvatar(avatarUrl);
+        return R.success();
+    }
+
     @ApiOperation("登出")
     @GetMapping("/logout")
     public R<?> logout() {

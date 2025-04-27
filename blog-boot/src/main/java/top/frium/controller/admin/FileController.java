@@ -25,12 +25,14 @@ public class FileController {
     FileService fileService;
 
     @ApiOperation("上传文件")
+    @PreAuthorize("permitAll()")
     @PostMapping("/uploadFile")
     public R<?> uploadFile(@RequestParam("file") MultipartFile file) {
         return R.success(fileService.uploadFile(file));
     }
 
     @ApiOperation("获取所有文件")
+    @PreAuthorize("permitAll()")
     @GetMapping("/getAllFiles")
     public R<?> uploadFiles() {
         return R.success(fileService.getAllFiles());
