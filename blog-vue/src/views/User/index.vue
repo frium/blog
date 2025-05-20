@@ -51,7 +51,7 @@ const trunOffLrc = () => {
 }
 
 watch(() => route.path, (newPath) => {
-  isTimeRoute.value = newPath === '/time';
+  isTimeRoute.value = newPath.includes('/time');
 },
   {
     immediate: true

@@ -38,7 +38,23 @@ const router = createRouter({
         {
           name: 'Time',
           path: 'time',
-          component: () => import('@/views/User/TimeLine/index.vue')
+          children: [
+            {
+              path: '',
+              name: 'DefaultTime',
+              redirect: { name: 'ZScroll' }
+            },
+            {
+              name: 'XScroll',
+              path: 'xScroll',
+              component: () => import('@/views/User/TimeLine/XScroll/index.vue'),
+            },
+            {
+              name: 'ZScroll',
+              path: 'zScroll',
+              component: () => import('@/views/User/TimeLine/ZScroll/index.vue'),
+            }
+          ]
         },
         {
           name: 'Friends',

@@ -1,14 +1,13 @@
 <script setup>
 import XScroll from '@/components/XScroll.vue';
 import { onMounted, ref } from 'vue';
-import TimeLineCard from './components/TimeLineCard.vue';
+import TimeLineCard from '../components/TimeLineCard.vue';
 import { getArticleByTimeAPI } from '@/api/article';
 
 const articles = ref([]);
 onMounted(async () => {
   const res = await getArticleByTimeAPI();
   articles.value = res.data;
-
 })
 </script>
 
