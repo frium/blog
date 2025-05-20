@@ -1,37 +1,99 @@
 <script setup>
 import XScroll from '@/components/XScroll.vue';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import TimeLineCard from '../components/TimeLineCard.vue';
-import { getArticleByTimeAPI } from '@/api/article';
+import ArticleNav from '../components/ArticleNav.vue';
 
-const articles = ref([]);
-onMounted(async () => {
-  const res = await getArticleByTimeAPI();
-  articles.value = res.data;
+const isShowArticleNav = ref(false);
+const handelShowArticleNav = () => {
+  isShowArticleNav.value = !isShowArticleNav.value;
+}
+
+const props = defineProps({
+  articles: Object
 })
+
 </script>
 
 <template>
-  <XScroll class="x-scroll">
-    <div class="time-line-cards">
-      <TimeLineCard v-for="(article, index) in articles" :key="article.id" :class="['card', { even: index % 2 === 0 }]"
-        :data="article" />
+  <div class="x-scrroll-out-box">
+    <XScroll class="x-scroll">
+      <div class="time-line-cards">
+        <TimeLineCard v-for="(article, index) in props.articles" :key="article.id"
+          :class="['card', { even: index % 2 === 0 }]" :data="article" />
+      </div>
+    </XScroll>
+    <div class="article-nav-out" :style="{ transform: !isShowArticleNav ? 'translateX(100%)' : 'translateX(0)' }">
+      <div class="triangle">
+        <img @click="handelShowArticleNav" :style="{ transform: !isShowArticleNav ? 'rotate(180deg)' : 'rotate(0)' }"
+          src="@/assets/icons/toRightArrow.svg" alt="">
+      </div>
+      <ArticleNav :articles="props.articles"></ArticleNav>
     </div>
-  </XScroll>
+
+  </div>
 </template>
 
 <style scoped lang="scss">
+.x-scrroll-out-box {
+  position: relative;
+
+  .article-nav-out {
+    position: sticky;
+    width: 240px;
+    background: var(--bg-color);
+    bottom: 50%;
+    left: 97%;
+    border-radius: 6px;
+    z-index: 999;
+    transform: translateX(0);
+    transition: all 0.5s;
+  }
+
+  .triangle {
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    width: 20px;
+    height: 45px;
+    transform: translate(0, -50%);
+    background: var(--bg-color);
+    display: flex;
+    align-items: center;
+
+    img {
+      transform: rotate(180deg);
+      transition: all 0.5s;
+    }
+  }
+
+  .nav-ball {
+    position: sticky;
+    width: 35px;
+    height: 35px;
+    background: var(--primary-color);
+    bottom: 8%;
+    left: 97%;
+    border-radius: 6px;
+    z-index: 999;
+  }
+}
+
 .x-scroll {
   position: relative;
   height: 80vh;
+
+
 
   &::before {
     content: '';
     position: absolute;
     top: 39vh;
-    width: 100%;
+    width: 50%;
     height: 2px;
     background: #525151;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .time-line-cards {

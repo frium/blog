@@ -51,7 +51,7 @@ const handelLogout = async () => {
             <RouterLink to="/categories" active-class="router-link-active">分类</RouterLink>
           </li>
           <li class="hover-show">
-            <RouterLink to="/time" active-class="router-link-active">归档</RouterLink>
+            <RouterLink to="/timeLine" active-class="router-link-active">归档</RouterLink>
           </li>
           <li class="hover-show">
             <RouterLink to="/friends" active-class="router-link-active">友人帐</RouterLink>

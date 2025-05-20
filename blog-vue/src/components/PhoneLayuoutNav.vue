@@ -16,19 +16,21 @@ const handelSearch = () => {
 </script>
 
 <template>
-  <div class="phone-layout-nav">
-    <img class="operation" src="@/assets/icons/menu.svg" @click="showPersonalCard" />
-    <h3 class="title">frium's blog</h3>
-    <img class="search" src="@/assets/icons/search.svg" @click="handelSearch" />
+  <div>
+    <div class="phone-layout-nav">
+      <img class="operation" src="@/assets/icons/menu.svg" @click="showPersonalCard" />
+      <h3 class="title">frium's blog</h3>
+      <img class="search" src="@/assets/icons/search.svg" @click="handelSearch" />
+    </div>
+    <div @click="offPersonalCard" class="blur-bg" :style="{
+      background: personalCard ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0)',
+      backdropFilter: personalCard ? 'blur(4px)' : 'blur(0px)',
+      zIndex: personalCard ? '99' : '-1',
+    }"></div>
+    <PhonePersonalCard class="phone-personal-card-out"
+      :style="{ transform: personalCard ? 'translateX(0)' : 'translateX(-100%)', boxShadow: personalCard ? ' 2px 0px 30px 2px #262626' : '0px 0px 0px 0px' }"
+      @off-persoal-card="offPersonalCard" />
   </div>
-  <div @click="offPersonalCard" class="blur-bg" :style="{
-    background: personalCard ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0)',
-    backdropFilter: personalCard ? 'blur(4px)' : 'blur(0px)',
-    zIndex: personalCard ? '99' : '-1',
-  }"></div>
-  <PhonePersonalCard class="phone-personal-card-out"
-    :style="{ transform: personalCard ? 'translateX(0)' : 'translateX(-100%)', boxShadow: personalCard ? ' 2px 0px 30px 2px #262626' : '0px 0px 0px 0px' }"
-    @off-persoal-card="offPersonalCard" />
 </template>
 
 <style scoped lang="scss">

@@ -37,7 +37,8 @@ const router = createRouter({
         },
         {
           name: 'Time',
-          path: 'time',
+          path: 'timeLine',
+          component: () => import('@/views/User/TimeLine/index.vue'),
           children: [
             {
               path: '',

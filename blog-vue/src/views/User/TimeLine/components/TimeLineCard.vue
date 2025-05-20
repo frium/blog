@@ -11,7 +11,6 @@ const props = defineProps({
     </RouterLink>
     <span class="time">{{ props.data.createTime.split(' ')[0] }}</span>
     <span class="title">{{ props.data.title }}</span>
-
     <span class="describe">{{ props.data.summary }}</span>
   </div>
 </template>

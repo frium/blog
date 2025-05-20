@@ -26,9 +26,6 @@ const getDomAnimation = (scrollStart, scrollEnd, dom) => {
   const maxScrollHeight = document.body.scrollHeight - window.innerHeight;
   scrollStart = dom.dataset.order * itemSpacing;
   scrollEnd = Math.min(scrollStart + itemSpacing * 8, maxScrollHeight);
-  console.log(scrollStart);
-  console.log(scrollEnd);
-  console.log("   ");
   const opacityAnimation = createAnimation(scrollStart, scrollEnd, 0, 3);
   const opacity = function (scroll) {
     return opacityAnimation(scroll);
@@ -82,23 +79,17 @@ onBeforeUnmount(() => {
     observer.disconnect()
   }
 })
-const slowScrollToBottom = (duration = 3000) => {
-  const start = window.scrollY;
-  const distance = document.body.scrollHeight - start;
-  const startTime = performance.now();
-  function step(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    window.scrollTo(0, start + distance * progress);
-    if (progress < 1) {
-      requestAnimationFrame(step);
-    }
-  }
-  requestAnimationFrame(step);
-}
-const toBottom = () => {
-  slowScrollToBottom(2000);
-}
+
+const scrollToArticle = (index) => {
+  const position = index * parseInt(window.innerHeight);
+  window.scrollTo({
+    top: position,
+    behavior: 'smooth'
+  });
+};
+defineExpose({
+  scrollToArticle
+})
 </script>
 
 <template>
