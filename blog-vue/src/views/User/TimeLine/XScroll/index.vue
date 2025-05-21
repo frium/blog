@@ -30,7 +30,6 @@ const props = defineProps({
       </div>
       <ArticleNav :articles="props.articles"></ArticleNav>
     </div>
-
   </div>
 </template>
 

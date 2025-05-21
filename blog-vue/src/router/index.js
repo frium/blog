@@ -45,11 +45,11 @@ const router = createRouter({
               name: 'DefaultTime',
               redirect: { name: 'ZScroll' }
             },
-            {
-              name: 'XScroll',
-              path: 'xScroll',
-              component: () => import('@/views/User/TimeLine/XScroll/index.vue'),
-            },
+            // {
+            //   name: 'XScroll',
+            //   path: 'xScroll',
+            //   component: () => import('@/views/User/TimeLine/XScroll/index.vue'),
+            // },
             {
               name: 'ZScroll',
               path: 'zScroll',

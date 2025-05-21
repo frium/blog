@@ -18,7 +18,7 @@ const handelToArticle = (articleNum) => {
         </template>
       </ul>
     </div>
-    <div class="switch">
+    <!-- <div class="switch">
       <h3>切换模式</h3>
       <RouterLink style="text-indent: 1rem; " :to="{ name: 'XScroll' }">
         <span>横向滑动</span>
@@ -26,7 +26,7 @@ const handelToArticle = (articleNum) => {
       <RouterLink style="text-indent: 1rem; " :to="{ name: 'ZScroll' }">
         <span> ZScroll</span>
       </RouterLink>
-    </div>
+    </div> -->
   </div>
 </template>
 
