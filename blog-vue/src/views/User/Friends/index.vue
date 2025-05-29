@@ -42,9 +42,7 @@ onMounted(async () => {
   background: var(--bg-color);
   transition: 0.6s ease-out;
 
-  &:hover {
-    background: rgba(40, 44, 52, 0.8);
-  }
+
 
   img {
     width: 100%;
@@ -86,8 +84,8 @@ onMounted(async () => {
 
     .friend-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      justify-content: center;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      justify-content: start;
       gap: 15px 30px;
       width: 100%;
       margin-top: 15px;
