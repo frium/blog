@@ -9,7 +9,6 @@ import { ElMessage } from 'element-plus';
 
 const fileData = ref([]);
 const uploadFileDialog = ref(null);
-
 const deleteFunction = async (selectedRows) => {
   const idsToDelete = selectedRows.map(item => item.id);
   await deleteFileAPI(idsToDelete);

@@ -50,6 +50,7 @@ const handelToArticle = (articleNum) => {
       padding: 2px 12px;
       border-radius: 3px;
       cursor: url('/src/assets/cursor/Hand.cur'), pointer;
+      margin-top: 10px;
 
       &:hover {
         background: #444a55;

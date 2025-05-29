@@ -15,10 +15,10 @@ import top.frium.pojo.entity.File;
 import top.frium.service.FileService;
 import top.frium.uitls.FtpUtils;
 
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
-import javax.imageio.ImageWriter;
+import javax.imageio.*;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,11 +52,6 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     String fileUrl;
 
     private static final long MAX_IMAGE_SIZE_BYTES = 1024 * 1024; // 1MB
-    private static final int MAX_COMPRESSION_ATTEMPTS = 5;
-    private static final double MIN_QUALITY = 0.3;
-    private static final double QUALITY_STEP = 0.15;
-    private static final double MIN_SCALE = 0.5;
-    private static final double SCALE_STEP = 0.9;
 
     @Override
     @Transactional
@@ -95,77 +90,63 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
     }
 
     private void processImageFile(MultipartFile file, Path targetPath) throws IOException {
-        BufferedImage inputImage = null;
-        BufferedImage outputImage = null;
-
         try (InputStream in = file.getInputStream()) {
-            inputImage = ImageIO.read(in);
-            if (inputImage == null) {
-                throw new IOException("Failed to read image file.");
+            byte[] originalBytes = file.getBytes();
+            if (originalBytes.length <= MAX_IMAGE_SIZE_BYTES) {
+                Files.write(targetPath, originalBytes);
+                return;
             }
-
-            double quality = 0.9;
-            double scale = 1.0;
-            boolean success = false;
-            int attempt = 0;
-
-            while (attempt < MAX_COMPRESSION_ATTEMPTS && !success) {
-                int width = (int) (inputImage.getWidth() * scale);
-                int height = (int) (inputImage.getHeight() * scale);
-
-                outputImage = Scalr.resize(inputImage, Scalr.Method.QUALITY, width, height);
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(outputImage, "jpg", baos);
-                baos.flush();
-                byte[] imageBytes = baos.toByteArray();
-                baos.close();
-
-                if (imageBytes.length <= MAX_IMAGE_SIZE_BYTES) {
-                    Files.write(targetPath, imageBytes);
-                    success = true;
-                } else {
-                    if (quality > MIN_QUALITY) {
-                        quality = Math.max(MIN_QUALITY, quality - QUALITY_STEP);
-                    } else {
-                        scale = Math.max(MIN_SCALE, scale * SCALE_STEP);
+            String formatName = getImageFormat(originalBytes);
+            if (formatName == null) formatName = "jpg";
+            BufferedImage inputImage = ImageIO.read(new ByteArrayInputStream(originalBytes));
+            if (inputImage == null) throw new IOException("Failed to read image file.");
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            if (ImageIO.write(inputImage, formatName, baos) && baos.size() <= MAX_IMAGE_SIZE_BYTES) {
+                Files.write(targetPath, baos.toByteArray());
+                return;
+            }
+            double[] scales = {0.9, 0.8, 0.7, 0.6};
+            double[] qualities = {0.9, 0.8, 0.7, 0.6};
+            for (double scale : scales) {
+                for (double quality : qualities) {
+                    baos.reset();
+                    int width = (int) (inputImage.getWidth() * scale);
+                    int height = (int) (inputImage.getHeight() * scale);
+                    BufferedImage scaledImage = Scalr.resize(inputImage, Scalr.Method.QUALITY, width, height);
+                    ImageWriter writer = ImageIO.getImageWritersByFormatName(formatName).next();
+                    try {
+                        ImageWriteParam param = writer.getDefaultWriteParam();
+                        if (param.canWriteCompressed()) {
+                            param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                            param.setCompressionQuality((float) quality);
+                        }
+                        writer.setOutput(ImageIO.createImageOutputStream(baos));
+                        writer.write(null, new IIOImage(scaledImage, null, null), param);
+                        if (baos.size() <= MAX_IMAGE_SIZE_BYTES) {
+                            Files.write(targetPath, baos.toByteArray());
+                            return;
+                        }
+                    } finally {
+                        writer.dispose();
                     }
                 }
-
-                attempt++;
             }
-
-            if (!success) {
-                log.warn("Image compression did not reach target size after {} attempts: {}", MAX_COMPRESSION_ATTEMPTS, targetPath.getFileName());
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(outputImage, "jpg", baos);
-                baos.flush();
-                Files.write(targetPath, baos.toByteArray());
-                baos.close();
-            }
-        } finally {
-            // 主动清理图片对象，帮助 GC
-            if (inputImage != null) {
-                inputImage.flush();
-            }
-            if (outputImage != null) {
-                outputImage.flush();
-            }
-            cleanUpImageIO();
+            Files.write(targetPath, baos.toByteArray());
         }
     }
 
-    private void cleanUpImageIO() {
-        // 主动清理 ImageIO 缓存
-        Iterator<ImageReader> readers = ImageIO.getImageReadersByFormatName("jpg");
-        while (readers.hasNext()) {
-            readers.next();
+    private String getImageFormat(byte[] imageData) throws IOException {
+        ImageInputStream iis = ImageIO.createImageInputStream(new ByteArrayInputStream(imageData));
+        Iterator<ImageReader> readers = ImageIO.getImageReaders(iis);
+        if (readers.hasNext()) {
+            ImageReader reader = readers.next();
+            try {
+                return reader.getFormatName();
+            } finally {
+                reader.dispose();
+            }
         }
-        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-        while (writers.hasNext()) {
-            writers.next();
-        }
-        ImageIO.scanForPlugins();
+        return null;
     }
 
     private String saveFileRecord(Path filePath) throws IOException {

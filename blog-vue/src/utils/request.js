@@ -21,6 +21,8 @@ request.interceptors.request.use(config => {
 }, e => Promise.reject(e))
 
 request.interceptors.response.use(res => res.data, error => {
+  console.log(error);
+
   if (error.response?.status === 401) {
     notificationToast.error('用户身份过期!');
     useUserStore().jwt = "";
@@ -34,7 +36,7 @@ request.interceptors.response.use(res => res.data, error => {
     return Promise.reject(error);
   }
 
-  const errorMsg = error.response.data.msg || '请求异常，请稍后重试'
+  const errorMsg = error.response?.data.msg || '请求异常，请稍后重试'
   notificationToast.error(errorMsg)
   return Promise.reject(error);
 })
