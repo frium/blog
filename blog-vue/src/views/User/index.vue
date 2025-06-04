@@ -21,7 +21,6 @@ const observer = ref(null);
 const route = useRoute();
 const markdownCatalogue = ref(null);
 const scrollStore = useScrollStore();
-const globalInfoStore = useGlobalInfoStore();
 
 const handleComponentLoaded = () => {
   markdownCatalogue.value.handleLoadCatalogue();
@@ -52,9 +51,7 @@ watch(() => route.path, (newPath) => {
 );
 
 onMounted(async () => {
-  const res = await getBlogInfoAPI();
-  globalInfoStore.globalInfo = res.data;
-  console.log(globalInfoStore.globalInfo);
+
   observer.value = new IntersectionObserver(
     ([entry]) => {
       isHidden.value = !entry.isIntersecting; //目标元素和视口相交

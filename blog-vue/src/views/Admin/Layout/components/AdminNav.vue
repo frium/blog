@@ -36,10 +36,11 @@ const route = useRoute();
         <img src="@/assets/icons/manageUser.svg" alt="">
         <RouterLink to="/admin/manageUser" style="flex-grow: 1;">用户</RouterLink>
       </li>
+      <li :class="{ active: route.path === '/admin/setting' }">
+        <img src="@/assets/icons/setting.svg" alt="">
+        <RouterLink to="/admin/setting" style="flex-grow: 1;">设置</RouterLink>
+      </li>
     </ul>
-    <div class="admin-info">
-      用户名
-    </div>
   </div>
 </template>
 

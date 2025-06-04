@@ -142,13 +142,14 @@ const router = createRouter({
           path: 'personalCenter',
           component: () => import('@/views/Admin/PersonalCenter/index.vue')
 
+        },
+        {
+          name: 'GlobalSetting',
+          path: 'setting',
+          component: () => import('@/views/Admin/Setting/index.vue')
+
         }
       ]
-    },
-    {
-      name: 'Start',
-      path: '/star',
-      component: () => import('@/components/StarSky.vue'),
     }
   ],
 });
