@@ -13,27 +13,20 @@ import { useScrollStore } from "@/stores/scrollStore";
 import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
 import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
 import StarSky from "@/components/StarSky.vue";
+import { useGlobalInfoStore } from "@/stores/globalInfo";
+import { getBlogInfoAPI } from "@/api/blog";
 
 const isHidden = ref(false);
 const observer = ref(null);
-
 const route = useRoute();
-const isChanging = ref(false);
-
 const markdownCatalogue = ref(null);
-
 const scrollStore = useScrollStore();
+const globalInfoStore = useGlobalInfoStore();
 
 const handleComponentLoaded = () => {
   markdownCatalogue.value.handleLoadCatalogue();
 };
 
-watch(route, () => {
-  isChanging.value = true;
-  setTimeout(() => {
-    isChanging.value = false;
-  }, 300);//应该是routerview的资源加载完毕后 isChanging.value = false;
-});
 const isTimeRoute = ref(false);
 
 const playerRef = ref(null);
@@ -58,7 +51,10 @@ watch(() => route.path, (newPath) => {
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  const res = await getBlogInfoAPI();
+  globalInfoStore.globalInfo = res.data;
+  console.log(globalInfoStore.globalInfo);
   observer.value = new IntersectionObserver(
     ([entry]) => {
       isHidden.value = !entry.isIntersecting; //目标元素和视口相交
@@ -90,8 +86,7 @@ onUnmounted(() => {
     <div class="selection">
       <div class="container">
         <div class="cloumns">
-          <div class="router-view"
-            :style="{ opacity: isChanging ? '0.5' : '1', transform: isChanging ? 'translateY(20px)' : 'translateY(0px)' }">
+          <div class="router-view">
             <div id="trigger" style="height: 1px; width: 100%;"></div>
             <router-view @component-loaded="handleComponentLoaded"></router-view>
           </div>

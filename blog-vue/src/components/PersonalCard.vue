@@ -1,12 +1,14 @@
 <script setup>
 import { getLabelNumAPI, getShowArticleNumAPI } from "@/api/article";
 import { getUVPVAPI } from "@/api/uvpv";
+import { useGlobalInfoStore } from "@/stores/globalInfo";
 import { onMounted, ref } from "vue";
 
 
 const articleNum = ref(0);
 const labelNum = ref(0);
 const viewNum = ref(0);
+const globalInfoStore = useGlobalInfoStore();
 
 onMounted(async () => {
   const [articleNumRes, labelNumRes, viewNumRes] = await Promise.all([
@@ -24,10 +26,10 @@ onMounted(async () => {
 <template>
   <div class="personal-info">
     <div class="bg-img"></div>
-    <div class="head"></div>
+    <img :src="globalInfoStore.globalInfo.avatarUrl" class="head" />
     <div class="detail">
-      <p class="name">frium</p>
-      <span class="signature">欲买桂花同载酒 终不似 少年游</span>
+      <p class="name">{{ globalInfoStore.globalInfo.siteName }}</p>
+      <span class="signature">{{ globalInfoStore.globalInfo.personalSignature }}</span>
       <div style="display: flex; justify-content: space-between;padding: 15px 10px 10px 10px; width: 240px;">
         <div>
           <p class="title">文章</p>
@@ -42,15 +44,15 @@ onMounted(async () => {
           <p class="number">{{ viewNum }}</p>
         </div>
       </div>
-      <a class="about-me" href="https://frium.top">About Me</a>
+      <a class="about-me" :href="globalInfoStore.globalInfo.aboutMe">About Me</a>
       <div class="relate">
-        <a href="https://github.com/frium">
+        <a :href="globalInfoStore.globalInfo.githubUrl">
           <img src="@/assets/icons/GitHub.svg" alt="" style="height: 18px;">
         </a>
-        <a href="https://blog.csdn.net/guabghaibaoan?spm=1000.2115.3001.5343">
+        <a :href="globalInfoStore.globalInfo.csdnUrl">
           <img src="@/assets/icons/csdn.svg" alt="" style="height: 18px;">
         </a>
-        <a href="https://music.163.com/#/user/home?id=3967869594">
+        <a :href="globalInfoStore.globalInfo.wyyUrl">
           <img src="@/assets/icons/wangyiyunyinle.svg" alt="" style="height: 18px;">
         </a>
       </div>
@@ -69,7 +71,7 @@ onMounted(async () => {
   .bg-img {
     width: 100%;
     height: 100%;
-    background-image: url('https://static.frium.top/blog/start.jpg');
+    background: url('https://static.frium.top/blog/start.jpg');
     opacity: 0.7;
     border-radius: 10px;
     background-position: center;
@@ -81,13 +83,12 @@ onMounted(async () => {
     position: absolute;
     top: 20px;
     left: 90px;
-    background-image: url('https://static.frium.top/blog/flowerboy.jpg');
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background-position: center;
     background-size: cover;
-    border: 4px solid var(--bg-color);
+    border: 4px solid rgba(184, 181, 181, 0.5);
     transition: transform 0.8s ease-out;
 
     &:hover {

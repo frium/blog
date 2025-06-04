@@ -1,11 +1,13 @@
 <script setup>
-import { Search } from '@element-plus/icons-vue'
 import { onMounted, ref } from 'vue'
 import Login from './Login.vue';
 import { useUserStore } from '@/stores/userStore';
 import PersoanalInfo from './PersoanalInfo.vue';
 import { getUserInfoAPI, logoutAPI } from '@/api/user';
 import notificationToast from '@/utils/notificationToast ';
+import { useGlobalInfoStore } from '@/stores/globalInfo';
+
+const globalInfoStore = useGlobalInfoStore();
 const userStore = useUserStore();
 const showLogin = ref(false);
 const handleShowLogin = () => {
@@ -39,7 +41,7 @@ const handelLogout = async () => {
 <template>
   <div class="layout-nav">
     <RouterLink :to="{ name: 'Home' }">
-      <span class="title">frium's blog</span>
+      <span class="title">{{ globalInfoStore.globalInfo.siteName }}'s blog</span>
     </RouterLink>
     <div class="menu">
       <div>
@@ -65,8 +67,6 @@ const handelLogout = async () => {
           </li>
         </ul>
       </div>
-      <img class="search" src="@/assets/icons/search.svg" alt="">
-
       <el-dropdown v-if=(userStore.userInfo.avatar)>
         <img class="user-head" :src="userStore.userInfo.avatar" alt="">
         <template #dropdown>

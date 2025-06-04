@@ -1,18 +1,20 @@
 <script setup>
 import { ref } from 'vue';
+import { useGlobalInfoStore } from '@/stores/globalInfo';
+const globalInfoStore = useGlobalInfoStore();
 const day = ref(0);
 const hours = ref(0);
 const minutes = ref(0);
 const seconds = ref(0);
 
 const getTime = () => {
-  const timeDifference = new Date() - new Date('2025-02-07T00:00:00');
+  const timeDifference = new Date() - new Date(globalInfoStore.globalInfo.blogStartTime);
   day.value = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   hours.value = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   minutes.value = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
   seconds.value = Math.floor((timeDifference % (1000 * 60)) / 1000);
 };
-getTime;
+getTime();
 setInterval(getTime, 1000);
 </script>
 
@@ -20,13 +22,13 @@ setInterval(getTime, 1000);
   <div class="layout-footer">
     <div class="title">
       <RouterLink :to="{ name: 'Home' }">
-        <span>frium's blog</span>
+        <span>{{ globalInfoStore.globalInfo.siteName }}'s blog</span>
       </RouterLink>
     </div>
     <div class="detail">
       <p>
-        © 2025 frium's blog
-        <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action">粤ICP备2024234516号</a>
+        © {{ new Date().getFullYear() + ' ' + globalInfoStore.globalInfo.siteName }}'s blog
+        <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action">{{ globalInfoStore.globalInfo.icp }}</a>
       </p>
       <p> 建站
         <span class="time">{{ day }}</span>
