@@ -8,19 +8,19 @@ import MusicPlayerStrip from '@/components/MusicPlayerStrip.vue';
 import LyricStrip from '@/components/LyricStrip.vue';
 import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
 import { useScrollStore } from "@/stores/scrollStore";
 import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
 import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
 import StarSky from "@/components/StarSky.vue";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
-import { getBlogInfoAPI } from "@/api/blog";
 
 const isHidden = ref(false);
 const observer = ref(null);
 const route = useRoute();
 const markdownCatalogue = ref(null);
 const scrollStore = useScrollStore();
+const globalInfoStore = useGlobalInfoStore();
 
 const handleComponentLoaded = () => {
   markdownCatalogue.value.handleLoadCatalogue();
@@ -49,9 +49,10 @@ watch(() => route.path, (newPath) => {
     immediate: true
   }
 );
+const backgroundUrl = computed(() => `url(${globalInfoStore.globalInfo.backgroundUrl})`);
+
 
 onMounted(async () => {
-
   observer.value = new IntersectionObserver(
     ([entry]) => {
       isHidden.value = !entry.isIntersecting; //目标元素和视口相交
@@ -113,11 +114,11 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .user-out-box {
+  width: 100%;
   position: relative;
   min-height: 100vh;
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
-    url('https://static.frium.top/blog/sea_of_flowers.jpg') no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    v-bind('backgroundUrl') no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
