@@ -16,10 +16,10 @@ const numberData = ref([
   { title: "浏览量", number: 0, icon: "visible.svg" }
 ]);
 const quickFindData = [
-  { title: "个人中心", url: "ManageUser", icon: "user.svg" },
   { title: "创建文章", url: "ToEditArticle", icon: "article.svg" },
   { title: "管理用户", url: "ManageUser", icon: "manageUser.svg" },
-  { title: "附件上传", url: "File", icon: "file.svg" }
+  { title: "附件上传", url: "File", icon: "file.svg" },
+  { title: "设置中心", url: "GlobalSetting", icon: "setting.svg" }
 ];
 const articleList = ref([]);
 

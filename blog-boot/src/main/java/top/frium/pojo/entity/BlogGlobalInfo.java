@@ -10,6 +10,7 @@ import lombok.Data;
 public class BlogGlobalInfo {
     Long id;
     String siteName;
+    String siteIcon;
     String aboutMe;
     String avatarUrl;
     String backgroundUrl;

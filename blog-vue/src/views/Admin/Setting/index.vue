@@ -8,40 +8,28 @@ import { uploadFileAPI } from '@/api/file';
 import { ElMessage } from 'element-plus';
 const globalInfoStore = useGlobalInfoStore();
 
+
+const createUpdateFunction = (propertyName) => {
+  return async (info) => {
+    globalInfoStore.globalInfo[propertyName] = info;
+    await updateBlogInfoAPI(globalInfoStore.globalInfo);
+  };
+};
+
+const updateSiteName = createUpdateFunction('siteName');
+const updateSiteIcon = createUpdateFunction('siteIcon');
+const updatePersonalSignature = createUpdateFunction('personalSignature');
+const updateBlogStartTime = createUpdateFunction('blogStartTime');
+const updateBackgroundUrl = createUpdateFunction('backgroundUrl');
+const updateGithubUrl = createUpdateFunction('githubUrl');
+const updateCsdnUrl = createUpdateFunction('csdnUrl');
+const updateWyyUrl = createUpdateFunction('wyyUrl');
+
 const updateAvatar = async (info) => {
   globalInfoStore.globalInfo.avatarUrl = info;
   await updateBlogInfoAPI(globalInfoStore.globalInfo);
   ElMessage.success('修改成功!');
 }
-const updateSiteName = async (info) => {
-  globalInfoStore.globalInfo.siteName = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updatePersonalSignature = async (info) => {
-  globalInfoStore.globalInfo.personalSignature = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updateBlogStartTime = async (info) => {
-  globalInfoStore.globalInfo.blogStartTime = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updateBackgroundUrl = async (info) => {
-  globalInfoStore.globalInfo.backgroundUrl = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updateGithubUrl = async (info) => {
-  globalInfoStore.globalInfo.githubUrl = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updateCsdnUrl = async (info) => {
-  globalInfoStore.globalInfo.csdnUrl = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-const updateWyyUrl = async (info) => {
-  globalInfoStore.globalInfo.wyyUrl = info;
-  await updateBlogInfoAPI(globalInfoStore.globalInfo);
-}
-
 const changeAvatar = () => {
   const input = document.createElement('input');
   input.type = 'file';
@@ -79,6 +67,10 @@ const changeAvatar = () => {
             :updateFunction="updateSiteName"></InputCard>
         </li>
         <li style="margin-left: 15px">
+          <InputCard :infoDescription="'站点图标'" :info="globalInfoStore.globalInfo.siteIcon"
+            :updateFunction="updateSiteIcon"></InputCard>
+        </li>
+        <li style="margin-left: 15px">
           <InputCard :infoDescription="'个性签名'" :info="globalInfoStore.globalInfo.personalSignature"
             :updateFunction="updatePersonalSignature"></InputCard>
         </li>
@@ -112,7 +104,5 @@ const changeAvatar = () => {
   background: white;
   padding: 20px 30px;
   border-radius: 5px;
-
-
 }
 </style>

@@ -4,6 +4,7 @@ export const useGlobalInfoStore = defineStore('globalInfoStore', () => {
 
   const globalInfo = reactive({
     siteName: "",
+    siteIcon: "",
     aboutMe: "",
     avatarUrl: "",
     backgroundUrl: "",
