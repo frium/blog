@@ -138,12 +138,6 @@ const router = createRouter({
           component: () => import('@/views/Admin/ManageUser/index.vue')
         },
         {
-          name: 'PersonalCenter',
-          path: 'personalCenter',
-          component: () => import('@/views/Admin/PersonalCenter/index.vue')
-
-        },
-        {
           name: 'GlobalSetting',
           path: 'setting',
           component: () => import('@/views/Admin/Setting/index.vue')
