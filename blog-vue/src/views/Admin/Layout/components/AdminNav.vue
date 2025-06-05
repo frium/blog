@@ -1,14 +1,16 @@
 <script setup>
+import { useGlobalInfoStore } from '@/stores/globalInfo';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+const globalInfoStore = useGlobalInfoStore();
 </script>
 
 <template>
   <div class="admin-nav">
 
     <h2 style="display: flex;justify-content: center; margin-bottom: 20px;">
-      <RouterLink to="/"> frium's blog</RouterLink>
+      <RouterLink to="/"> {{ globalInfoStore.globalInfo.siteName + '\'s blog' }}</RouterLink>
     </h2>
 
     <ul class="tool-bar">

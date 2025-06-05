@@ -8,7 +8,6 @@ import { getCommentNumAPI } from '@/api/comment';
 import { getUVPVAPI } from '@/api/uvpv';
 import { getUserNumAPI } from '@/api/adminUser';
 import { getArticleListAPI, getArticleNumAPI } from '@/api/adminArticle';
-import { getArticleByTimeAPI } from '@/api/article';
 
 const numberData = ref([
   { title: "文章", number: 0, icon: "article.svg" },
@@ -39,7 +38,7 @@ onMounted(async () => {
     { ...numberData.value[2], number: commentRes.data },
     { ...numberData.value[3], number: UVPVRes.data.uv }
   ];
-  articleList.value = articleListRes.data;
+  articleList.value = articleListRes.data.sort((a, b) => a.createTime - b.createTime);
 })
 
 </script>

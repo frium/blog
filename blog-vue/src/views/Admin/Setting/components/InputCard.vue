@@ -21,7 +21,7 @@ const editInfo = () => {
 
 const updateFunctionHandle = async () => {
   try {
-    await props.updateFunction(info.value)
+    await props.updateFunction(info.value);
     ElMessage.success('修改成功!');
     cancle();
   } catch {

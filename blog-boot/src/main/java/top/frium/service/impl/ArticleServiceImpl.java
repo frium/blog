@@ -134,11 +134,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public List<Label> getLabels() {
-        return labelMapper.selectList(null);
-    }
-
-    @Override
     @Transactional
     public void addLabel(String label) {
         Long count = labelMapper.selectCount(new LambdaQueryWrapper<Label>()
@@ -185,6 +180,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
                     Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId())  .eq(Comment::getStatus, 1) );
+                    System.out.println(commentCount);
+                    articleListVO.setCommentNum(commentCount);
                     articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
                     return articleListVO;
                 })

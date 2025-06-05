@@ -23,7 +23,6 @@ public interface ArticleService extends IService<Article> {
 
     void deleteArticle(List<Long> articleIds);
 
-    List<Label> getLabels();
 
     void addLabel(String label);
 
