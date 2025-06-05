@@ -27,7 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers("/user/getUserInfo").authenticated()
-                        .requestMatchers("/user/**","/visit/**").permitAll() // 允许登录和注册请求
+                        .requestMatchers("/user/**","/visit/**","/blogGlobalInfo/getGlobalInfo").permitAll() // 允许登录和注册请求
                         .anyRequest().authenticated()) // 其他所有请求都需要认证
                 .formLogin(AbstractHttpConfigurer::disable)  // 禁用表单登录
                 .csrf(AbstractHttpConfigurer::disable)  // 禁用 CSRF 保护

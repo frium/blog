@@ -22,7 +22,6 @@ public class BlogGlobalInfoController {
     BlogGlobalInfoService blogGlobalInfoService;
 
     @ApiOperation("修改全局参数")
-    @PreAuthorize("permitAll()")
     @PostMapping("/updateGlobalInfo")
     public R<?> updateGlobalInfo(@RequestBody BlogGlobalInfo blogGlobalInfo) {
         blogGlobalInfoService.updateBlogGlobalInfo(blogGlobalInfo);

@@ -44,7 +44,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         if (((requestURI.contains("/user/")&& !requestURI.contains("/user/getUserInfo")&& !requestURI.contains("/logout"))
                 && !requestURI.contains("/addComment")  && !requestURI.contains("/updateEmail")  && !requestURI.contains("/updateUsername")
-                && !requestURI.contains("/updateAvatar")) ||requestURI.contains("/visit/") ) {
+                && !requestURI.contains("/updateAvatar")) ||requestURI.contains("/visit/") ||requestURI.contains("/getGlobalInfo") ) {
             filterChain.doFilter(request, response);
             return;
         }
