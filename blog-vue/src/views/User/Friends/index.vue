@@ -2,8 +2,11 @@
 import { onMounted, ref } from 'vue';
 import FriendCard from './components/FriendCard.vue';
 import { getShowLinksAPI } from '@/api/links';
+import { useGlobalInfoStore } from '@/stores/globalInfo';
 
 const links = ref([]);
+
+const globalInfoStore = useGlobalInfoStore();
 onMounted(async () => {
   const res = await getShowLinksAPI();
   links.value = res.data;
@@ -14,7 +17,9 @@ onMounted(async () => {
   <div class="friend-out-box">
     <img src="https://static.frium.top/blog/网易云背景.jpg" alt="">
     <div class="content">
-      <h3>frium的小伙伴们</h3>
+      <h3>
+        {{ globalInfoStore.globalInfo.siteName + '的小伙伴们' }}
+      </h3>
       <div class="friend-cards">
         <FriendCard v-for="link in links" :key="link" :data="link"></FriendCard>
       </div>
@@ -22,7 +27,7 @@ onMounted(async () => {
       <div class="friend-link">
         申请友链的方法：
         <ul>
-          <li>名称: frium's blog</li>
+          <li>名称: {{ globalInfoStore.globalInfo.siteName + 's blog' }}</li>
           <li>地址: <a href="https://blog.frium.top">https://blog.frium.top</a></li>
           <li>图标: <a href="https://static.frium.top/blog/flowerboy.jpg">https://static.frium.top/blog/flowerboy.jpg</a>
           </li>

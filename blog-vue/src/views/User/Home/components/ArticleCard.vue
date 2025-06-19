@@ -129,7 +129,11 @@ span {
 
       .time {
         margin-left: auto;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
+
     }
   }
 
@@ -176,7 +180,7 @@ span {
   }
 }
 
-@media (max-width:450px) {
+@media (max-width:510px) {
   .message {
     display: none;
   }
@@ -184,6 +188,30 @@ span {
   .chat {
     display: none;
   }
+
+
+}
+
+@media (max-width:415px) {
+  .views {
+    display: none;
+  }
+
+  .eye {
+    display: none;
+  }
+
+  .article-card {
+    .left-div {
+      .footer {
+        .time {
+          margin-left: 0;
+
+        }
+      }
+    }
+  }
+
 
 }
 </style>

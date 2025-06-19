@@ -1,4 +1,25 @@
 <script setup>
+import { getLabelNumAPI, getShowArticleNumAPI } from "@/api/article";
+import { getUVPVAPI } from "@/api/uvpv";
+import { useGlobalInfoStore } from "@/stores/globalInfo";
+import { onMounted, ref } from "vue";
+
+
+const articleNum = ref(0);
+const labelNum = ref(0);
+const viewNum = ref(0);
+
+onMounted(async () => {
+  const [articleNumRes, labelNumRes, viewNumRes] = await Promise.all([
+    getShowArticleNumAPI(),
+    getLabelNumAPI(),
+    getUVPVAPI()
+  ])
+  articleNum.value = articleNumRes.data;
+  labelNum.value = labelNumRes.data;
+  viewNum.value = viewNumRes.data.uv;
+})
+
 const emit = defineEmits('offPersoalCard')
 const handelOffPersonalCard = () => {
   emit('off-persoal-card');
@@ -11,9 +32,9 @@ const handelOffPersonalCard = () => {
     <p>frium</p>
     <p>愿你历经千帆,归来仍是少年</p>
     <div class="details">
-      <p class="detail">累计撰写 <span class="num">1</span> 篇文章</p>
-      <p class="detail">累计创建 <span class="num">1</span> 个标签</p>
-      <p class="detail">累计收获 <span class="num">1</span> 次访问</p>
+      <p class="detail">累计撰写 <span class="num">{{ articleNum }}</span> 篇文章</p>
+      <p class="detail">累计创建 <span class="num">{{ labelNum }}</span> 个标签</p>
+      <p class="detail">累计收获 <span class="num">{{ viewNum }}</span> 次访问</p>
     </div>
     <div class="nav">
       <ul class="sub-menu">
