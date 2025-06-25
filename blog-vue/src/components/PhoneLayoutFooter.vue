@@ -1,5 +1,7 @@
 <script setup>
+import { useGlobalInfoStore } from '@/stores/globalInfo';
 import { ref } from 'vue';
+const globalInfoStore = useGlobalInfoStore();
 const day = ref(0);
 const hours = ref(0);
 const minutes = ref(0);
@@ -20,8 +22,8 @@ setInterval(getTime, 1000);
   <div class="phone-layout-footer">
     <div class="detail">
       <p>
-        © 2025 frium's blog
-        <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action">粤ICP备2024234516号</a>
+        © {{ new Date().getFullYear() + ' ' + globalInfoStore.globalInfo.siteName }}'s blog
+        <a href="http://beian.miit.gov.cn/publish/query/indexFirst.action">{{ globalInfoStore.globalInfo.icp }}</a>
       </p>
       <p class="time-datail"> 建站
         <span class="time">{{ day }}</span>

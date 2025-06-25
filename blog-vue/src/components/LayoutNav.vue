@@ -26,7 +26,6 @@ const handelShowPersonalInfo = () => {
   showPersonalInfo.value = true;
 }
 const offSearchDialog = () => {
-  console.log(1232123);
   searchDialog.value = false;
 }
 onMounted(async () => {

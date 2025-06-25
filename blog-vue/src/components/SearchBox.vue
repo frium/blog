@@ -38,9 +38,10 @@ const handelSearchArticle = async () => {
   background: rgb(60, 60, 60);
   border-radius: 10px;
   padding: 0 10px 0 5px;
+  width: 100%;
 
   .search {
-    width: 600px;
+    width: 100%;
     height: 45px;
     border-radius: 10px;
     margin: auto;

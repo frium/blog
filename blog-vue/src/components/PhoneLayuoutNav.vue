@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import PhonePersonalCard from './PhonePersonalCard.vue';
-
+import { useGlobalInfoStore } from '@/stores/globalInfo';
+import SearchBox from './SearchBox.vue';
+const globalInfoStore = useGlobalInfoStore();
 const personalCard = ref(false);
 const showPersonalCard = () => {
   personalCard.value = true;
@@ -9,17 +11,24 @@ const showPersonalCard = () => {
 const offPersonalCard = () => {
   personalCard.value = false;
 }
+const searchDialog = ref(false);
 const handelSearch = () => {
-  console.log('search');
-
+  searchDialog.value = true;
+}
+const offSearchDialog = () => {
+  searchDialog.value = false;
 }
 </script>
 
 <template>
   <div class="phone-layout-nav">
     <img class="operation" src="@/assets/icons/menu.svg" @click="showPersonalCard" />
-    <h3 class="title">frium's blog</h3>
+    <h3 class="title">{{ globalInfoStore.globalInfo.siteName }}'s blog</h3>
     <img class="search" src="@/assets/icons/search.svg" @click="handelSearch" />
+    <el-dialog style="width: 300px ;  background-color: transparent;  " v-model="searchDialog" :append-to-body="true"
+      :lock-scroll="false" :show-close="false">
+      <SearchBox @search-success="offSearchDialog"></SearchBox>
+    </el-dialog>
   </div>
   <div @click="offPersonalCard" class="blur-bg" :style="{
     background: personalCard ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0)',

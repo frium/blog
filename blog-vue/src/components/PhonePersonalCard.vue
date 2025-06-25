@@ -3,7 +3,7 @@ import { getLabelNumAPI, getShowArticleNumAPI } from "@/api/article";
 import { getUVPVAPI } from "@/api/uvpv";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
 import { onMounted, ref } from "vue";
-
+const globalInfoStore = useGlobalInfoStore();
 
 const articleNum = ref(0);
 const labelNum = ref(0);
@@ -29,8 +29,8 @@ const handelOffPersonalCard = () => {
 <template>
   <div class="phone-personal-card">
     <img class="avatar" src="https://static.frium.top/blog/flowerboy.jpg" alt="">
-    <p>frium</p>
-    <p>愿你历经千帆,归来仍是少年</p>
+    <p>{{ globalInfoStore.globalInfo.siteName }}</p>
+    <p>{{ globalInfoStore.globalInfo.personalSignature }}</p>
     <div class="details">
       <p class="detail">累计撰写 <span class="num">{{ articleNum }}</span> 篇文章</p>
       <p class="detail">累计创建 <span class="num">{{ labelNum }}</span> 个标签</p>
