@@ -59,6 +59,9 @@
         WHERE
             a.title LIKE CONCAT('%', #{searchInfo}, '%')
            OR l.label_name LIKE CONCAT('%', #{searchInfo}, '%')
+        ORDER BY
+            a.is_top DESC,
+            a.create_time DESC
         LIMIT 7 OFFSET #{offset}
     </select>
 
