@@ -24,6 +24,10 @@ const updateBackgroundUrl = createUpdateFunction('backgroundUrl');
 const updateGithubUrl = createUpdateFunction('githubUrl');
 const updateCsdnUrl = createUpdateFunction('csdnUrl');
 const updateWyyUrl = createUpdateFunction('wyyUrl');
+const updateFriendLinkName = createUpdateFunction('wyyUrl');
+const updateFriendLinkUrl = createUpdateFunction('wyyUrl');
+const updateFriendLinkImg = createUpdateFunction('wyyUrl');
+const updateFriendLinkDescribe = createUpdateFunction('wyyUrl');
 
 const updateAvatar = async (info) => {
   globalInfoStore.globalInfo.avatarUrl = info;
@@ -93,6 +97,26 @@ const changeAvatar = () => {
         <li style="margin-left: 15px">
           <InputCard :infoDescription="'网易云链接'" :info="globalInfoStore.globalInfo.wyyUrl"
             :updateFunction="updateWyyUrl"></InputCard>
+        </li>
+        <li style="margin-left: 15px">
+          <InputCard :infoDescription="'友链名称'" :info="globalInfoStore.globalInfo.friendLinkName"
+            :updateFunction="updateFriendLinkName">
+          </InputCard>
+        </li>
+        <li style="margin-left: 15px">
+          <InputCard :infoDescription="'友链地址'" :info="globalInfoStore.globalInfo.friendLinkUrl"
+            :updateFunction="updateFriendLinkUrl">
+          </InputCard>
+        </li>
+        <li style="margin-left: 15px">
+          <InputCard :infoDescription="'友链图标'" :info="globalInfoStore.globalInfo.friendLinkImg"
+            :updateFunction="updateFriendLinkImg">
+          </InputCard>
+        </li>
+        <li style="margin-left: 15px">
+          <InputCard :infoDescription="'友链描述'" :info="globalInfoStore.globalInfo.friendLinkDescribe"
+            :updateFunction="updateFriendLinkDescribe">
+          </InputCard>
         </li>
       </ul>
     </div>

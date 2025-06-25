@@ -13,7 +13,11 @@ export const useGlobalInfoStore = defineStore('globalInfoStore', () => {
     icp: "",
     githubUrl: "",
     wyyUrl: "",
-    csdnUrl: ""
+    csdnUrl: "",
+    friendLinkName: "",
+    friendLinkUrl: "",
+    friendLinkImg: "",
+    friendLinkDescribe: ""
   })
   return {
     globalInfo

@@ -84,12 +84,15 @@ watch(() => props.info, (newVal) => {
     border-radius: 8px;
     box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9;
 
-
     &:focus {
       box-shadow: inset 4px 4px 4px #d1d9e6, inset -4px -4px 4px #f9f9f9;
 
     }
 
+  }
+
+  .edit {
+    color: #2c98e6;
   }
 }
 </style>
