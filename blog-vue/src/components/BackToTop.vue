@@ -35,7 +35,7 @@ const checkScroll = () => {
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
     document.body.classList.remove('scrolling');
-  }, 500);
+  }, 300);
 }
 const throttledCheckScroll = throttle(checkScroll, 200);
 onMounted(() => {

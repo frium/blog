@@ -25,7 +25,7 @@ onBeforeUnmount(() => {
       selectionDiv.style.paddingLeft = tempPaddingLeft;
       selectionDiv.style.paddingRight = tempPaddingRight;
     }
-  }, 500)
+  }, 300)
 })
 </script>
 

@@ -47,7 +47,7 @@ watch(() => route.path, (newPath) => {
   else rightBoxOpcity.value = 1;
   setTimeout(() => {
     isTimeRoute.value = newPath.includes('/time');
-  }, 500)
+  }, 300)
 },
   {
     immediate: true
@@ -123,7 +123,7 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .fade-slide-y-enter-active,
 .fade-slide-y-leave-active {
-  transition: all .5s linear;
+  transition: all .3s linear;
 }
 
 /* 进入前和离开后的状态 */
