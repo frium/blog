@@ -4,7 +4,7 @@ import FileInfoCard from './components/FileInfoCard.vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import { onMounted, ref } from 'vue';
 import UploadFileDialog from './components/UploadFileDialog.vue';
-import { deleteFileAPI, getAllFilesAPI } from '@/api/file';
+import { deleteFileAPI, getAllFilesAPI, searchFileByNameAPI } from '@/api/file';
 import { ElMessage } from 'element-plus';
 
 const fileData = ref([]);
@@ -16,8 +16,10 @@ const deleteFunction = async (selectedRows) => {
   ElMessage.success('删除成功!');
 }
 
-const searchFunction = () => {
-
+const searchFunction = async (searchInfo) => {
+  const res = await searchFileByNameAPI(searchInfo);
+  fileData.value = res.data;
+  ElMessage.success('搜索成功!')
 }
 const showUploadFile = ref(false);
 const toUploadFile = () => {

@@ -3,8 +3,9 @@ import EditArticleCard from './components/EditArticleCard.vue';
 import HeadOperation from '../../Layout/components/HeadOperation.vue';
 import SearchTable from '../../Layout/components/SearchTable.vue';
 import { onMounted, ref } from 'vue';
-import { deleteArticleAPI, getArticleListAPI } from '@/api/adminArticle';
+import { deleteArticleAPI, getArticleListAPI, searchArticleByNameAPI } from '@/api/adminArticle';
 import { useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 const tableData = ref([]);
 const router = useRouter();
@@ -27,8 +28,10 @@ const deleteFunction = async (selectedRows) => {
   ElMessage.success('删除成功!');
 }
 
-const searchFunction = () => {
-
+const searchFunction = async (searchInfo) => {
+  const res = await searchArticleByNameAPI(searchInfo);
+  tableData.value = res.data;
+  ElMessage.success('搜索成功!');
 }
 const handleDeleteSuccess = (deletedId) => {
   tableData.value = tableData.value.filter(item => item.id !== deletedId);

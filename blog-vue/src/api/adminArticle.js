@@ -65,3 +65,13 @@ export const getArticleNumAPI = () => {
     url: '/adminArticle/getArticleNum',
   })
 }
+
+export const searchArticleByNameAPI = (searchInfo) => {
+  return request({
+    url: '/adminArticle/searchArticleByName',
+    method: 'POST',
+    params: {
+      searchInfo
+    }
+  })
+}

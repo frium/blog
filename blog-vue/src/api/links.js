@@ -39,3 +39,13 @@ export const getShowLinksAPI = () => {
     url: '/user/getLinks',
   })
 }
+
+export const searchLinksByNameAPI = (searchInfo) => {
+  return request({
+    url: '/links/searchLinksByName',
+    method: 'POST',
+    params: {
+      searchInfo
+    }
+  })
+}

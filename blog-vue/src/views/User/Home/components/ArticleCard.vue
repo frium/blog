@@ -188,8 +188,6 @@ span {
   .chat {
     display: none;
   }
-
-
 }
 
 @media (max-width:415px) {

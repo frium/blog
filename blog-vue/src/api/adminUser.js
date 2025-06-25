@@ -52,3 +52,13 @@ export const getUserNumAPI = () => {
     url: '/manageUser/getUserNum',
   })
 }
+
+export const searchUserByNameAPI = (searchInfo) => {
+  return request({
+    url: '/manageUser/searchUserByName',
+    method: 'POST',
+    params: {
+      searchInfo
+    }
+  })
+}

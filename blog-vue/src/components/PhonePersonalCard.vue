@@ -45,9 +45,6 @@ const handelOffPersonalCard = () => {
           <RouterLink to="/categories" active-class="router-link-active" @click="handelOffPersonalCard">分类</RouterLink>
         </li>
         <li>
-          <RouterLink to="/time" active-class="router-link-active" @click="handelOffPersonalCard">归档</RouterLink>
-        </li>
-        <li>
           <RouterLink to="/friends" active-class="router-link-active" @click="handelOffPersonalCard">友人帐</RouterLink>
         </li>
         <li>

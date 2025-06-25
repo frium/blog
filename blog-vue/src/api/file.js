@@ -27,3 +27,13 @@ export const deleteFileAPI = (list) => {
     data: list
   })
 }
+
+export const searchFileByNameAPI = (searchInfo) => {
+  return request({
+    url: '/file/searchFileByName',
+    method: 'POST',
+    params: {
+      searchInfo
+    }
+  })
+}

@@ -3,8 +3,8 @@ import CommentCard from './components/CommentCard.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import { onMounted, ref } from 'vue';
-import { deleteCommentAPI, getAllCommentAPI } from '@/api/comment';
-
+import { deleteCommentAPI, getAllCommentAPI, searchCommentByContentAPI } from '@/api/comment';
+import { ElMessage } from 'element-plus';
 const tableData = ref([]);
 
 const deleteFunction = async (selectedRows) => {
@@ -14,8 +14,10 @@ const deleteFunction = async (selectedRows) => {
   ElMessage.success('删除成功!');
 }
 
-const searchFunction = () => {
-
+const searchFunction = async (searchInfo) => {
+  const res = await searchCommentByContentAPI(searchInfo);
+  tableData.value = res.data;
+  ElMessage.success('搜索成功!')
 }
 const handlePassSuccess = (id) => {
   const index = tableData.value.findIndex(item => item.id === id);

@@ -4,7 +4,7 @@ import LinkCard from './components/LinkCard.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import AddLink from './components/AddLink.vue';
 import { onMounted, ref } from 'vue';
-import { deleteLinkAPI, getLinksAPI } from '@/api/links';
+import { deleteLinkAPI, getLinksAPI, searchLinksByNameAPI } from '@/api/links';
 import { ElMessage } from 'element-plus';
 
 const tableData = ref([]);
@@ -27,8 +27,10 @@ const deleteFunction = async (selectedRows) => {
   ElMessage.success('删除成功!');
 }
 
-const searchFunction = (test) => {
-  console.log(test);
+const searchFunction = async (searchInfo) => {
+  const res = await searchLinksByNameAPI(searchInfo);
+  tableData.value = res.data;
+  ElMessage.success('搜索成功!')
 }
 const addLinkRef = ref(null);
 const handelShowLink = () => {

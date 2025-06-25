@@ -3,8 +3,9 @@ import { onMounted, ref } from 'vue';
 import HeadOperation from '../Layout/components/HeadOperation.vue';
 import SearchTable from '../Layout/components/SearchTable.vue';
 import UserInfoCard from './components/UserInfoCard.vue';
-import { deleteUsersAPI, getUsersAPI } from '@/api/adminUser';
+import { deleteUsersAPI, getUsersAPI, searchUserByNameAPI } from '@/api/adminUser';
 import CreatUser from './components/CreatUser.vue';
+import { ElMessage } from 'element-plus';
 
 const showCreateUser = ref(false);
 
@@ -22,8 +23,10 @@ const deleteFunction = async (selectedRows) => {
   ElMessage.success('删除成功!');
 }
 
-const searchFunction = () => {
-
+const searchFunction = async (searchInfo) => {
+  const res = await searchUserByNameAPI(searchInfo);
+  tableData.value = res.data;
+  ElMessage.success('搜索成功!')
 }
 
 const handelShowDialog = () => {

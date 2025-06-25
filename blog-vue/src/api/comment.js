@@ -47,3 +47,13 @@ export const passCommentAPI = (commentId) => {
     }
   })
 }
+
+export const searchCommentByContentAPI = (searchInfo) => {
+  return request({
+    url: '/adminComment/searchCommentByContent',
+    method: 'POST',
+    params: {
+      searchInfo
+    }
+  })
+}

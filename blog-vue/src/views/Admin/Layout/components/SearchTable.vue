@@ -7,9 +7,6 @@ const props = defineProps({
   tableData: Array,
 });
 
-
-
-
 const selectedRows = ref([]);
 const showSearch = ref(true);
 const handleSelectionChange = (selection) => {
@@ -23,7 +20,7 @@ watch(() => selectedRows.value.length, newLength => {
 })
 const emit = defineEmits(['to-delete', 'to-search'])
 const toSearch = () => {
-  emit('to-search');
+  emit('to-search', inputValue.value);
 }
 
 const toDelete = () => {
