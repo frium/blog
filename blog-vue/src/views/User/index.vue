@@ -41,9 +41,13 @@ const skipBack = () => {
 const trunOffLrc = () => {
   if (playerRef.value) playerRef.value.trunOffLrc();
 }
-
+const rightBoxOpcity = ref(1);
 watch(() => route.path, (newPath) => {
-  isTimeRoute.value = newPath.includes('/time');
+  if (newPath.includes('/time')) rightBoxOpcity.value = 0;
+  else rightBoxOpcity.value = 1;
+  setTimeout(() => {
+    isTimeRoute.value = newPath.includes('/time');
+  }, 500)
 },
   {
     immediate: true
@@ -86,9 +90,13 @@ onUnmounted(() => {
         <div class="cloumns">
           <div class="router-view">
             <div id="trigger" style="height: 1px; width: 100%;"></div>
-            <router-view @component-loaded="handleComponentLoaded"></router-view>
+            <router-view v-slot="{ Component }" @component-loaded="handleComponentLoaded">
+              <transition name="fade-slide-y" mode="out-in">
+                <component :is="Component" />
+              </transition>
+            </router-view>
           </div>
-          <div class="right" v-if="!isTimeRoute">
+          <div class="right" v-if="!isTimeRoute" :style="{ opacity: rightBoxOpcity }">
             <div class="content" :style="{ top: isHidden ? '30px' : '80px', transition: 'top 0.8s ease' }">
               <PersonalCard class="personal-card">
               </PersonalCard>
@@ -113,6 +121,18 @@ onUnmounted(() => {
 </template>
 
 <style scoped lang="scss">
+.fade-slide-y-enter-active,
+.fade-slide-y-leave-active {
+  transition: all .5s linear;
+}
+
+/* 进入前和离开后的状态 */
+.fade-slide-y-enter-from,
+.fade-slide-y-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 .user-out-box {
   width: 100%;
   position: relative;
@@ -148,6 +168,7 @@ onUnmounted(() => {
 
         .right {
           width: 270px;
+          transition: opacity .5s linear;
 
           .content {
             position: sticky;

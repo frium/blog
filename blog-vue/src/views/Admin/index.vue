@@ -20,6 +20,7 @@ const route = useRoute();
   position: relative;
   display: flex;
   color: black;
+  min-width: 1200px;
 
   .admin-nav {
     position: sticky;
@@ -30,6 +31,7 @@ const route = useRoute();
 
   .router-view-div {
     width: calc(100% - 250px);
+
   }
 
   ::selection {

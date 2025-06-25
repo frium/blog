@@ -6,25 +6,26 @@ import { getArticleByTimeAPI } from '@/api/article';
 let tempPaddingLeft = 0;
 let tempPaddingRight = 0;
 const articles = ref([]);
+const selectionDiv = document.querySelector('.selection');
+if (selectionDiv) {
+  tempPaddingLeft = selectionDiv.style.paddingLeft;
+  tempPaddingRight = selectionDiv.style.paddingRight;
+  selectionDiv.style.paddingLeft = '0';
+  selectionDiv.style.paddingRight = '0';
+}
 onMounted(async () => {
   const res = await getArticleByTimeAPI();
   articles.value = res.data;
-  const selectionDiv = document.querySelector('.selection');
-  if (selectionDiv) {
-    tempPaddingLeft = selectionDiv.style.paddingLeft;
-    tempPaddingRight = selectionDiv.style.paddingRight;
-    selectionDiv.style.paddingLeft = '0';
-    selectionDiv.style.paddingRight = '0';
-  }
-
 })
 
 onBeforeUnmount(() => {
-  const selectionDiv = document.querySelector('.selection');
-  if (selectionDiv) {
-    selectionDiv.style.paddingLeft = tempPaddingLeft;
-    selectionDiv.style.paddingRight = tempPaddingRight;
-  }
+  setTimeout(() => {
+    const selectionDiv = document.querySelector('.selection');
+    if (selectionDiv) {
+      selectionDiv.style.paddingLeft = tempPaddingLeft;
+      selectionDiv.style.paddingRight = tempPaddingRight;
+    }
+  }, 500)
 })
 </script>
 

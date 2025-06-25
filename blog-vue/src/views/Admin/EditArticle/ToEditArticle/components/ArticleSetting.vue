@@ -26,8 +26,6 @@ const creatArticle = async () => {
 }
 
 const updateArticle = async () => {
-  console.log(article);
-
   editArticleStore.article = article;
   props.closeArticleSetting();
 }

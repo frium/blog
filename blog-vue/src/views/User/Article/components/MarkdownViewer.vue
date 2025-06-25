@@ -1,6 +1,8 @@
 <template>
-  <el-skeleton class="skeleton" v-if="isLoading" :rows="10" />
-  <div id="markdown-container" v-html="htmlContent" v-show="!isLoading" />
+  <div>
+    <el-skeleton class="skeleton" v-if="isLoading" :rows="10" />
+    <div id="markdown-container" v-html="htmlContent" v-show="!isLoading" />
+  </div>
 </template>
 
 <script setup>

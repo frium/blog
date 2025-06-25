@@ -23,8 +23,6 @@ const addCommentHandel = async () => {
 onMounted(async () => {
   const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
-  console.log(commentArr.value);
-
 })
 </script>
 

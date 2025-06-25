@@ -1,7 +1,7 @@
 <script setup>
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import TopArticleCard from '@/views/User/Home/components/TopArticleCard.vue';
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
@@ -19,7 +19,11 @@ const article = reactive({
   "isTop": null,
   "createTime": "",
   "viewNum": null,
-  "commentNum": null
+  "commentNum": null,
+  'prevArticleName': '',
+  'prevArticleId': null,
+  'nextArticleName': '',
+  'nextArticleId': null
 });
 const handleComponentLoaded = () => {
   emit('component-loaded');
@@ -30,6 +34,15 @@ onMounted(async () => {
   const res = await getArticleAPI(route.params.articleId);
   Object.assign(article, res.data);
 })
+watch(
+  () => route.params.articleId,
+  async (newId) => {
+    const res = await getArticleAPI(newId);
+    Object.assign(article, res.data);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -39,8 +52,9 @@ onMounted(async () => {
       :line-numbers="true" />
     <CommentArea v-if="token"></CommentArea>
     <div class="last-next">
-      <RouterLink to="/article/1">{{ '< 上一篇:文章名字' }}</RouterLink>
-          <RouterLink to="/article/1">{{ '下一篇:文章名字 >' }}</RouterLink>
+      <RouterLink :to="'/article/' + article.prevArticleId">{{ '上一篇: ' + article.prevArticleName }}</RouterLink>
+      <RouterLink :to="'/article/' + article.nextArticleId">{{ '下一篇: ' + article.nextArticleName }}
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -48,8 +62,6 @@ onMounted(async () => {
 <style scoped lang="scss">
 .article {
   width: 100%;
-
-
 
   .last-next {
     display: flex;

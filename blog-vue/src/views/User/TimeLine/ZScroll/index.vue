@@ -27,14 +27,13 @@ const handelToArticle = (articleNum) => {
           :class="['list-item', `position${(index % 8 + 1)}`]" :data="article" />
       </template>
     </ZScroll>
-    <div class="article-nav-out" :style="{ transform: isShowArticleNav ? 'translateX(0)' : 'translateX(100%)' }">
+    <!-- <div class="article-nav-out" :style="{ transform: isShowArticleNav ? 'translateX(0)' : 'translateX(100%)' }">
       <div class="triangle">
         <img @click="handelShowArticleNav" :style="{ transform: !isShowArticleNav ? 'rotate(180deg)' : 'rotate(0)' }"
           src="@/assets/icons/toRightArrow.svg" alt="">
       </div>
       <ArticleNav @to-article="handelToArticle" :articles="props.articles"></ArticleNav>
-    </div>
-
+    </div> -->
   </div>
 </template>
 

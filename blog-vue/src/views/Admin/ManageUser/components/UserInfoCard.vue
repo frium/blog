@@ -10,8 +10,6 @@ const props = defineProps({
 
 const updateInfo = () => {
   showDialog.value = true;
-  console.log('修改用户信息');
-
 }
 const emit = defineEmits(['delete-success']);
 
