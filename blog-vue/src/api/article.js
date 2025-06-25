@@ -8,6 +8,21 @@ export const getShowArticleListAPI = (pageNum) => {
     }
   })
 }
+
+export const searchArticleAPI = (data) => {
+  return request({
+    url: '/user/article/searchArticle',
+    method: 'POST',
+    data
+  })
+}
+export const getSearchArticleNumAPI = (data) => {
+  return request({
+    url: '/user/article/getSearchArticleNum',
+    method: 'POST',
+    data
+  })
+}
 export const getShowArticleNumAPI = () => {
   return request({
     url: '/user/article/getShowArticleNum'

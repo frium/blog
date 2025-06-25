@@ -4,38 +4,37 @@ import ArticleCard from './components/ArticleCard.vue';
 import TopArticleCard from './components/TopArticleCard.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { getShowArticleListAPI, getShowArticleNumAPI } from '@/api/article';
+import { searchArticleAPI, getSearchArticleNumAPI } from '@/api/article';
+import { useArticleStore } from '@/stores/article';
 
+const artilceStore = useArticleStore()
 const route = useRoute();
-
 const pageId = computed(() => {
   return parseInt(route.params.pageId) || 1;
 });
 
 watch(pageId, async (newId) => {
-  const res = await getShowArticleListAPI(newId);
-  dataArr.value = res.data;
+  artilceStore.searchData.pageNum = newId;
+  const res = await searchArticleAPI(artilceStore.searchData);
+  artilceStore.articleArr = res.data;
 });
 
-const articleNum = ref(0);
-const dataArr = ref([]);
-
 onMounted(async () => {
-  const res = await getShowArticleListAPI(pageId.value);
-  dataArr.value = res.data;
-  const numRes = await getShowArticleNumAPI();
-  articleNum.value = numRes.data;
+  const numRes = await getSearchArticleNumAPI(artilceStore.searchData);
+  artilceStore.articleNum = numRes.data;
+  const res = await searchArticleAPI(artilceStore.searchData);
+  artilceStore.articleArr = res.data;
 })
 </script>
 
 <template>
   <div class="article-cards">
-    <template v-for="data in dataArr" :key="data.id">
+    <template v-for="data in artilceStore.articleArr" :key="data.id">
       <TopArticleCard v-if="data.isTop" :data="data"></TopArticleCard>
       <ArticleCard v-else :data="data"></ArticleCard>
     </template>
-    <CardPaginator style="margin: 10px 0 20px 0" v-if="articleNum > 7" :number-of-page="Math.ceil(articleNum / 7)"
-      :show-num="7">
+    <CardPaginator style="margin: 10px 0 20px 0" v-if="artilceStore.articleNum > 7"
+      :number-of-page="Math.ceil(artilceStore.articleNum / 7)" :show-num="7">
     </CardPaginator>
   </div>
 </template>
@@ -43,5 +42,12 @@ onMounted(async () => {
 <style scoped lang="scss">
 .article-cards {
   width: 100%;
+
+  .not-thing {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
 }
 </style>

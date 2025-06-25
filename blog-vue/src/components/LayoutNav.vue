@@ -6,7 +6,7 @@ import PersoanalInfo from './PersoanalInfo.vue';
 import { getUserInfoAPI, logoutAPI } from '@/api/user';
 import notificationToast from '@/utils/notificationToast ';
 import { useGlobalInfoStore } from '@/stores/globalInfo';
-
+import SearchBox from './SearchBox.vue';
 const globalInfoStore = useGlobalInfoStore();
 const userStore = useUserStore();
 const showLogin = ref(false);
@@ -18,8 +18,16 @@ const handleClose = () => {
   showLogin.value = false;
 };
 const showPersonalInfo = ref(false);
+const searchDialog = ref(false);
+const showSearchDialog = () => {
+  searchDialog.value = true;
+}
 const handelShowPersonalInfo = () => {
   showPersonalInfo.value = true;
+}
+const offSearchDialog = () => {
+  console.log(1232123);
+  searchDialog.value = false;
 }
 onMounted(async () => {
   if (userStore.jwt) {
@@ -67,6 +75,11 @@ const handelLogout = async () => {
           </li>
         </ul>
       </div>
+      <img class="search" src="@/assets/icons/search.svg" alt="" @click="showSearchDialog">
+      <el-dialog style="width: 600px ;  background-color: transparent;  " v-model="searchDialog" :append-to-body="true"
+        :lock-scroll="false" :show-close="false">
+        <SearchBox @search-success="offSearchDialog"></SearchBox>
+      </el-dialog>
       <el-dropdown v-if=(userStore.userInfo.avatar)>
         <img class="user-head" :src="userStore.userInfo.avatar" alt="">
         <template #dropdown>
@@ -98,6 +111,10 @@ const handelLogout = async () => {
 <style scoped lang="scss">
 .no-scroll-dialog :deep(.el-overlay-dialog) {
   overflow: hidden !important;
+}
+
+:deep(.el-dialog__header) {
+  display: none;
 }
 
 .layout-nav {
@@ -169,9 +186,10 @@ const handelLogout = async () => {
     }
 
     .search {
-      width: 32px;
+      width: 28px;
       margin-left: auto;
       margin-right: 25px;
+      cursor: url('/src/assets/cursor/Hand.cur'), pointer;
     }
 
     .login {
@@ -179,6 +197,7 @@ const handelLogout = async () => {
       height: 36px;
       color: var(--text-color);
       transition: all 0.6s ease;
+      cursor: url('/src/assets/cursor/Hand.cur'), pointer;
 
       &:hover {
         color: var(--primary-color);
@@ -190,6 +209,7 @@ const handelLogout = async () => {
       width: 36px;
       transition: transform 0.5s;
       border-radius: 50%;
+      cursor: url('/src/assets/cursor/Hand.cur'), pointer;
 
       &:hover {
         transform: rotate(560deg)
