@@ -306,4 +306,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Long getSearchArticleNum(SearchDTO searchDTO) {
         return articleMapper.countSearchArticles(searchDTO.getSearchInfo());
     }
+
+    @Override
+    public List<Article> searchArticleByName(String searchInfo) {
+        return lambdaQuery()
+                .select(
+                        Article::getId,
+                        Article::getTitle,
+                        Article::getCreateTime,
+                        Article::getIsShow
+                )
+                .like(Article::getTitle, searchInfo)
+                .list();
+    }
 }

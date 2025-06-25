@@ -47,4 +47,22 @@
     </select>
 
 
+    <select id="searchComments" resultType="top.frium.pojo.vo.CommentAllDetailVO">
+        SELECT
+            c.id AS Id,
+            u.username AS username,
+            u.email AS email,
+            u.avatar AS avatar,
+            a.title AS articleTitle,
+            c.comment_content AS commentContent,
+            c.create_time AS createTime,
+            c.status AS status
+        FROM
+            comment c
+                LEFT JOIN user u ON c.user_id = u.id
+                LEFT JOIN article a ON c.article_id = a.id
+        WHERE c.comment_content LIKE CONCAT('%', #{searchInfo}, '%')
+    </select>
+
+
 </mapper>

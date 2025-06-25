@@ -88,4 +88,11 @@ public class AdminArticleController {
         return R.success();
     }
 
+    @ApiOperation("根据名称搜索文章")
+    @PostMapping("/searchArticleByName")
+    public R<?> searchArticleByName( String searchInfo) {
+        return R.success(articleService.searchArticleByName(searchInfo));
+    }
+
+
 }

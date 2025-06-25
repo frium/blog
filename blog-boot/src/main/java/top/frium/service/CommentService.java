@@ -1,10 +1,8 @@
 package top.frium.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.springframework.web.bind.annotation.RequestBody;
 import top.frium.pojo.dto.CommentDTO;
 import top.frium.pojo.entity.Comment;
-import top.frium.pojo.entity.File;
 import top.frium.pojo.vo.CommentAllDetailVO;
 import top.frium.pojo.vo.CommentVO;
 
@@ -23,4 +21,6 @@ public interface CommentService extends IService<Comment> {
     void deleteComment( List<Long>  commentId);
 
     void pauseComment(Integer commentId);
+
+    List<CommentAllDetailVO> searchCommentByContent(String searchInfo);
 }

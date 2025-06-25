@@ -196,6 +196,12 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, File> implements Fi
         });
     }
 
+    @Override
+    public List<File> searchFileByName(String searchInfo) {
+        return lambdaQuery()
+                .like(File::getFileName, searchInfo)
+                .list();
+    }
 
 
 }

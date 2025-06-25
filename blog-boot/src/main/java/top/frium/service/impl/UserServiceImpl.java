@@ -1,5 +1,6 @@
 package top.frium.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static top.frium.context.CommonConstant.*;
 
@@ -180,6 +182,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         boolean exists = lambdaQuery().eq(User::getAvatar, url).exists();
         if (exists) throw new MyException(StatusCodeEnum.USER_NAME_EXIST);
         lambdaUpdate().eq(User::getId, userId).set(User::getAvatar, url).update();
+    }
+
+    @Override
+    public List<UserVO> searchUserByName(String searchInfo) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(User::getUsername, searchInfo);
+        List<User> users = userMapper.selectList(queryWrapper);
+        return users.stream()
+                .map(user -> {
+                    UserVO userVO = new UserVO();
+                    BeanUtils.copyProperties(user,userVO);
+                    userVO.setId(user.getId());
+                    userVO.setUsername(user.getUsername());
+                    return userVO;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

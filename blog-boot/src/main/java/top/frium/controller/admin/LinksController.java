@@ -49,4 +49,10 @@ public class LinksController {
     public R<?> getLinks() {
         return R.success(linkService.getLinks());
     }
+
+    @ApiOperation("根据名称搜索友链")
+    @PostMapping("/searchLinksByName")
+    public R<?> searchLinksByName( String searchInfo) {
+        return R.success(linkService.searchLinksByName(searchInfo));
+    }
 }

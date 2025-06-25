@@ -44,4 +44,9 @@ public class FileController {
         fileService.deleteFile(fileIds);
         return R.success();
     }
+    @ApiOperation("根据名称搜索文件")
+    @PostMapping("/searchFileByName")
+    public R<?> searchFileByName( String searchInfo) {
+        return R.success(fileService.searchFileByName(searchInfo));
+    }
 }

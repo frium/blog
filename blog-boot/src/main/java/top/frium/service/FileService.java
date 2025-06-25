@@ -16,4 +16,6 @@ public interface FileService extends IService<File> {
     List<File> getAllFiles();
 
     void deleteFile(List<Long> fileId);
+
+    List<File> searchFileByName(String searchInfo);
 }

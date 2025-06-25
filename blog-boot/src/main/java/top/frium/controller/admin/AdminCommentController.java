@@ -47,5 +47,9 @@ public class AdminCommentController {
     public R<?> getCommentNum() {
         return R.success(commentService.count());
     }
-
+    @ApiOperation("根据内容搜索评论")
+    @PostMapping("/searchCommentByContent")
+    public R<?> searchCommentByContent( String searchInfo) {
+        return R.success(commentService.searchCommentByContent(searchInfo));
+    }
 }

@@ -74,4 +74,10 @@ public class LinkServiceImpl extends ServiceImpl<LinkMapper, Link> implements Li
         }
         return voList;
     }
+    @Override
+    public List<Link> searchLinksByName(String searchInfo) {
+        return lambdaQuery()
+                .like(Link::getUrlName, searchInfo)
+                .list();
+    }
 }

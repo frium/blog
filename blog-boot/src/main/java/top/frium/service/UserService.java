@@ -41,4 +41,6 @@ public interface UserService extends IService<User> {
     List<UserVO> getUsers();
 
     void updateAvatar(String url);
+
+    List<UserVO>  searchUserByName(String searchInfo);
 }

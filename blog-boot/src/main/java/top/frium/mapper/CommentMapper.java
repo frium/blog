@@ -16,5 +16,6 @@ import java.util.List;
 public interface CommentMapper  extends BaseMapper<Comment> {
     List<CommentVO> getArticleComment(Long articleId);
     List<CommentAllDetailVO> getAllComments();
+    List<CommentAllDetailVO> searchComments(String searchInfo);
 
 }

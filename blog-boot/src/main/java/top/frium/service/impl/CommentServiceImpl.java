@@ -91,4 +91,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
     }
 
+    @Override
+    public List<CommentAllDetailVO> searchCommentByContent(String searchInfo) {
+        return commentMapper.searchComments(searchInfo);
+    }
+
 }

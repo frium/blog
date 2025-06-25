@@ -41,4 +41,6 @@ public interface ArticleService extends IService<Article> {
     List<ArticleListVO> searchArticle(SearchDTO searchDTO);
 
     Long getSearchArticleNum(SearchDTO searchDTO);
+
+    List<Article>  searchArticleByName(String searchInfo);
 }

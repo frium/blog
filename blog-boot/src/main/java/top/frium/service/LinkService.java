@@ -20,4 +20,6 @@ public interface LinkService extends IService<Link> {
 
     List<Link> getLinks();
     List<LinkVO> getLinkVOs();
+
+    List<Link> searchLinksByName(String searchInfo);
 }
