@@ -4,11 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import top.frium.common.R;
 import top.frium.mapper.LabelMapper;
+import top.frium.pojo.dto.SearchDTO;
 import top.frium.pojo.entity.Article;
 import top.frium.service.ArticleService;
 
@@ -50,6 +49,7 @@ public class ArticleController {
     public R<?> getLabels() {
         return R.success(labelMapper.selectLabelsWithArticleCount());
     }
+
     @ApiOperation("获取标签数量")
     @GetMapping("/getLabelNum")
     public R<?> getLabelNum() {
@@ -60,5 +60,17 @@ public class ArticleController {
     @GetMapping("/getArticleByTime")
     public R<?> getArticleByTime() {
         return R.success(articleService.getArticleByTime());
+    }
+
+    @ApiOperation("搜索文章")
+    @PostMapping("/searchArticle")
+    public R<?> searchArticle(@RequestBody SearchDTO searchDTO) {
+        return R.success(articleService.searchArticle(searchDTO));
+    }
+
+    @ApiOperation("搜索文章数量")
+    @PostMapping("/getSearchArticleNum")
+    public R<?> getSearchArticleNum(@RequestBody SearchDTO searchDTO) {
+        return R.success(articleService.getSearchArticleNum(searchDTO));
     }
 }

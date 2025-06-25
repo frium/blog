@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import top.frium.pojo.entity.Article;
 import top.frium.pojo.entity.Label;
+import top.frium.pojo.vo.ArticleListVO;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,6 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     Integer checkLabelExists(Long labelId);
     List<Label> getLabelsByArticleId(Long articleId);
+    List<ArticleListVO> searchArticles(String searchInfo, long offset);
+    Long countSearchArticles(String searchInfo);
 }

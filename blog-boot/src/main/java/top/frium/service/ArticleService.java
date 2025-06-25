@@ -2,6 +2,7 @@ package top.frium.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import top.frium.pojo.dto.ArticleDTO;
+import top.frium.pojo.dto.SearchDTO;
 import top.frium.pojo.entity.Article;
 import top.frium.pojo.entity.Label;
 import top.frium.pojo.vo.ArticleByTimeVO;
@@ -36,4 +37,8 @@ public interface ArticleService extends IService<Article> {
     void changeArticleShowStatus(Long articleId);
 
     List<ArticleByTimeVO> getArticleByTime();
+
+    List<ArticleListVO> searchArticle(SearchDTO searchDTO);
+
+    Long getSearchArticleNum(SearchDTO searchDTO);
 }
