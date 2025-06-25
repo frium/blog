@@ -22,4 +22,8 @@ public class ArticleVO {
     private String createTime;
     private Long viewNum;
     private Long commentNum;
+    private String prevArticleName;
+    private Long prevArticleId;
+    private String nextArticleName;
+    private Long nextArticleId;
 }

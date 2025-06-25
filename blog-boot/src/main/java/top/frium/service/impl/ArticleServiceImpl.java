@@ -24,10 +24,7 @@ import top.frium.pojo.vo.ArticleVO;
 import top.frium.service.ArticleService;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -88,14 +85,47 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = getById(articleId);
         if (article == null) throw new MyException(StatusCodeEnum.NOT_FOUND);
         lambdaUpdate().setSql("view_num = view_num + 1").eq(Article::getId, articleId).update();
+        List<Long> allArticleIds = lambdaQuery()
+                .select(Article::getId)
+                .orderByAsc(Article::getCreateTime)
+                .list()
+                .stream()
+                .map(Article::getId)
+                .toList();
+        int currentIndex = allArticleIds.indexOf(articleId);
+        Long prevArticleId = null;
+        String prevArticleName = null;
+        Long nextArticleId = null;
+        String nextArticleName = null;
+        if (!allArticleIds.isEmpty()) {
+            if (currentIndex == 0) prevArticleId = allArticleIds.get(allArticleIds.size() - 1);
+            else prevArticleId = allArticleIds.get(currentIndex - 1);
+            if (currentIndex == allArticleIds.size() - 1) nextArticleId = allArticleIds.get(0);
+            else nextArticleId = allArticleIds.get(currentIndex + 1);
+            if (prevArticleId != null) {
+                Article prevArticle = getById(prevArticleId);
+                prevArticleName = prevArticle != null ? prevArticle.getTitle() : null;
+            }
+            if (nextArticleId != null) {
+                Article nextArticle = getById(nextArticleId);
+                nextArticleName = nextArticle != null ? nextArticle.getTitle() : null;
+            }
+        }
         ArticleVO articleVO = new ArticleVO();
         BeanUtils.copyProperties(article, articleVO);
         articleVO.setLabel(articleMapper.getLabelsByArticleId(articleId));
+
+        articleVO.setPrevArticleId(prevArticleId);
+        articleVO.setPrevArticleName(prevArticleName);
+        articleVO.setNextArticleId(nextArticleId);
+        articleVO.setNextArticleName(nextArticleName);
+
         redisTemplate.delete("articleList:all");
         Set<Object> keys = redisTemplate.keys("articleList*");
         if (keys != null && !keys.isEmpty()) {
             redisTemplate.delete(keys);
         }
+
         return articleVO;
     }
 
@@ -179,9 +209,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .map(article -> {
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
-                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId())  .eq(Comment::getStatus, 1) );
-                    System.out.println(commentCount);
-                    articleListVO.setCommentNum(commentCount);
+                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId()).eq(Comment::getStatus, 1));
+                    articleListVO.setCommentNum(Objects.requireNonNullElse(commentCount, 0L));
                     articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
                     return articleListVO;
                 })
@@ -211,8 +240,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     ArticleListVO articleListVO = new ArticleListVO();
                     BeanUtils.copyProperties(article, articleListVO);
                     articleListVO.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
-                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId())  .eq(Comment::getStatus, 1) );
-                    articleListVO.setCommentNum(commentCount);
+                    Long commentCount = commentMapper.selectCount(new LambdaQueryWrapper<Comment>().eq(Comment::getArticleId, article.getId()).eq(Comment::getStatus, 1));
+                    articleListVO.setCommentNum(Objects.requireNonNullElse(commentCount, 0L));
                     return articleListVO;
                 }).collect(Collectors.toList());
         String jsonString = JSON.toJSONString(articleListVOList);
