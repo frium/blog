@@ -20,4 +20,8 @@ public class BlogGlobalInfo {
     String githubUrl;
     String wyyUrl;
     String csdnUrl;
+    String friendLinkName;
+    String friendLinkUrl;
+    String friendLinkImg;
+    String friendLinkDescribe;
 }
