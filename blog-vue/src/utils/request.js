@@ -31,6 +31,10 @@ request.interceptors.response.use(res => res.data, error => {
     notificationToast.error('您暂无权限访问');
     router.push({ name: 'Home' })
     return Promise.reject(error);
+  } else if (error.response?.status === 404) {
+    notificationToast.error('未找到相关内容');
+    router.push({ name: 'NotFound' })
+    return Promise.reject(error);
   }
 
   const errorMsg = error.response?.data.msg || '请求异常，请稍后重试'

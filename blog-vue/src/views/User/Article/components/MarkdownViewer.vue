@@ -32,6 +32,9 @@ const md = new MarkdownIt({
   linkify: true,      // 自动转换URL为链接
   typographer: true,  // 优化排版
   highlight: function (str, lang) {
+    if (!lang || !hljs.getLanguage(lang)) {
+      lang = 'plaintext';
+    }
     // 此处判断是否有添加代码语言
     if (lang && hljs.getLanguage(lang)) {
       try {

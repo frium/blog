@@ -49,13 +49,18 @@ onMounted(async () => {
   background: var(--bg-color);
   transition: 0.6s ease-out;
 
-
-
   img {
     width: 100%;
     height: 30vh;
     object-fit: cover;
     filter: brightness(0.75);
+  }
+
+  @media (max-width:510px) {
+
+    img {
+      height: 20vh;
+    }
   }
 
   .content {
@@ -107,6 +112,7 @@ onMounted(async () => {
     .friend-link {
       font-size: 16px;
       color: #999;
+      user-select: text;
 
       ul {
         li {

@@ -23,7 +23,7 @@ const offSearchDialog = () => {
 <template>
   <div class="phone-layout-nav">
     <img class="operation" src="@/assets/icons/menu.svg" @click="showPersonalCard" />
-    <h3 class="title">{{ globalInfoStore.globalInfo.siteName }}'s blog</h3>
+    <RouterLink :to="{ name: 'Home' }" class="title">{{ globalInfoStore.globalInfo.siteName }}'s blog</RouterLink>
     <img class="search" src="@/assets/icons/search.svg" @click="handelSearch" />
     <el-dialog style="width: 300px ;  background-color: transparent;  " v-model="searchDialog" :append-to-body="true"
       :lock-scroll="false" :show-close="false">

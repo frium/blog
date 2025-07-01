@@ -16,7 +16,7 @@ const editArticleStore = useEditArticleStore();
 
 const toPublish = async () => {
   if (route.params.editArticleId) {//修改文章不需要配置弹窗
-    editArticleStore.article.label = editArticleStore.article.label.map(item => item.id);
+    if (!typeof editArticleStore.article.label[0] === 'number') editArticleStore.article.label = editArticleStore.article.label.map(item => item.id);
     await updateArticleAPI(editArticleStore.article);
     ElMessage.success('修改成功!');
     return;

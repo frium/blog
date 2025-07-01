@@ -12,8 +12,14 @@ computed(() => {
 
 <template>
   <div class="top-aticle-card">
+
     <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
-      <img class="bg-img" :src="props.data.coverImg" alt="">
+      <img v-if="props.data.coverImg" class="bg-img" :src="props.data.coverImg" alt="">
+      <el-skeleton v-else style="width: 100%">
+        <template #template>
+          <el-skeleton-item class="bg-img" variant="image" style="background-color: rgb(76, 76, 77);" />
+        </template>
+      </el-skeleton>
     </RouterLink>
     <div class="detail">
       <span class="top" v-if="props.data.isTop">置顶</span>
@@ -42,7 +48,7 @@ span {
 
   .bg-img {
     width: 100%;
-    height: 100%;
+    height: 270px;
     object-fit: cover;
     object-position: center;
     border-radius: 10px;
