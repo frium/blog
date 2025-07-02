@@ -129,6 +129,10 @@ span {
   @media (max-width: 750px) {
     height: 165px;
 
+    .bg-img {
+      height: 165px;
+    }
+
     .detail {
       top: 85px;
 
