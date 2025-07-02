@@ -54,7 +54,9 @@ const handelLogout = async () => {
       <div>
         <ul class="sub-menu">
           <li class="hover-show">
-            <RouterLink to="/home" active-class="router-link-active">首页</RouterLink>
+            <RouterLink to="/home"
+              :class="{ 'router-link-active': $route.path === '/home' || $route.path.startsWith('/article') }">首页
+            </RouterLink>
           </li>
           <li class="hover-show">
             <RouterLink to="/categories" active-class="router-link-active">分类</RouterLink>
