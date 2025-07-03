@@ -1,6 +1,11 @@
-# frium's blog --- 前后端分离博客
+# frium's blog --- 星空主题个人博客
 
 访问地址:[frium's blog](https://blog.frium.top/)
+
+## 前言
+
+- 开源不易，希望大家**star**支持一下
+- 本人主要是前端开发 项目目前更新到此 后续会根据issue问题进行修改更新, 有问题可以提issue， 同时也欢迎大家来共建此项目，包括但不限于：bug 修复、代码优化、功能开发等等
 
 ## 效果图
 
@@ -28,10 +33,11 @@
 - 权限框架：springsecurity
 - 缓存中间件：redis
 - 消息中间件：rabbitmq
+- 数据库: mysql
 
 ## 部署
 
-本项目采用docker部署 在部署之前请先安装并配置好docker
+本项目采用docker部署 在部署之前请先安装并配置好docker  这边十分建立使用1panel进行安装接下来需要的容器(这样部署的时候文件路径不会出现很大的问题)
 
 拉取项目
 
@@ -52,15 +58,21 @@ pnpm build;
 mvn package;
 ```
 
-服务器创建好文件夹 /opt/1panel/apps/openresty/openresty/html/static/blog
+服务器创建好文件夹
 
-部署项目文件结构如下 所有文件放在/home/java/blog
-将刚才生成的jar放在这个目录里面(注意名字是blog-boot.jar)
+1. **/opt/1panel/apps/openresty/openresty/html/static/blog**
+2. **/opt/1panel/apps/openresty/openresty/html/blog/blog-vue**
+3. **/home/java/blog**
+
+将刚刚生成的dist文件放在**/opt/1panel/apps/openresty/openresty/html/blog/blog-vue**下
+部署项目文件结构如下 所有文件放在**/home/java/blog**
+将刚才生成的jar放在这个目录里面(注意名字是**blog-boot.jar**)
 
 ![image-20250702202112387](README/image-20250702202112387.png)
 
-Dockerfile文件如下
-需要先拉取jdk17镜像
+### Dockerfile文件如下
+
+记得要需要先拉取jdk17镜像
 
 ```dockerfile
 # 第一行必须指定基础容器，我们是java项目，运行需要jdk支撑
@@ -84,7 +96,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 
 ```
 
-blog-boot.sh (脚本文件)
+### blog-boot.sh (脚本文件)
 
 ```sh
 CONTAINER_NAME="blog-boot"
@@ -113,7 +125,7 @@ docker run -d --name $CONTAINER_NAME -p $CUSTOM_PORT:80 -v /opt/1panel/apps/open
 echo "Operation completed!"
 ```
 
-后端application.yml文件如下
+### 后端application.yml文件如下
 
 ```yml
 server:
@@ -195,7 +207,13 @@ visit:
   pv: website:pv
 ```
 
-nginx文件配置
+### nginx(openresty)挂载
+
+![image-20250703113435420](README/image-20250703113435420.png)
+
+![image-20250703113454573](README/image-20250703113454573.png)
+
+### nginx(openresty)文件配置
 
 ```nginx
  server {
@@ -299,14 +317,9 @@ nginx文件配置
 			}
 ```
 
-配置好之后在/home/java/blog 运行./blog-boot.sh命令
-
-## 后记
-
-- 开源不易，希望大家star支持一下
-- 本人主要是前端开发 项目目前更新到此 后续会根据issue问题进行修改更新, 有问题可以提issue， 同时也欢迎大家来共建此项目，包括但不限于：bug 修复、代码优化、功能开发等等
+配置好之后在**/home/java/blog** 运行**./blog-boot.sh**命令
 
 ## 联系方式
 
-qq: 877385364
-wx: Frium_
+1. qq: 877385364
+2. wx: Frium_
