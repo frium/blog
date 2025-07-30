@@ -83,8 +83,6 @@ const md = new MarkdownIt({
     </svg>
   </div>
 `;
-        isLoading.value = false;
-
         return '<pre class="hljs">' + a + '<code>' +
           html +
           '</code></pre>'
@@ -148,6 +146,7 @@ const handleCopyCode = async (event) => {
 
 watchEffect(() => {
   htmlContent.value = md.render(props.source);
+  isLoading.value = false;
   nextTick(() => {
     document.querySelectorAll('.show-code').forEach(svg => {
       svg.removeEventListener('click', handleShowCode)
