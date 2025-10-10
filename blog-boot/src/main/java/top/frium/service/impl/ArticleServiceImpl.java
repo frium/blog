@@ -286,20 +286,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<ArticleListVO> searchArticle(SearchDTO searchDTO) {
         long offset = (searchDTO.getPageNum() - 1) * 7;
-        List<ArticleListVO> articleListVOS = articleMapper.searchArticles(searchDTO.getSearchInfo(), offset);
-
-        return articleListVOS.stream()
-                .map(article -> {
-                    article.setLabel(articleMapper.getLabelsByArticleId(article.getId()));
-                    Long commentCount = commentMapper.selectCount(
-                            new LambdaQueryWrapper<Comment>()
-                                    .eq(Comment::getArticleId, article.getId())
-                                    .eq(Comment::getStatus, 1)
-                    );
-                    article.setCommentNum(Objects.requireNonNullElse(commentCount, 0L));
-                    return article;
-                }).collect(Collectors.toList());
-
+        return articleMapper.searchArticles(searchDTO.getSearchInfo(), offset);
     }
 
     @Override

@@ -3,6 +3,53 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.frium.mapper.ArticleMapper">
+    <resultMap id="articleListVOResultMap" type="top.frium.pojo.vo.ArticleListVO">
+        <!-- 主对象映射 -->
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="coverImg" column="coverImg"/>
+        <result property="summary" column="summary"/>
+        <result property="isTop" column="isTop"/>
+        <result property="createTime" column="createTime"/>
+        <result property="isShow" column="isShow"/>
+        <result property="viewNum" column="viewNum"/>
+        <result property="commentNum" column="commentNum"/>
+
+        <!-- 集合映射 -->
+        <collection
+                property="label"
+                ofType="Label"
+                resultMap="labelResultMap"/> <!-- 指向标签映射 -->
+    </resultMap>
+
+    <!-- 专门处理标签的映射 -->
+    <resultMap id="labelResultMap" type="top.frium.pojo.entity.Label">
+        <id property="id" column="labelId"/>
+        <result property="labelName" column="labelName"/>
+    </resultMap>
+    <select id="searchArticles" resultMap="articleListVOResultMap"> <!-- 改用resultMap -->
+        SELECT
+        a.id,
+        a.title,
+        a.cover_img as coverImg,
+        a.summary,
+        a.is_top as isTop,
+        a.create_time as createTime,
+        a.is_show as isShow,
+        a.view_num as viewNum,
+        l.id as labelId,       <!-- 单数形式，用于映射 -->
+        l.label_name as labelName,
+        COUNT(c.id) as commentNum
+        FROM article a
+        LEFT JOIN article_label al ON a.id = al.article_id
+        LEFT JOIN label l ON al.label_id = l.id
+        LEFT JOIN comment c ON a.id = c.article_id AND c.status = 1
+        WHERE a.title LIKE CONCAT('%', #{searchInfo}, '%')
+        OR a.content LIKE CONCAT('%', #{searchInfo}, '%')
+        GROUP BY a.id, l.id        <!-- 按标签分组 -->
+        LIMIT #{offset}, 7
+    </select>
+
     <insert id="insertArticleLabels" parameterType="java.util.Map">
         INSERT INTO article_label (article_id, label_id)
         VALUES
@@ -17,10 +64,13 @@
         </choose>
     </insert>
     <select id="checkLabelExists" resultType="java.lang.Integer">
-        SELECT 1 FROM label WHERE id = #{labelId} LIMIT 1
+        SELECT 1
+        FROM label
+        WHERE id = #{labelId}
+        LIMIT 1
     </select>
 
-    <select id="getLabelsByArticleId" resultType="top.frium.pojo.entity.Label" >
+    <select id="getLabelsByArticleId" resultType="top.frium.pojo.entity.Label">
         SELECT *
         FROM label
                  JOIN article_label al ON label.id = al.label_id
@@ -28,7 +78,9 @@
     </select>
 
     <delete id="deleteLabelsByArticleId" parameterType="Long">
-        DELETE FROM article_label WHERE article_id = #{articleId}
+        DELETE
+        FROM article_label
+        WHERE article_id = #{articleId}
     </delete>
 
     <delete id="deleteLabelRelations">
@@ -51,19 +103,17 @@
         WHERE id = #{articleId}
     </update>
 
-    <select id="searchArticles" >
-        SELECT DISTINCT a.*
-        FROM article a
-                 LEFT JOIN article_label al ON a.id = al.article_id
-                 LEFT JOIN label l ON al.label_id = l.id
-        WHERE
-            a.title LIKE CONCAT('%', #{searchInfo}, '%')
-           OR l.label_name LIKE CONCAT('%', #{searchInfo}, '%')
-        ORDER BY
-            a.is_top DESC,
-            a.create_time DESC
-        LIMIT 7 OFFSET #{offset}
-    </select>
+<!--    <select id="searchArticles">-->
+<!--        SELECT DISTINCT a.*-->
+<!--        FROM article a-->
+<!--                 LEFT JOIN article_label al ON a.id = al.article_id-->
+<!--                 LEFT JOIN label l ON al.label_id = l.id-->
+<!--        WHERE a.title LIKE CONCAT('%', #{searchInfo}, '%')-->
+<!--           OR l.label_name LIKE CONCAT('%', #{searchInfo}, '%')-->
+<!--        ORDER BY a.is_top DESC,-->
+<!--                 a.create_time DESC-->
+<!--        LIMIT 7 OFFSET #{offset}-->
+<!--    </select>-->
 
     <select id="countSearchArticles">
         SELECT COUNT(DISTINCT a.id) AS total
