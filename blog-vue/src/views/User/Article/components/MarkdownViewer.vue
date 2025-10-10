@@ -8,10 +8,38 @@
 <script setup>
 import { nextTick, ref, watchEffect } from 'vue'
 import MarkdownIt from 'markdown-it'
-import hljs from 'highlight.js'
+import hljs from 'highlight.js/lib/core'
 import 'highlight.js/styles/atom-one-dark.min.css'
 import multimdTable from 'markdown-it-multimd-table'
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import python from 'highlight.js/lib/languages/python';
+import java from 'highlight.js/lib/languages/java';
+import cpp from 'highlight.js/lib/languages/cpp';
+import php from 'highlight.js/lib/languages/php';
+import go from 'highlight.js/lib/languages/go';
+import rust from 'highlight.js/lib/languages/rust';
+import kotlin from 'highlight.js/lib/languages/kotlin';
+import sql from 'highlight.js/lib/languages/sql';
+import xml from 'highlight.js/lib/languages/xml';
+import css from 'highlight.js/lib/languages/css';
 
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('python', python);
+hljs.registerLanguage('java', java);
+hljs.registerLanguage('cpp', cpp);
+hljs.registerLanguage('php', php);
+hljs.registerLanguage('go', go);
+hljs.registerLanguage('rust', rust);
+hljs.registerLanguage('kotlin', kotlin);
+hljs.registerLanguage('sql', sql);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('html', xml); // HTML通常使用XML的解析器
+hljs.registerLanguage('css', css);
+
+// 3. 初始化高亮
+hljs.highlightAll();
 const htmlContent = ref('');
 const isLoading = ref(true);
 

@@ -1,49 +1,49 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      name: 'User',
-      path: '/',
-      component: () => import('@/views/User/index.vue'),
+      name: "User",
+      path: "/",
+      component: () => import("@/views/User/index.vue"),
       children: [
         {
-          path: '',
-          name: 'DefaultHome',
-          redirect: { name: 'Home' }
+          path: "",
+          name: "DefaultHome",
+          redirect: { name: "Home" },
         },
         {
-          name: 'Home',
-          path: 'home',
-          component: () => import('@/views/User/Home/index.vue'),
+          name: "Home",
+          path: "home",
+          component: () => import("@/views/User/Home/index.vue"),
           children: [
             {
-              name: 'Page',
-              path: 'page/:pageId',
-              component: () => import('@/views/User/Home/index.vue'),
-            }
-          ]
+              name: "Page",
+              path: "page/:pageId",
+              component: () => import("@/views/User/Home/index.vue"),
+            },
+          ],
         },
         {
-          name: 'Article',
-          path: 'article/:articleId',
-          component: () => import('@/views/User/Article/index.vue')
+          name: "Article",
+          path: "article/:articleId",
+          component: () => import("@/views/User/Article/index.vue"),
         },
         {
-          name: 'Categories',
-          path: 'categories',
-          component: () => import('@/views/User/Categories/index.vue')
+          name: "Categories",
+          path: "categories",
+          component: () => import("@/views/User/Categories/index.vue"),
         },
         {
-          name: 'Time',
-          path: 'timeLine',
-          component: () => import('@/views/User/TimeLine/index.vue'),
+          name: "Time",
+          path: "timeLine",
+          component: () => import("@/views/User/TimeLine/index.vue"),
           children: [
             {
-              path: '',
-              name: 'DefaultTime',
-              redirect: { name: 'ZScroll' }
+              path: "",
+              name: "DefaultTime",
+              redirect: { name: "ZScroll" },
             },
             // {
             //   name: 'XScroll',
@@ -51,102 +51,99 @@ const router = createRouter({
             //   component: () => import('@/views/User/TimeLine/XScroll/index.vue'),
             // },
             {
-              name: 'ZScroll',
-              path: 'zScroll',
-              component: () => import('@/views/User/TimeLine/ZScroll/index.vue'),
-            }
-          ]
+              name: "ZScroll",
+              path: "zScroll",
+              component: () => import("@/views/User/TimeLine/ZScroll/index.vue"),
+            },
+          ],
         },
         {
-          name: 'Friends',
-          path: 'friends',
-          component: () => import('@/views/User/Friends/index.vue')
+          name: "Friends",
+          path: "friends",
+          component: () => import("@/views/User/Friends/index.vue"),
         },
         {
-          name: 'Other',
-          path: 'other',
-          component: () => import('@/views/User/Home/index.vue')
+          name: "Other",
+          path: "other",
+          component: () => import("@/views/User/Home/index.vue"),
         },
         {
-          name: 'NotFound',
-          path: '404',
-          component: () => import('@/components/NotFound.vue')
+          name: "NotFound",
+          path: "404",
+          component: () => import("@/components/NotFound.vue"),
         },
-        { path: '/:pathMatch(.*)*', component: () => import('@/components/NotFound.vue') }
-      ]
+        { path: "/:pathMatch(.*)*", component: () => import("@/components/NotFound.vue") },
+      ],
     },
     {
-      name: 'Admin',
-      path: '/admin',
-      component: () => import('@/views/Admin/index.vue'),
+      name: "Admin",
+      path: "/admin",
+      component: () => import("@/views/Admin/index.vue"),
       children: [
         {
-          path: '',
-          redirect: { name: 'DashBoard' }
+          path: "",
+          redirect: { name: "DashBoard" },
         },
 
         {
-          name: 'DashBoard',
-          path: 'dashBoard',
-          component: () => import('@/views/Admin/DashBoard/index.vue')
+          name: "DashBoard",
+          path: "dashBoard",
+          component: () => import("@/views/Admin/DashBoard/index.vue"),
         },
         {
           name: "EditArticle",
-          path: 'editArticle',
-          component: () => import('@/views/Admin/EditArticle/index.vue'),
+          path: "editArticle",
+          component: () => import("@/views/Admin/EditArticle/index.vue"),
           children: [
-
             {
-              path: '',
-              redirect: { name: 'ArticleList' }
+              path: "",
+              redirect: { name: "ArticleList" },
             },
             {
               name: "ArticleList",
-              path: 'articleList',
-              component: () => import('@/views/Admin/EditArticle/ArticleList/index.vue'),
+              path: "articleList",
+              component: () => import("@/views/Admin/EditArticle/ArticleList/index.vue"),
             },
             {
               name: "ToEditArticle",
-              path: 'toEditArticle/:editArticleId?',
-              component: () => import('@/views/Admin/EditArticle/ToEditArticle/index.vue'),
+              path: "toEditArticle/:editArticleId?",
+              component: () => import("@/views/Admin/EditArticle/ToEditArticle/index.vue"),
             },
             {
               name: "LabelList",
-              path: 'labelList',
-              component: () => import('@/views/Admin/EditArticle/LabelList/index.vue'),
-            }
-
-          ]
+              path: "labelList",
+              component: () => import("@/views/Admin/EditArticle/LabelList/index.vue"),
+            },
+          ],
         },
         {
-          name: 'Comment',
-          path: 'comment',
-          component: () => import('@/views/Admin/Comment/index.vue')
+          name: "Comment",
+          path: "comment",
+          component: () => import("@/views/Admin/Comment/index.vue"),
         },
         {
           name: "File",
-          path: 'file',
-          component: () => import('@/views/Admin/File/index.vue'),
+          path: "file",
+          component: () => import("@/views/Admin/File/index.vue"),
         },
         {
-          name: 'Links',
-          path: 'links',
-          component: () => import('@/views/Admin/Links/index.vue')
+          name: "Links",
+          path: "links",
+          component: () => import("@/views/Admin/Links/index.vue"),
         },
         {
-          name: 'ManageUser',
-          path: 'manageUser',
-          component: () => import('@/views/Admin/ManageUser/index.vue')
+          name: "ManageUser",
+          path: "manageUser",
+          component: () => import("@/views/Admin/ManageUser/index.vue"),
         },
         {
-          name: 'GlobalSetting',
-          path: 'setting',
-          component: () => import('@/views/Admin/Setting/index.vue')
-
-        }
-      ]
-    }
+          name: "GlobalSetting",
+          path: "setting",
+          component: () => import("@/views/Admin/Setting/index.vue"),
+        },
+      ],
+    },
   ],
 });
 
-export default router
+export default router;
