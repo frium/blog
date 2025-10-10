@@ -127,7 +127,9 @@ const trunOffLrc = () => {
 defineExpose({ toggleMusic, skipBack, skipForward, trunOffLrc });
 
 onMounted(() => {
-  getMusicList();
+  setTimeout(() => {
+    getMusicList();
+  }, 2000)
 });
 </script>
 

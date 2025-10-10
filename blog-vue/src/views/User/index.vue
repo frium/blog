@@ -2,8 +2,6 @@
 import LayoutNav from "@/components/LayoutNav.vue";
 import LayoutFooter from "@/components/LayoutFooter.vue";
 import PersonalCard from "@/components/PersonalCard.vue";
-import NavBall from "@/components/NavBall.vue";
-import BackToTop from '@/components/BackToTop.vue';
 import MusicPlayerStrip from '@/components/MusicPlayerStrip.vue';
 import LyricStrip from '@/components/LyricStrip.vue';
 import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
@@ -107,10 +105,10 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="control-container" :style="{ 'opacity': scrollStore.scrollProportion == 0 ? 0 : 1 }">
+    <!-- <div class="control-container" :style="{ 'opacity': scrollStore.scrollProportion == 0 ? 0 : 1 }">
       <BackToTop class="back-to-top"></BackToTop>
       <NavBall class="nav-ball"></NavBall>
-    </div>
+    </div> -->
     <MusicPlayerStrip class="music" ref="playerRef"></MusicPlayerStrip>
     <LyricStrip class="music" @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
       @turn-off-lrc="trunOffLrc">

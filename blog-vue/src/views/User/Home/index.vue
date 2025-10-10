@@ -20,9 +20,9 @@ watch(pageId, async (newId) => {
 });
 
 onMounted(async () => {
-  const numRes = await getSearchArticleNumAPI(artilceStore.searchData);
+  const [numRes, res] = await Promise.all([getSearchArticleNumAPI(artilceStore.searchData),
+  searchArticleAPI(artilceStore.searchData)]);
   artilceStore.articleNum = numRes.data;
-  const res = await searchArticleAPI(artilceStore.searchData);
   artilceStore.articleArr = res.data;
 })
 </script>

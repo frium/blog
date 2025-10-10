@@ -60,7 +60,9 @@ onMounted(() => {
     observer = new MutationObserver(() => {
       listItems.value = Array.from(listRef.value?.children || []);
       updateMap();
-      window.addEventListener('scroll', updateStyles);
+      window.addEventListener('scroll', updateStyles, {
+        passive: true
+      });
       playgroundRef.value.style.height = `${(listItems.value.length + 2) * 100}vh`;
       console.log(listItems.value.length + 2);
       observer.disconnect();

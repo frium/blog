@@ -1,6 +1,5 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import ArticleNav from './components/ArticleNav.vue';
 import { getArticleByTimeAPI } from '@/api/article';
 
 let tempPaddingLeft = 0;

@@ -4,8 +4,7 @@ import { ElMessage } from "element-plus";
 import { uploadFileAPI } from "@/api/file";
 import ProgressCircle from "./ProgressCircle.vue";
 import { SuccessFilled, CircleCloseFilled } from "@element-plus/icons-vue";
-import { all } from "axios";
-
+import imageCompression from 'browser-image-compression';
 const fileBlodArr = ref([]);
 const fileNameSet = ref(new Set());
 const previewUrls = ref(new Map());
@@ -165,13 +164,32 @@ let concurrentUploads = ref(0);
 const maxConcurrentUploads = 4;
 const abortControllers = ref([]);
 
-const processQueue = () => {
+const processQueue = async () => {
   while (concurrentUploads.value < maxConcurrentUploads && queue.length > 0) {
     const { file, index, signal } = queue.shift();
+    const isImage = file.type.startsWith('image/');
+    let fileToUpload = file;
+    if (isImage) {
+      const options = {
+        maxSizeMB: 0.05,
+        maxWidthOrHeight: 800,
+        useWebWorker: true,
+        fileType: 'image/jpeg',
+      };
+      const compressedFile = await imageCompression(file, options);
+      fileToUpload = new File([compressedFile], file.name, {
+        type: compressedFile.type,
+        lastModified: Date.now(),
+      });
+    }
+    if (fileToUpload.size > 60000) {
+      ElMessage.warning(`${file.name} 压缩后大小仍超过50kb,请重新选择该文件`);
+      return;
+    }
     if (!fileBlodArr.value[index]) continue;
     fileBlodArr.value[index].uploadProgress = 0;
     concurrentUploads.value++;
-    uploadFileAPI(file, onUploadProgress(index), signal)
+    uploadFileAPI(fileToUpload, onUploadProgress(index), signal)
       .then(() => {
         resolve(index);
       })
