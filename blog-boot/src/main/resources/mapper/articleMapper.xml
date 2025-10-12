@@ -28,27 +28,35 @@
         <result property="labelName" column="labelName"/>
     </resultMap>
     <select id="searchArticles" resultMap="articleListVOResultMap">
-        SELECT a.id,
-               a.title,
-               a.cover_img   as coverImg,
-               a.summary,
-               a.is_top      as isTop,
-               a.create_time as createTime,
-               a.is_show     as isShow,
-               a.view_num    as viewNum,
-               l.id          as labelId,
-               l.label_name  as labelName,
-               COUNT(c.id)   as commentNum
-        FROM article a
-                 LEFT JOIN article_label al ON a.id = al.article_id
-                 LEFT JOIN label l ON al.label_id = l.id
-                 LEFT JOIN comment c ON a.id = c.article_id AND c.status = 1
-        WHERE a.title LIKE CONCAT('%', #{searchInfo}, '%')
-           OR a.content LIKE CONCAT('%', #{searchInfo}, '%')
-        GROUP BY a.id, a.title, a.cover_img, a.summary, a.is_top, a.create_time, a.is_show, a.view_num, l.id,
-                 l.label_name
-        ORDER BY a.is_top DESC, a.create_time DESC
+        SELECT
+        a.id,
+        a.title,
+        a.cover_img as coverImg,
+        a.summary,
+        a.is_top as isTop,
+        a.create_time as createTime,
+        a.is_show as isShow,
+        a.view_num as viewNum,
+        l.id as labelId,
+        l.label_name as labelName,
+        comment_counts.comment_count as commentNum
+        FROM
+        (SELECT id, title, cover_img, summary, is_top, create_time, is_show, view_num
+        FROM article
+        WHERE title LIKE CONCAT('%', #{searchInfo}, '%')
+        OR content LIKE CONCAT('%', #{searchInfo}, '%')
+        ORDER BY is_top DESC, create_time DESC
         LIMIT #{offset}, 7
+        ) a
+        LEFT JOIN article_label al ON a.id = al.article_id
+        LEFT JOIN label l ON al.label_id = l.id
+        LEFT JOIN (
+        SELECT article_id, COUNT(id) as comment_count
+        FROM comment
+        WHERE status = 1
+        GROUP BY article_id
+        ) comment_counts ON a.id = comment_counts.article_id
+        ORDER BY a.is_top DESC, a.create_time DESC
     </select>
 
     <insert id="insertArticleLabels" parameterType="java.util.Map">
