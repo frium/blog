@@ -27,8 +27,8 @@ computed(() => {
     </div>
     <span class="time">{{ props.data.createTime }} </span>
     <div class="labels">
-      <RouterLink to="/" class="label" v-for="label in props.data.label" :key="label"> {{ label.labelName }}
-      </RouterLink>
+      <div class="label" v-for="label in props.data.label" :key="label"> {{ label.labelName }}
+      </div>
     </div>
   </div>
 </template>
