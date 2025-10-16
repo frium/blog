@@ -6,7 +6,6 @@ import { visualizer } from "rollup-plugin-visualizer";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-import viteCDNPlugin from "vite-plugin-cdn-import";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,18 +19,17 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    viteCDNPlugin({
-      modules: [
-        {
-          name: "vue",
-          var: "Vue",
-          path: "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.min.js",
-        },
-      ],
-    }),
+    // viteCDNPlugin({
+    //   modules: [
+    //     {
+    //       name: "vue",
+    //       var: "Vue",
+    //       path: "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.min.js",
+    //     },
+    //   ],
+    // }),
   ],
   build: {
-    minify: "terser",
     assetsInlineLimit: 10240,
     rollupOptions: {
       output: {
@@ -46,16 +44,16 @@ export default defineConfig({
         },
       },
     },
-    terserOptions: {
-      compress: {
-        drop_console: true,
-      },
-    },
+  },
+  esbuild: {
+    pure: ["console.log"],
+    drop: ["debugger"],
   },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".scss", ".css"],
   },
   server: {
     host: "0.0.0.0",
