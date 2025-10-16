@@ -1,6 +1,9 @@
+import { useNProgress } from "@/hooks/useNProgress";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
 import { useHead } from "@vueuse/head";
 import { createRouter, createWebHistory } from "vue-router";
+
+const { start, done } = useNProgress();
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -185,6 +188,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  start();
   const globalInfoStore = useGlobalInfoStore();
   useHead({
     title: to.meta.title
@@ -202,4 +206,9 @@ router.beforeEach((to) => {
     ],
   });
 });
+
+router.afterEach((_) => {
+  done();
+});
+
 export default router;

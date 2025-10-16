@@ -90,6 +90,14 @@ img {
   -webkit-user-select: none;
 }
 
+#nprogress .bar {
+  background: var(--primary-color) !important;
+}
+
+#nprogress .peg {
+  box-shadow: 0 0 10px #fff, 0 0 5px #fff !important;
+}
+
 /* 滚动条优化 */
 ::-webkit-scrollbar {
   width: 0px;

@@ -2,7 +2,8 @@
 import { getLabelsAPI } from "@/api/article";
 import { useHead } from "@vueuse/head";
 import { onMounted, ref, unref } from "vue";
-
+import { Loading } from "@element-plus/icons-vue";
+const loading = ref(true);
 const keywords = ref('');
 useHead({
   meta: [
@@ -14,9 +15,11 @@ useHead({
 })
 const labels = ref([]);
 onMounted(async () => {
+  loading.value = true;
   const res = await getLabelsAPI();
   labels.value = res.data;
   keywords.value = unref(labels).join();
+  loading.value = false;
 })
 </script>
 
@@ -27,19 +30,36 @@ onMounted(async () => {
       <div class="triangle"></div>
     </div>
     <hr>
-    <ul>
-      <li v-for="label in labels" :key="label.id">
-        <RouterLink to="/" class="categorie">
-          <span class="categorie-name">{{ label.labelName }}</span>
-          <div class="categorie-number">{{ label.articleCount }}</div>
-        </RouterLink>
-      </li>
+    <ul style="min-height: 100px; position: relative;">
+      <template v-if="loading">
+        <el-icon class="loading-icon" :size="20">
+          <Loading />
+        </el-icon>
+      </template>
+      <template v-else>
+        <li v-for="label in labels" :key="label.id">
+          <RouterLink to="/" class="categorie">
+            <span class="categorie-name">{{ label.labelName }}</span>
+            <div class="categorie-number">{{ label.articleCount }}</div>
+          </RouterLink>
+        </li>
+      </template>
     </ul>
   </div>
 
 </template>
 
 <style scoped lang="scss">
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .categories {
   position: relative;
   width: 100%;
@@ -108,6 +128,15 @@ onMounted(async () => {
       }
 
     }
+  }
+
+  .loading-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: pink;
+    animation: spin 3s linear infinite;
   }
 }
 </style>
