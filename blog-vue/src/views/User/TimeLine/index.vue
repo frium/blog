@@ -1,7 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref, unref } from 'vue';
 import { getArticleByTimeAPI } from '@/api/article';
-import { useHead } from '@vueuse/head';
 
 let tempPaddingLeft = 0;
 let tempPaddingRight = 0;
@@ -13,19 +12,10 @@ if (selectionDiv) {
   selectionDiv.style.paddingLeft = '0';
   selectionDiv.style.paddingRight = '0';
 }
-const keywords = ref('');
-useHead({
-  meta: [
-    {
-      name: 'keywords',
-      content: keywords
-    }
-  ]
-})
+
 onMounted(async () => {
   const res = await getArticleByTimeAPI();
   articles.value = res.data;
-  keywords.value = unref(articles).map(article => article.title).join(',')
 })
 
 onBeforeUnmount(() => {

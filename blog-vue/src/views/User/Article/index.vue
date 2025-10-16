@@ -1,7 +1,7 @@
 <script setup>
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import TopArticleCard from '@/views/User/Home/components/TopArticleCard.vue';
-import { onMounted, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
@@ -32,17 +32,13 @@ const handleComponentLoaded = () => {
 
 const emit = defineEmits(['component-loaded']);
 
-const keywords = ref('');
+
 const description = ref('');
 useHead({
   meta: [
     {
       name: 'description',
       content: description
-    },
-    {
-      name: 'keywords',
-      content: keywords
     }
   ]
 })
@@ -51,7 +47,6 @@ watch(
   async (newId) => {
     const res = await getArticleAPI(newId);
     Object.assign(article, res.data);
-    keywords.value = article.label.join();
     description.value = article.summary;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },

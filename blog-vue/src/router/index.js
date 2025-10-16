@@ -20,7 +20,6 @@ const router = createRouter({
             title: "首页",
             description:
               "主要记录项目实现时的问题收集、以前端为主的知识总结、以及一些零碎知识科普、开发时踩到的坑等",
-            keywords: "博客,技术文章,教程,学习资源",
           },
         },
         {
@@ -31,7 +30,6 @@ const router = createRouter({
             title: "首页",
             description:
               "主要记录项目实现时的问题收集、以前端为主的知识总结、以及一些零碎知识科普、开发时踩到的坑等",
-            keywords: "博客,技术文章,教程,学习资源",
           },
           children: [
             {
@@ -48,7 +46,6 @@ const router = createRouter({
           meta: {
             title: "文章详情",
             description: "",
-            keywords: "",
           },
         },
         {
@@ -58,7 +55,6 @@ const router = createRouter({
           meta: {
             title: "分类",
             description: "技术文章分类",
-            keywords: "",
           },
         },
         {
@@ -68,7 +64,6 @@ const router = createRouter({
           meta: {
             title: "时间线",
             description: "按照时间线浏览文章",
-            keywords: "",
           },
           children: [
             {
@@ -95,7 +90,6 @@ const router = createRouter({
           meta: {
             title: "友人帐",
             description: "友人帐",
-            keywords: "友人帐,友链",
           },
         },
         {
@@ -111,6 +105,7 @@ const router = createRouter({
             title: "404",
             description: "您访问的页面不存在",
             noindex: true,
+            robots: "index, nofollow",
           },
         },
         { path: "/:pathMatch(.*)*", redirect: { name: "NotFound" } },
@@ -200,8 +195,8 @@ router.beforeEach((to) => {
         content: to.meta.description || "",
       },
       {
-        name: "keywords",
-        content: to.meta.keywords || "",
+        name: "robots",
+        content: to.meta.robots || "index, follow",
       },
     ],
   });

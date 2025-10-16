@@ -1,24 +1,14 @@
 <script setup>
 import { getLabelsAPI } from "@/api/article";
-import { useHead } from "@vueuse/head";
-import { onMounted, ref, unref } from "vue";
+import { onMounted, ref } from "vue";
 import { Loading } from "@element-plus/icons-vue";
 const loading = ref(true);
-const keywords = ref('');
-useHead({
-  meta: [
-    {
-      name: 'keywords',
-      content: keywords
-    }
-  ]
-})
+
 const labels = ref([]);
 onMounted(async () => {
   loading.value = true;
   const res = await getLabelsAPI();
   labels.value = res.data;
-  keywords.value = unref(labels).join();
   loading.value = false;
 })
 </script>
