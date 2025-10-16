@@ -1,12 +1,22 @@
 <script setup>
 import { getLabelsAPI } from "@/api/article";
-import { onMounted, ref } from "vue";
+import { useHead } from "@vueuse/head";
+import { onMounted, ref, unref } from "vue";
 
-
+const keywords = ref('');
+useHead({
+  meta: [
+    {
+      name: 'keywords',
+      content: keywords
+    }
+  ]
+})
 const labels = ref([]);
 onMounted(async () => {
   const res = await getLabelsAPI();
   labels.value = res.data;
+  keywords.value = unref(labels).join();
 })
 </script>
 

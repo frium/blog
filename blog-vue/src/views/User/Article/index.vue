@@ -6,6 +6,7 @@ import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { useHead } from '@vueuse/head'
 const token = useUserStore().jwt;
 const route = useRoute();
 const article = reactive({
@@ -30,15 +31,28 @@ const handleComponentLoaded = () => {
 }
 
 const emit = defineEmits(['component-loaded']);
-onMounted(async () => {
-  const res = await getArticleAPI(route.params.articleId);
-  Object.assign(article, res.data);
+
+const keywords = ref('');
+const description = ref('');
+useHead({
+  meta: [
+    {
+      name: 'description',
+      content: description
+    },
+    {
+      name: 'keywords',
+      content: keywords
+    }
+  ]
 })
 watch(
   () => route.params.articleId,
   async (newId) => {
     const res = await getArticleAPI(newId);
     Object.assign(article, res.data);
+    keywords.value = article.label.join();
+    description.value = article.summary;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   },
   { immediate: true }

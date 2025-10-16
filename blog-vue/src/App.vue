@@ -14,15 +14,10 @@ const setFavicon = (href) => {
   link.href = href
 }
 
-const setTitle = (title) => {
-  document.title = title + '\'s blog';
-
-}
 onMounted(async () => {
   const res = await getBlogInfoAPI();
   globalInfoStore.globalInfo = res.data;
   setFavicon(globalInfoStore.globalInfo.siteIcon);
-  setTitle(globalInfoStore.globalInfo.siteName);
 })
 </script>
 

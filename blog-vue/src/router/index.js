@@ -1,5 +1,6 @@
+import { useGlobalInfoStore } from "@/stores/globalInfo";
+import { useHead } from "@vueuse/head";
 import { createRouter, createWebHistory } from "vue-router";
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -12,11 +13,23 @@ const router = createRouter({
           path: "",
           name: "DefaultHome",
           redirect: { name: "Home" },
+          meta: {
+            title: "首页",
+            description:
+              "主要记录项目实现时的问题收集、以前端为主的知识总结、以及一些零碎知识科普、开发时踩到的坑等",
+            keywords: "博客,技术文章,教程,学习资源",
+          },
         },
         {
           name: "Home",
           path: "home",
           component: () => import("@/views/User/Home/index.vue"),
+          meta: {
+            title: "首页",
+            description:
+              "主要记录项目实现时的问题收集、以前端为主的知识总结、以及一些零碎知识科普、开发时踩到的坑等",
+            keywords: "博客,技术文章,教程,学习资源",
+          },
           children: [
             {
               name: "Page",
@@ -29,16 +42,31 @@ const router = createRouter({
           name: "Article",
           path: "article/:articleId",
           component: () => import("@/views/User/Article/index.vue"),
+          meta: {
+            title: "文章详情",
+            description: "",
+            keywords: "",
+          },
         },
         {
           name: "Categories",
           path: "categories",
           component: () => import("@/views/User/Categories/index.vue"),
+          meta: {
+            title: "分类",
+            description: "技术文章分类",
+            keywords: "",
+          },
         },
         {
           name: "Time",
           path: "timeLine",
           component: () => import("@/views/User/TimeLine/index.vue"),
+          meta: {
+            title: "时间线",
+            description: "按照时间线浏览文章",
+            keywords: "",
+          },
           children: [
             {
               path: "",
@@ -61,6 +89,11 @@ const router = createRouter({
           name: "Friends",
           path: "friends",
           component: () => import("@/views/User/Friends/index.vue"),
+          meta: {
+            title: "友人帐",
+            description: "友人帐",
+            keywords: "友人帐,友链",
+          },
         },
         {
           name: "Other",
@@ -71,8 +104,13 @@ const router = createRouter({
           name: "NotFound",
           path: "404",
           component: () => import("@/components/NotFound.vue"),
+          meta: {
+            title: "404",
+            description: "您访问的页面不存在",
+            noindex: true,
+          },
         },
-        { path: "/:pathMatch(.*)*", component: () => import("@/components/NotFound.vue") },
+        { path: "/:pathMatch(.*)*", redirect: { name: "NotFound" } },
       ],
     },
     {
@@ -146,4 +184,22 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach((to) => {
+  const globalInfoStore = useGlobalInfoStore();
+  useHead({
+    title: to.meta.title
+      ? (globalInfoStore.globalInfo.siteName || "frium") + "'s blog - " + to.meta.title
+      : "默认标题",
+    meta: [
+      {
+        name: "description",
+        content: to.meta.description || "",
+      },
+      {
+        name: "keywords",
+        content: to.meta.keywords || "",
+      },
+    ],
+  });
+});
 export default router;
