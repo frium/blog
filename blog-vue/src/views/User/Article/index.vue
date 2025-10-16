@@ -1,7 +1,7 @@
 <script setup>
 import MarkdownViewer from './components/MarkdownViewer.vue'
 import TopArticleCard from '@/views/User/Home/components/TopArticleCard.vue';
-import { reactive, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
@@ -30,6 +30,10 @@ const handleComponentLoaded = () => {
 }
 
 const emit = defineEmits(['component-loaded']);
+onMounted(async () => {
+  const res = await getArticleAPI(route.params.articleId);
+  Object.assign(article, res.data);
+})
 watch(
   () => route.params.articleId,
   async (newId) => {

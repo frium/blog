@@ -17,6 +17,7 @@ const isHidden = ref(false);
 const observer = ref(null);
 const route = useRoute();
 const markdownCatalogue = ref(null);
+const scrollStore = useScrollStore();
 const globalInfoStore = useGlobalInfoStore();
 
 const handleComponentLoaded = () => {

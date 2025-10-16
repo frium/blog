@@ -174,7 +174,6 @@ const handleCopyCode = async (event) => {
 
 watchEffect(() => {
   htmlContent.value = md.render(props.source);
-  if (!props.source) return;
   isLoading.value = false;
   nextTick(() => {
     document.querySelectorAll('.show-code').forEach(svg => {

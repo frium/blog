@@ -3,7 +3,7 @@ import { getSearchArticleNumAPI, searchArticleAPI } from '@/api/article';
 import router from '@/router';
 import { useArticleStore } from '@/stores/article';
 import notificationToast from '@/utils/notificationToast ';
-import { onBeforeMount, ref } from 'vue';
+import { ref } from 'vue';
 const artilceStore = useArticleStore();
 const searchInfo = ref('');
 const emit = defineEmits(['search-success'])
@@ -11,7 +11,7 @@ const handelSearchArticle = async () => {
   artilceStore.searchData.searchInfo = searchInfo.value;
   const num = await getSearchArticleNumAPI(artilceStore.searchData);
   if (num.data === 0) {
-    notificationToast.warning("未查询到相关数据!");
+    notificationToast.success("未查询到相关数据!");
     emit('search-success');
     return;
   }
@@ -23,9 +23,6 @@ const handelSearchArticle = async () => {
   emit('search-success');
   router.push({ name: 'Home' });
 }
-onBeforeMount(() => {
-  artilceStore.searchData.searchInfo = '';
-})
 </script>
 
 <template>
