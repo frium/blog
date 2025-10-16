@@ -3,20 +3,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'LXGW WenKai Screen', sans-serif;
-
+  font-family: "LXGW WenKai Screen", sans-serif;
 }
-
-
-@font-face {
-  font-family: 'LXGW WenKai Screen';
-  src: url('/fonts/LXGWWenKaiGBScreen.woff2') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-
 
 /* HTML & Body 基础设置 */
 html,
@@ -27,7 +15,7 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  cursor: url('/src/assets/cursor/Arrow.cur'), default !important;
+  cursor: url("/src/assets/cursor/Arrow.cur"), default !important;
   scroll-behavior: smooth;
   width: 100% !important;
 }
@@ -37,9 +25,15 @@ html {
   overflow-y: overlay;
 }
 
+body {
+  font-family: "LXGW WenKai Screen";
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* 超链接默认样式 */
 a {
-  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
+  cursor: url("/src/assets/cursor/Hand.cur"), pointer !important;
   text-decoration: none;
   color: inherit;
   outline: none;
@@ -62,7 +56,7 @@ select {
 
 input,
 textarea {
-  cursor: url('@/assets/cursor/IBeam.cur'), auto !important;
+  cursor: url("@/assets/cursor/IBeam.cur"), auto !important;
 }
 
 input::placeholder,
@@ -71,7 +65,7 @@ textarea::placeholder {
 }
 
 button {
-  cursor: url('/src/assets/cursor/Hand.cur'), pointer !important;
+  cursor: url("/src/assets/cursor/Hand.cur"), pointer !important;
   background: none;
   border: none;
 }
@@ -96,7 +90,6 @@ img {
   -webkit-user-select: none;
 }
 
-
 /* 滚动条优化 */
 ::-webkit-scrollbar {
   width: 0px;
@@ -120,11 +113,9 @@ img {
   transition: border-radius 0.3s ease;
 }
 
-
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
 
 /* 选中文本样式 */
 ::selection {
