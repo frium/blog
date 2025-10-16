@@ -20,6 +20,7 @@ watch(pageId, async (newId) => {
 });
 
 onMounted(async () => {
+  artilceStore.searchData.searchInfo = ''
   const [numRes, res] = await Promise.all([getSearchArticleNumAPI(artilceStore.searchData),
   searchArticleAPI(artilceStore.searchData)]);
   artilceStore.articleNum = numRes.data;

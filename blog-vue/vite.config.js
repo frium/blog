@@ -7,6 +7,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import viteCDNPlugin from "vite-plugin-cdn-import";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,7 +21,32 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
+    viteCDNPlugin({
+      modules: [
+        {
+          name: "vue",
+          var: "Vue",
+          path: "https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.min.js",
+        },
+      ],
+    }),
   ],
+  build: {
+    assetsInlineLimit: 10240,
+    rollupOptions: {
+      output: {
+        entryFileNames: "js/[name]-[hash].js",
+        chunkFileNames: "js/[name]-[hash].js",
+        assetFileNames: (assetInfo) => {
+          const extType = assetInfo?.names[0].split(".").pop();
+          if (extType === "css") {
+            return "css/[name]-[hash][extname]";
+          }
+          return "assets/[name]-[hash][extname]";
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
