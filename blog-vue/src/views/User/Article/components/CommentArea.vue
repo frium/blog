@@ -1,16 +1,23 @@
 <script setup>
 import { addCommentAPI, getCommentsAPI } from '@/api/comment';
-import { useUserStore } from '@/stores/userStore';
+import { useGlobalInfoStore } from '@/stores/globalInfo';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import notificationToast from '@/utils/notificationToast ';
 
-const route = useRoute();
 const userStore = useUserStore();
+const route = useRoute();
 const commentArr = ref([]);
+const token = useUserStore().jwt;
 
 const comment = ref('');
 const addCommentHandel = async () => {
+  if (!token) {
+    notificationToast.warning('请先登录再进行评论!');
+    return;
+  }
   const data = {};
   data.commentContent = comment.value;
   data.articleId = route.params.articleId;
@@ -20,6 +27,7 @@ const addCommentHandel = async () => {
   ElMessage.success('评论成功,请等待管理员审核!');
   comment.value = '';
 }
+const globalInfoStore = useGlobalInfoStore();
 onMounted(async () => {
   const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
@@ -30,7 +38,7 @@ onMounted(async () => {
   <div class="comment-area">
     <h3>评论</h3>
     <div class="top">
-      <img :src="userStore.userInfo.avatar" alt="">
+      <img :src="userStore.userInfo.avatar || globalInfoStore.globalInfo.avatarUrl" alt="">
       <div class="add-comment">
         <textarea class="input-area" placeholder="写点评论~" maxlength="300" v-model="comment"></textarea>
         <el-button color="#35363c" style="margin-left: calc(100% - 60px); margin-top: 6px;" @click="addCommentHandel">

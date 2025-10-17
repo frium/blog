@@ -28,7 +28,7 @@ const props = defineProps({
         <img class="eye" src="@/assets/icons/eye.svg" alt="">
         <span class="views">{{ props.data.viewNum }}</span>
         <img class="chat" src="@/assets/icons/chat.svg" alt="">
-        <span class="message">{{ props.data.commentNum }}</span>
+        <span class="message">{{ props.data.commentNum || 0 }}</span>
         <span class="time">{{ props.data.createTime }}</span>
       </div>
     </div>

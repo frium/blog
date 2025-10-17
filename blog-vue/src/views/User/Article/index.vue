@@ -5,9 +5,9 @@ import { reactive, ref, watch } from 'vue'
 import CommentArea from './components/CommentArea.vue';
 import { getArticleAPI } from '@/api/article';
 import { useRoute } from 'vue-router';
-import { useUserStore } from '@/stores/userStore';
+
+
 import { useHead } from '@vueuse/head'
-const token = useUserStore().jwt;
 const route = useRoute();
 const article = reactive({
   "id": null,
@@ -59,7 +59,7 @@ watch(
     <TopArticleCard :isTop="false" :data="article"></TopArticleCard>
     <MarkdownViewer @component-loaded="handleComponentLoaded" class="markdown" :source="article.content"
       :line-numbers="true" />
-    <CommentArea v-if="token"></CommentArea>
+    <CommentArea></CommentArea>
     <div class="last-next">
       <RouterLink :to="'/article/' + article.prevArticleId">{{ '上一篇: ' + article.prevArticleName }}</RouterLink>
       <RouterLink :to="'/article/' + article.nextArticleId">{{ '下一篇: ' + article.nextArticleName }}

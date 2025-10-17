@@ -6,7 +6,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-
+import viteCompression from "vite-plugin-compression";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -18,6 +18,13 @@ export default defineConfig({
     }),
     Components({
       resolvers: [ElementPlusResolver()],
+    }),
+    viteCompression({
+      algorithm: "gzip", // 压缩算法
+      ext: ".gz", // 生成的文件后缀
+      threshold: 10240, // 只压缩大于10KB的文件
+      deleteOriginFile: false, // 是否删除源文件
+      filter: /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i, // 要压缩的文件类型
     }),
     // viteCDNPlugin({
     //   modules: [

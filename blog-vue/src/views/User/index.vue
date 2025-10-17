@@ -6,20 +6,36 @@ import MusicPlayerStrip from '@/components/MusicPlayerStrip.vue';
 import LyricStrip from '@/components/LyricStrip.vue';
 import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
-import { useScrollStore } from "@/stores/scrollStore";
+import { ref, onMounted, onUnmounted, watch, computed, onBeforeUnmount } from 'vue';
 import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
 import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
 import StarSky from "@/components/StarSky.vue";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
 
+
 const isHidden = ref(false);
 const observer = ref(null);
 const route = useRoute();
 const markdownCatalogue = ref(null);
-const scrollStore = useScrollStore();
 const globalInfoStore = useGlobalInfoStore();
 
+
+
+const useWindowSize = () => {
+  const width = ref(window.innerWidth)
+  const height = ref(window.innerHeight)
+  const update = () => {
+    width.value = window.innerWidth
+    height.value = window.innerHeight
+  }
+
+  onMounted(() => window.addEventListener('resize', update))
+  onBeforeUnmount(() => window.removeEventListener('resize', update))
+
+  return { width, height }
+}
+const { width: windowWidth } = useWindowSize();
+const isMobile = computed(() => windowWidth.value <= 750);
 const handleComponentLoaded = () => {
   markdownCatalogue.value.handleLoadCatalogue();
 };
@@ -77,10 +93,10 @@ onUnmounted(() => {
 <template>
   <div class="user-out-box">
     <StarSky class="star-sky"></StarSky>
-    <LayoutNav
+    <LayoutNav v-if="!isMobile"
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
     </LayoutNav>
-    <PhoneLayuoutNav
+    <PhoneLayuoutNav v-else
       :style="{ transform: isHidden ? 'translateY(-100%)' : 'translateY(0)', transition: 'transform 0.8s ease' }">
     </PhoneLayuoutNav>
     <div class="selection">
@@ -113,8 +129,8 @@ onUnmounted(() => {
     <LyricStrip class="music" @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
       @turn-off-lrc="trunOffLrc">
     </LyricStrip>
-    <LayoutFooter class="footer"></LayoutFooter>
-    <PhoneLayoutFooter class="footer"></PhoneLayoutFooter>
+    <LayoutFooter v-if="!isMobile" class="footer"></LayoutFooter>
+    <PhoneLayoutFooter class="footer" v-else></PhoneLayoutFooter>
   </div>
 </template>
 

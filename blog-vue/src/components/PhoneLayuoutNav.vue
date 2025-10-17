@@ -42,9 +42,9 @@ const offSearchDialog = () => {
 
 <style scoped lang="scss">
 .phone-layout-nav {
+  display: none;
   position: fixed;
   z-index: 9;
-  display: none;
   height: 50px;
   width: 100%;
   background: var(--bg-color);
