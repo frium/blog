@@ -186,19 +186,32 @@ router.beforeEach((to) => {
   start();
   const globalInfoStore = useGlobalInfoStore();
   useHead({
-    title: to.meta.title
+    title: to.path.includes("admin")
+      ? (globalInfoStore.globalInfo.siteName || "frium") + "'s blog - admin"
+      : to.meta.title
       ? (globalInfoStore.globalInfo.siteName || "frium") + "'s blog - " + to.meta.title
       : "默认标题",
-    meta: [
-      {
-        name: "description",
-        content: to.meta.description || "",
-      },
-      {
-        name: "robots",
-        content: to.meta.robots || "index, follow",
-      },
-    ],
+    meta: to.path.includes("admin")
+      ? [
+          {
+            name: "description",
+            content: "Administration dashboard",
+          },
+          {
+            name: "robots",
+            content: "noindex, nofollow",
+          },
+        ]
+      : [
+          {
+            name: "description",
+            content: to.meta.description || "",
+          },
+          {
+            name: "robots",
+            content: to.meta.robots || "index, follow",
+          },
+        ],
   });
 });
 
