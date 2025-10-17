@@ -169,7 +169,7 @@ const processQueue = async () => {
     const { file, index, signal } = queue.shift();
     const isImage = file.type.startsWith('image/');
     let fileToUpload = file;
-    if (isImage) {
+    if (isImage && file.size > 60000) {
       const options = {
         maxSizeMB: 0.05,
         maxWidthOrHeight: 800,
