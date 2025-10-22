@@ -1,3 +1,4 @@
+import defaultImage from "@/assets/defaultImg.png";
 const lazyLoadDirecvtive = {
   mounted(el, binding) {
     const { value } = binding;
@@ -13,7 +14,7 @@ const lazyLoadDirecvtive = {
               el.src = value;
             };
             img.onerror = () => {
-              // el.src = errorImage;
+              el.src = defaultImage;
             };
             observer.unobserve(el); //停止观察
           }
@@ -24,7 +25,7 @@ const lazyLoadDirecvtive = {
         threshold: 0.1, // 当10%的图片可见时触发
       }
     );
-    // el.src = defaultImage;  //默认图片
+    el.src = defaultImage; //默认图片
     observer.observe(el);
     //将observer保存在元素上，便于在unmounted时断开连接
     el._lazyLoadObserver = observer;
