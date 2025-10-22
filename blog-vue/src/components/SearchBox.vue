@@ -24,6 +24,12 @@ const handelSearchArticle = async () => {
   emit('search-success');
   router.push({ name: 'Home' });
 }
+const resetSearchInfo = () => {
+  searchInfo.value = '';
+};
+defineExpose({
+  resetSearchInfo
+})
 onBeforeMount(() => {
   artilceStore.searchData.searchInfo = '';
 })

@@ -1,10 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useMusicStore } from "@/stores/musicStore";
+
 const musicStore = useMusicStore();
 const draggableElement = ref(null);
 const showBox = ref(false);
-
 const startDrag = (event) => {
   draggableElement.value.addEventListener('mousedown', startDrag);
   showBox.value = true;
@@ -89,7 +89,6 @@ const handleMusicToggle = () => {
         <button @click="handleMusicToggle">
           <img v-if="!isPlaying" src='/src/assets/icons/play.svg' alt="">
           <img v-else src='/src/assets/icons/pause.svg' alt="">
-
         </button>
         <button @click="emit('skip-forward')">
           <img src="/src/assets/icons/next.svg" alt="">

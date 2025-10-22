@@ -36,10 +36,12 @@ const searchFunction = async (searchInfo) => {
 const handleDeleteSuccess = (deletedId) => {
   tableData.value = tableData.value.filter(item => item.id !== deletedId);
 };
-onMounted(async () => {
+const fetchArticleList = async () => {
   const res = await getArticleListAPI();
   tableData.value = res.data;
-})
+};
+
+fetchArticleList();
 </script>
 
 <template>

@@ -2,23 +2,25 @@
 import { getLabelNumAPI, getShowArticleNumAPI } from "@/api/article";
 import { getUVPVAPI } from "@/api/uvpv";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 const globalInfoStore = useGlobalInfoStore();
 
 const articleNum = ref(0);
 const labelNum = ref(0);
 const viewNum = ref(0);
 
-onMounted(async () => {
+const fetchData = async () => {
   const [articleNumRes, labelNumRes, viewNumRes] = await Promise.all([
     getShowArticleNumAPI(),
     getLabelNumAPI(),
-    getUVPVAPI()
-  ])
+    getUVPVAPI(),
+  ]);
   articleNum.value = articleNumRes.data;
   labelNum.value = labelNumRes.data;
   viewNum.value = viewNumRes.data.uv;
-})
+};
+
+fetchData();
 
 const emit = defineEmits('offPersoalCard')
 const handelOffPersonalCard = () => {

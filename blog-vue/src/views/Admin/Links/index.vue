@@ -45,10 +45,12 @@ const handleSubmitSuccess = async () => {
 const handleDeleteSuccess = (deletedId) => {
   tableData.value = tableData.value.filter(item => item.id !== deletedId);
 };
-onMounted(async () => {
+const fetchLinks = async () => {
   const res = await getLinksAPI();
   tableData.value = res.data;
-})
+};
+
+fetchLinks();
 </script>
 
 <template>

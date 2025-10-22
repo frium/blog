@@ -40,15 +40,19 @@ const buttonArr = [
   { name: "设置", onClick: toShowArticleSetting },
   { name: "发布", onClick: toPublish },
 ];
-onMounted(async () => {
+
+const fetchArticle = async () => {
+  console.log(route.params.editArticleId + "-----------------");
   if (!route.params.editArticleId) return;
   const res = await getArticleAPI(route.params.editArticleId);
   if (res.code === 4010) {
-    router.push({ name: 'ToEditArticle' })
+    router.push({ name: 'ToEditArticle' });
     return;
   }
   editArticleStore.article = res.data;
-})
+};
+
+fetchArticle();
 
 </script>
 

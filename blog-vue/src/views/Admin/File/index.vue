@@ -39,12 +39,12 @@ const handleDialogClosed = async () => {
 const handleDeleteSuccess = (deletedId) => {
   fileData.value = fileData.value.filter(item => item.id !== deletedId);
 };
-
-
-onMounted(async () => {
+const fetchFiles = async () => {
   const res = await getAllFilesAPI();
   fileData.value = res.data;
-})
+};
+
+fetchFiles();
 </script>
 
 <template>

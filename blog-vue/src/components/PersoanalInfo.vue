@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/userStore';
 import UploadImg from './UploadImg.vue';
 import notificationToast from '@/utils/notificationToast ';
 import { onMounted, reactive, ref } from 'vue';
-import { getUserInfoAPI, getVerifyAPI, updateAvatarAPI, updateEmailAPI, updateUsernameAPI } from '@/api/user';
+import { getVerifyAPI, updateAvatarAPI, updateEmailAPI, updateUsernameAPI } from '@/api/user';
 import { uploadFileAPI } from '@/api/file';
 import { ElMessage } from 'element-plus';
 

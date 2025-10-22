@@ -27,10 +27,12 @@ const handlePassSuccess = (id) => {
 const handleDeleteSuccess = (id) => {
   tableData.value = tableData.value.filter(item => item.id !== id);
 }
-onMounted(async () => {
+const fetchComments = async () => {
   const res = await getAllCommentAPI();
   tableData.value = res.data;
-})
+};
+
+fetchComments();
 </script>
 
 <template>

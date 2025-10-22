@@ -1,17 +1,24 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import FriendCard from './components/FriendCard.vue';
 import { getShowLinksAPI } from '@/api/links';
 import { useGlobalInfoStore } from '@/stores/globalInfo';
 
 const links = ref([]);
-
 const globalInfoStore = useGlobalInfoStore();
-onMounted(async () => {
-  const res = await getShowLinksAPI();
-  links.value = res.data;
-})
+
+const fetchLinks = async () => {
+  try {
+    const res = await getShowLinksAPI();
+    links.value = res.data;
+  } catch (error) {
+    console.error("Failed to fetch links:", error);
+  }
+};
+
+fetchLinks();
 </script>
+
 
 <template>
   <div class="friend-out-box">

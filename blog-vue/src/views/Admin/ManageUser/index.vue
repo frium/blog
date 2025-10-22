@@ -28,22 +28,21 @@ const searchFunction = async (searchInfo) => {
   tableData.value = res.data;
   ElMessage.success('搜索成功!')
 }
-
 const handelShowDialog = () => {
   showCreateUser.value = false;
 }
-
 const handleDeleteSuccess = async () => {
   const res = await getUsersAPI();
   tableData.value = res.data;
 }
 
 const tableData = ref([]);
-
-onMounted(async () => {
+const fetchUsers = async () => {
   const res = await getUsersAPI();
   tableData.value = res.data;
-})
+};
+
+fetchUsers();
 </script>
 
 <template>

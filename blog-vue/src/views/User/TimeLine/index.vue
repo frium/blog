@@ -1,10 +1,11 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref, unref } from 'vue';
+import { onBeforeUnmount, ref } from 'vue';
 import { getArticleByTimeAPI } from '@/api/article';
 
 let tempPaddingLeft = 0;
 let tempPaddingRight = 0;
 const articles = ref([]);
+
 const selectionDiv = document.querySelector('.selection');
 if (selectionDiv) {
   tempPaddingLeft = selectionDiv.style.paddingLeft;
@@ -13,10 +14,12 @@ if (selectionDiv) {
   selectionDiv.style.paddingRight = '0';
 }
 
-onMounted(async () => {
+const fetchArticles = async () => {
   const res = await getArticleByTimeAPI();
   articles.value = res.data;
-})
+};
+
+fetchArticles();
 
 onBeforeUnmount(() => {
   setTimeout(() => {
@@ -26,7 +29,7 @@ onBeforeUnmount(() => {
       selectionDiv.style.paddingRight = tempPaddingRight;
     }
   }, 300)
-})
+});
 </script>
 
 <template>

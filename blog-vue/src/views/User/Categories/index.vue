@@ -1,17 +1,25 @@
 <script setup>
 import { getLabelsAPI } from "@/api/article";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { Loading } from "@element-plus/icons-vue";
-const loading = ref(true);
 
+const loading = ref(true);
 const labels = ref([]);
-onMounted(async () => {
-  loading.value = true;
-  const res = await getLabelsAPI();
-  labels.value = res.data;
-  loading.value = false;
-})
+
+const fetchLabels = async () => {
+  try {
+    const res = await getLabelsAPI();
+    labels.value = res.data;
+  } catch (error) {
+    console.error("Failed to fetch labels:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+fetchLabels();
 </script>
+
 
 <template>
   <div class="categories">

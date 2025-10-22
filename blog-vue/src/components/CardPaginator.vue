@@ -26,7 +26,7 @@ const allPages = ref([]);
 const updatePages = () => {
   props.showNum = Math.max(props.showNum, 5)
   if (pageId.value > props.numberOfPage) {
-    //TODO 路由到404去
+    router.push({ name: 'NotFound' });
     return;
   }
   const pages = [];

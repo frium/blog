@@ -11,16 +11,24 @@ import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
 import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
 import StarSky from "@/components/StarSky.vue";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
+import { defineAsyncComponent } from 'vue';
 
 
+const MusicPlayerStripAsyncComponent = defineAsyncComponent({
+  loader: () => import('@/components/MusicPlayerStrip.vue'),
+  delay: 200,
+  timeout: 10000,
+});
+const LyricStripAsyncComponent = defineAsyncComponent({
+  loader: () => import('@/components/LyricStrip.vue'),
+  delay: 200,
+  timeout: 10000,
+});
 const isHidden = ref(false);
 const observer = ref(null);
 const route = useRoute();
 const markdownCatalogue = ref(null);
 const globalInfoStore = useGlobalInfoStore();
-
-
-
 const useWindowSize = () => {
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)
@@ -125,10 +133,10 @@ onUnmounted(() => {
       <BackToTop class="back-to-top"></BackToTop>
       <NavBall class="nav-ball"></NavBall>
     </div> -->
-    <MusicPlayerStrip class="music" ref="playerRef"></MusicPlayerStrip>
-    <LyricStrip class="music" @toggle-music="toggleMusic" @skip-forward="skipForward" @skip-back="skipBack"
-      @turn-off-lrc="trunOffLrc">
-    </LyricStrip>
+    <MusicPlayerStripAsyncComponent class="music" ref="playerRef"></MusicPlayerStripAsyncComponent>
+    <LyricStripAsyncComponent class="music" @toggle-music="toggleMusic" @skip-forward="skipForward"
+      @skip-back="skipBack" @turn-off-lrc="trunOffLrc">
+    </LyricStripAsyncComponent>
     <LayoutFooter v-if="!isMobile" class="footer"></LayoutFooter>
     <PhoneLayoutFooter class="footer" v-else></PhoneLayoutFooter>
   </div>

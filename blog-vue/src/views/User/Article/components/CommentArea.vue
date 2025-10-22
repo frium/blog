@@ -28,10 +28,12 @@ const addCommentHandel = async () => {
   comment.value = '';
 }
 const globalInfoStore = useGlobalInfoStore();
-onMounted(async () => {
+const fetchComments = async () => {
   const res = await getCommentsAPI(route.params.articleId);
   commentArr.value = res.data;
-})
+};
+
+fetchComments();
 </script>
 
 <template>

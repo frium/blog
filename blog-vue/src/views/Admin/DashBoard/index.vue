@@ -23,7 +23,7 @@ const quickFindData = [
 ];
 const articleList = ref([]);
 
-onMounted(async () => {
+const fetchDashboardData = async () => {
   const [articleRes, commentRes, userRes, UVPVRes, articleListRes] = await Promise.all([
     getArticleNumAPI(),
     getCommentNumAPI(),
@@ -39,8 +39,9 @@ onMounted(async () => {
     { ...numberData.value[3], number: UVPVRes.data.uv }
   ];
   articleList.value = articleListRes.data.sort((a, b) => a.createTime - b.createTime);
-})
+};
 
+fetchDashboardData();
 </script>
 
 <template>

@@ -42,11 +42,12 @@ const close = () => {
   showCreateLabel.value = false;
   createLabelValue.value = "";
 }
-
-onMounted(async () => {
+const fetchLabels = async () => {
   const res = await getLabelsAPI();
   tableData.value = res.data;
-})
+};
+
+fetchLabels();
 </script>
 
 <template>

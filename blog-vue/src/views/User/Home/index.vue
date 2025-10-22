@@ -2,16 +2,27 @@
 import CardPaginator from '@/components/CardPaginator.vue';
 import ArticleCard from './components/ArticleCard.vue';
 import TopArticleCard from './components/TopArticleCard.vue';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { searchArticleAPI, getSearchArticleNumAPI } from '@/api/article';
 import { useArticleStore } from '@/stores/article';
 
-const artilceStore = useArticleStore()
+const artilceStore = useArticleStore();
 const route = useRoute();
 const pageId = computed(() => {
+  artilceStore.searchData.pageNum = parseInt(route.params.pageId) || 1;
   return parseInt(route.params.pageId) || 1;
 });
+
+const fetchArticles = async () => {
+  artilceStore.searchData.searchInfo = '';
+  const [numRes, res] = await Promise.all([
+    getSearchArticleNumAPI(artilceStore.searchData),
+    searchArticleAPI(artilceStore.searchData),
+  ]);
+  artilceStore.articleNum = numRes.data;
+  artilceStore.articleArr = res.data;
+};
 
 watch(pageId, async (newId) => {
   artilceStore.searchData.pageNum = newId;
@@ -19,13 +30,7 @@ watch(pageId, async (newId) => {
   artilceStore.articleArr = res.data;
 });
 
-onMounted(async () => {
-  artilceStore.searchData.searchInfo = ''
-  const [numRes, res] = await Promise.all([getSearchArticleNumAPI(artilceStore.searchData),
-  searchArticleAPI(artilceStore.searchData)]);
-  artilceStore.articleNum = numRes.data;
-  artilceStore.articleArr = res.data;
-})
+fetchArticles();
 </script>
 
 <template>

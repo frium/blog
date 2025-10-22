@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import Login from './Login.vue';
 import { useUserStore } from '@/stores/userStore';
 import PersoanalInfo from './PersoanalInfo.vue';
@@ -7,13 +7,14 @@ import { getUserInfoAPI, logoutAPI } from '@/api/user';
 import notificationToast from '@/utils/notificationToast ';
 import { useGlobalInfoStore } from '@/stores/globalInfo';
 import SearchBox from './SearchBox.vue';
+
 const globalInfoStore = useGlobalInfoStore();
 const userStore = useUserStore();
 const showLogin = ref(false);
 const handleShowLogin = () => {
   showLogin.value = true;
 }
-
+const searchBoxRef = ref(null);
 const handleClose = () => {
   showLogin.value = false;
 };
@@ -28,13 +29,12 @@ const handelShowPersonalInfo = () => {
 const offSearchDialog = () => {
   searchDialog.value = false;
 }
-onMounted(async () => {
+const fetchUserInfo = async () => {
   if (userStore.jwt) {
     const res = await getUserInfoAPI();
     Object.assign(userStore.userInfo, res.data);
   }
-})
-
+};
 const handelLogout = async () => {
   await logoutAPI();
   userStore.userInfo.avatar = "";
@@ -43,6 +43,13 @@ const handelLogout = async () => {
   userStore.jwt = "";
   notificationToast.success('登出成功!');
 }
+const handleDialogClose = () => {
+  if (searchBoxRef.value) {
+    searchBoxRef.value.resetSearchInfo();
+  }
+}
+fetchUserInfo();
+
 </script>
 
 <template>
@@ -77,9 +84,9 @@ const handelLogout = async () => {
         </ul>
       </div>
       <img class="search" src="@/assets/icons/search.svg" alt="" @click="showSearchDialog">
-      <el-dialog style="width: 600px ;  background-color: transparent;  " v-model="searchDialog" :append-to-body="true"
-        :lock-scroll="false" :show-close="false">
-        <SearchBox @search-success="offSearchDialog"></SearchBox>
+      <el-dialog style="width: 600px ;  background-color: transparent;" @close="handleDialogClose"
+        v-model="searchDialog" :append-to-body="true" :lock-scroll="false" :show-close="false">
+        <SearchBox ref="searchBoxRef" @search-success="offSearchDialog"></SearchBox>
       </el-dialog>
       <el-dropdown v-if=(userStore.userInfo.avatar)>
         <img class="user-head" :src="userStore.userInfo.avatar" alt="">
@@ -99,7 +106,7 @@ const handelLogout = async () => {
       </el-dialog>
     </div>
     <el-dialog class="no-scroll-dialog"
-      style="width:calc(23.5vw - 5px); padding : 0px; margin: 0px 0px 0px 76.5vw;   background-color: transparent;   height: 100vh;"
+      style="width:23.5vw; padding : 0px; margin: 0px 0px 0px 76.5vw;   background-color: transparent;   height: 100vh;"
       v-model="showPersonalInfo" @before-close="handleClose" :append-to-body="true" :lock-scroll="false">
       <div style="margin-top: -16px;">
         <PersoanalInfo></PersoanalInfo>

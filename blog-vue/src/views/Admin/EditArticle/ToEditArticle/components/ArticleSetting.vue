@@ -34,16 +34,14 @@ const cancle = () => {
   Object.assign(article, editArticleStore.article);
   props.closeArticleSetting();
 }
-
-onMounted(async () => {
+const fetchLabelsAndArticle = async () => {
   const res = await getLabelsAPI();
   labels.value = res.data;
   Object.assign(article, editArticleStore.article);
   article.label.forEach((item, index, array) => {
     array[index] = item.id;
   });
-})
-
+};
 const changeAvatar = () => {
   const input = document.createElement('input');
   input.type = 'file';
@@ -69,6 +67,7 @@ const selectImg = (url) => {
   article.coverImg = url;
 }
 
+fetchLabelsAndArticle();
 </script>
 
 <template>

@@ -118,6 +118,7 @@ const router = createRouter({
       children: [
         {
           path: "",
+          name: "AdminDefault",
           redirect: { name: "DashBoard" },
         },
 
@@ -133,6 +134,7 @@ const router = createRouter({
           children: [
             {
               path: "",
+              name: "EditArticleDefault",
               redirect: { name: "ArticleList" },
             },
             {
