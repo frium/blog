@@ -23,7 +23,7 @@ const operations = [
 <template>
   <div class="file-info-card">
     <div class="left">
-      <img :src="props.data.url" alt="">
+      <img v-lazyLoad="props.data.url" alt="">
       <div class="detail">
         <p class="text">{{ props.data.fileName }}</p>
         <span>{{ 'size: ' + props.data.size + 'KB' }}</span>

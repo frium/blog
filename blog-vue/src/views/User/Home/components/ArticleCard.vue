@@ -34,7 +34,7 @@ const props = defineProps({
     </div>
     <div class="right-div">
       <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
-        <img :src="props.data.coverImg" alt="">
+        <img v-lazyLoad="props.data.coverImg" alt="">
       </RouterLink>
     </div>
   </div>

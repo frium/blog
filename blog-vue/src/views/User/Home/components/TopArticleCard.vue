@@ -14,7 +14,7 @@ computed(() => {
   <div class="top-aticle-card">
 
     <RouterLink :to="{ name: 'Article', params: { articleId: props.data.id } }">
-      <img v-if="props.data.coverImg" class="bg-img" :src="props.data.coverImg" alt="">
+      <img v-if="props.data.coverImg" v-lazyLoad="props.data.coverImg" class="bg-img" alt="">
       <el-skeleton v-else style="width: 100%">
         <template #template>
           <el-skeleton-item class="bg-img" variant="image" style="background-color: rgb(76, 76, 77);" />
