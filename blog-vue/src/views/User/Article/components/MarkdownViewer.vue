@@ -23,6 +23,7 @@ import kotlin from 'highlight.js/lib/languages/kotlin';
 import sql from 'highlight.js/lib/languages/sql';
 import xml from 'highlight.js/lib/languages/xml';
 import css from 'highlight.js/lib/languages/css';
+import nginx from 'highlight.js/lib/languages/nginx';
 
 hljs.registerLanguage('javascript', javascript);
 hljs.registerLanguage('typescript', typescript);
@@ -37,6 +38,7 @@ hljs.registerLanguage('sql', sql);
 hljs.registerLanguage('xml', xml);
 hljs.registerLanguage('html', xml); // HTML通常使用XML的解析器
 hljs.registerLanguage('css', css);
+hljs.registerLanguage('nginx', nginx);
 
 // 3. 初始化高亮
 hljs.highlightAll();

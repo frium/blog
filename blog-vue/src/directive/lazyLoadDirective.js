@@ -12,17 +12,18 @@ const lazyLoadDirecvtive = {
             //图片加载成功
             img.onload = () => {
               el.src = value;
+              observer.unobserve(el); //停止观察
             };
             img.onerror = () => {
               el.src = defaultImage;
+              observer.unobserve(el); //停止观察
             };
-            observer.unobserve(el); //停止观察
           }
         });
       },
       {
-        rootMargin: "0px 0px 100px 0px", // 提前100px进入视口就开始加载
-        threshold: 0.1, // 当10%的图片可见时触发
+        rootMargin: "0px 0px 200px 0px", // 提前100px进入视口就开始加载
+        threshold: 0.1,
       }
     );
     el.src = defaultImage; //默认图片
@@ -31,7 +32,7 @@ const lazyLoadDirecvtive = {
     el._lazyLoadObserver = observer;
   },
   unmounted(el) {
-    if (el._lazyLoadObserver) el._lazyLoadObserver.disconnect();
+    if (el._lazyLoadObserver) el._lazyLoadObserver.disconnect(); //停止观察所有元素
   },
 };
 export default lazyLoadDirecvtive;
