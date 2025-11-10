@@ -55,10 +55,9 @@ span {
   margin-bottom: 24px;
 
   .right-div {
-    img {
-      filter: brightness(0.8);
-    }
+    mask: linear-gradient(to left, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
   }
+
 
   &:hover {
     background: rgba(44, 47, 54, 0.7);
