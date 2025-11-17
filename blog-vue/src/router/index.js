@@ -1,6 +1,7 @@
 import { useNProgress } from "@/hooks/useNProgress";
 import { useGlobalInfoStore } from "@/stores/globalInfo";
 import { useHead } from "@vueuse/head";
+import { useRoute } from "vue-router";
 import { createRouter, createWebHistory } from "vue-router";
 
 const { start, done } = useNProgress();
@@ -183,8 +184,7 @@ const router = createRouter({
     },
   ],
 });
-
-router.beforeEach((to) => {
+router.beforeEach((to, from, next) => {
   start();
   const globalInfoStore = useGlobalInfoStore();
   useHead({
@@ -215,6 +215,18 @@ router.beforeEach((to) => {
           },
         ],
   });
+  if (to.path.includes("home") && !from.path.includes("home")) {
+    const currentPage = sessionStorage.getItem("homeCurrentPage") || "1";
+    console.log(to);
+
+    if (to.params.pageId !== currentPage) {
+      let uri = to.fullPath.includes("page") ? to.fullPath : to.fullPath + "/page/";
+      return next(uri + currentPage);
+    }
+  } else {
+    sessionStorage.setItem("homeCurrentPage", from.params.pageId || "1");
+  }
+  next();
 });
 
 router.afterEach((_) => {

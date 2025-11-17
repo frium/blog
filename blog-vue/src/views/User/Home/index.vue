@@ -36,7 +36,7 @@ fetchArticles();
 <template>
   <div class="article-cards">
     <template v-for="data in artilceStore.articleArr" :key="data.id">
-      <TopArticleCard v-if="data.isTop" :data="data"></TopArticleCard>
+      <TopArticleCard v-if="data.isTop" :data="data" :isTop="true"></TopArticleCard>
       <ArticleCard v-else :data="data"></ArticleCard>
     </template>
     <CardPaginator style="margin: 10px 0 20px 0" v-if="artilceStore.articleNum > 7"

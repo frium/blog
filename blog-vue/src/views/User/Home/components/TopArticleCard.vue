@@ -1,8 +1,9 @@
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 
 const props = defineProps({
-  data: Object
+  data: Object,
+  isTop: Boolean
 })
 computed(() => {
   props.data.label.length = 3;
@@ -22,7 +23,7 @@ computed(() => {
       </el-skeleton>
     </RouterLink>
     <div class="detail">
-      <span class="top" v-if="props.data.isTop">置顶</span>
+      <span class="top" v-if="props.isTop">置顶</span>
       <span class="title"> {{ props.data.title }}</span>
     </div>
     <span class="time">{{ props.data.createTime }} </span>

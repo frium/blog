@@ -46,9 +46,12 @@ watch(
   () => route.params.articleId,
   async (newId) => {
     const res = await getArticleAPI(newId);
-    Object.assign(article, res.data);
+    Object.keys(res.data).forEach(key => {
+      article[key] = res.data[key];
+    });
     description.value = article.summary;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
   },
   { immediate: true }
 );
@@ -56,7 +59,7 @@ watch(
 
 <template>
   <div class="article">
-    <TopArticleCard :isTop="false" :data="article"></TopArticleCard>
+    <TopArticleCard :key="article.id" :isTop="false" :data="article"></TopArticleCard>
     <MarkdownViewer @component-loaded="handleComponentLoaded" class="markdown" :source="article.content"
       :line-numbers="true" />
     <CommentArea></CommentArea>
