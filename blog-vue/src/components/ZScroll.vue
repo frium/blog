@@ -1,6 +1,8 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
+const emit = defineEmits(['bottom-reached']);
+
 const createAnimation = (scrollStart, scrollEnd, valueStart, valueEnd) => {
   return function (scroll) {
     if (scroll <= scrollStart) {
@@ -19,6 +21,10 @@ const updateStyles = () => {
     for (const cssProp in value) {
       dom.style[cssProp] = value[cssProp](scroll);
     }
+  }
+  const maxScrollHeight = document.body.scrollHeight - window.innerHeight;
+  if (scroll >= maxScrollHeight - 2) {
+    emit('bottom-reached');
   }
 }
 const getDomAnimation = (scrollStart, scrollEnd, dom) => {
@@ -63,8 +69,8 @@ onMounted(() => {
       window.addEventListener('scroll', updateStyles, {
         passive: true
       });
-      playgroundRef.value.style.height = `${(listItems.value.length + 2) * 100}vh`;
-      console.log(listItems.value.length + 2);
+      const extraScrollScreens = 4;
+      playgroundRef.value.style.height = `${(listItems.value.length + extraScrollScreens) * 100}vh`;
       observer.disconnect();
     })
 

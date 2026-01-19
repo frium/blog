@@ -54,14 +54,14 @@ fetchUserInfo();
 
 <template>
   <div class="layout-nav">
-    <RouterLink :to="{ name: 'Home' }">
+    <RouterLink to="/home/page/1">
       <span class="title">{{ globalInfoStore.globalInfo.siteName }}'s blog</span>
     </RouterLink>
     <div class="menu">
       <div>
         <ul class="sub-menu">
           <li class="hover-show">
-            <RouterLink to="/home"
+            <RouterLink to="/home/page/1"
               :class="{ 'router-link-active': $route.path === '/home' || $route.path.startsWith('/article') }">首页
             </RouterLink>
           </li>

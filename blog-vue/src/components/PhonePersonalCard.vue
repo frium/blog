@@ -41,7 +41,7 @@ const handelOffPersonalCard = () => {
     <div class="nav">
       <ul class="sub-menu">
         <li>
-          <RouterLink to="/home"
+          <RouterLink to="/home/page/1"
             :class="{ 'router-link-active': $route.path === '/home' || $route.path.startsWith('/article') }"
             @click="handelOffPersonalCard">首页</RouterLink>
         </li>

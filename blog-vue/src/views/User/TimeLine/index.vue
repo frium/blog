@@ -1,34 +1,48 @@
 <script setup>
-import { onBeforeUnmount, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getArticleByTimeAPI } from '@/api/article';
 
-let tempPaddingLeft = 0;
-let tempPaddingRight = 0;
+let tempPaddingLeft = '';
+let tempPaddingRight = '';
+let hasAdjustedPadding = false;
 const articles = ref([]);
 
-const selectionDiv = document.querySelector('.selection');
-if (selectionDiv) {
+onMounted(() => {
+  const selectionDiv = document.querySelector('.selection');
+  if (!selectionDiv) return;
+
+  // store original inline styles (could be empty string, meaning “use CSS rules”)
   tempPaddingLeft = selectionDiv.style.paddingLeft;
   tempPaddingRight = selectionDiv.style.paddingRight;
+
   selectionDiv.style.paddingLeft = '0';
   selectionDiv.style.paddingRight = '0';
-}
+  hasAdjustedPadding = true;
+});
 
 const fetchArticles = async () => {
   const res = await getArticleByTimeAPI();
-  articles.value = res.data;
+  const list = Array.isArray(res.data) ? res.data : [];
+
+  // sort newest first (createTime: "YYYY-MM-DD HH:mm:ss")
+  articles.value = list
+    .slice()
+    .sort((a, b) => String(b?.createTime ?? '').localeCompare(String(a?.createTime ?? '')));
 };
 
 fetchArticles();
 
 onBeforeUnmount(() => {
+  if (!hasAdjustedPadding) return;
+
+  // wait for route transition
   setTimeout(() => {
     const selectionDiv = document.querySelector('.selection');
-    if (selectionDiv) {
-      selectionDiv.style.paddingLeft = tempPaddingLeft;
-      selectionDiv.style.paddingRight = tempPaddingRight;
-    }
-  }, 300)
+    if (!selectionDiv) return;
+
+    selectionDiv.style.paddingLeft = tempPaddingLeft;
+    selectionDiv.style.paddingRight = tempPaddingRight;
+  }, 300);
 });
 </script>
 

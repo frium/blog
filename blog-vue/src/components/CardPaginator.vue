@@ -24,32 +24,32 @@ const lastPage = async () => {
 
 const allPages = ref([]);
 const updatePages = () => {
-  props.showNum = Math.max(props.showNum, 5)
+  const showNum = Math.max(props.showNum, 5)
   if (pageId.value > props.numberOfPage) {
     router.push({ name: 'NotFound' });
     return;
   }
   const pages = [];
-  if (props.numberOfPage <= props.showNum) {
+  if (props.numberOfPage <= showNum) {
     for (let i = 0; i < props.numberOfPage; i++) {
       pages.push(i + 1);
     }
     allPages.value = pages;
     return;
   }
-  if (pageId.value >= props.showNum - 1) {
+  if (pageId.value >= showNum - 1) {
     pages.push(1, -1);
-    if (pageId.value >= props.numberOfPage - (props.showNum - 3)) {
-      for (let i = props.numberOfPage - (props.showNum - 3); i <= props.numberOfPage; i++) {
+    if (pageId.value >= props.numberOfPage - (showNum - 3)) {
+      for (let i = props.numberOfPage - (showNum - 3); i <= props.numberOfPage; i++) {
         pages.push(i);
       }
-      hiddenStartPage.value = props.numberOfPage - (props.showNum - 2);
+      hiddenStartPage.value = props.numberOfPage - (showNum - 2);
       hiddenEndPage.value = props.numberOfPage;
       allPages.value = pages;
       return;
     }
 
-    const num = (props.showNum - 5) / 2;
+    const num = (showNum - 5) / 2;
     let addNum = num;
     let reduceNum = num;
     if (num < Math.ceil(num)) {
@@ -68,69 +68,71 @@ const updatePages = () => {
 
 
   } else {
-    if (props.showNum >= props.numberOfPage) {
-      for (let i = 1; i <= props.showNum; i++) {
+    if (showNum >= props.numberOfPage) {
+      for (let i = 1; i <= showNum; i++) {
         pages.push(i);
       }
     } else {
-      for (let i = 1; i <= props.showNum - 2; i++) {
+      for (let i = 1; i <= showNum - 2; i++) {
         pages.push(i);
       }
       pages.push(-2, props.numberOfPage);
       hiddenStartPage.value = 0;
-      hiddenEndPage.value = props.showNum - 1;
+      hiddenEndPage.value = showNum - 1;
     }
   }
   allPages.value = pages;
 };
 updatePages();
 const lastNumOfPage = () => {
+  const showNum = Math.max(props.showNum, 5)
   const pages = [];
-  if (hiddenStartPage.value <= props.showNum - 2) {
-    for (let i = 1; i <= props.showNum - 2 && i <= props.numberOfPage; i++) {
+  if (hiddenStartPage.value <= showNum - 2) {
+    for (let i = 1; i <= showNum - 2 && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
     allPages.value = pages;
-    hiddenEndPage.value = props.showNum - 1;
+    hiddenEndPage.value = showNum - 1;
     pages.push(-2, props.numberOfPage);
     return;
   }
 
-  if (hiddenStartPage.value <= props.showNum - 2) {
-    for (let i = 1; i <= props.showNum - 2 && i <= props.numberOfPage; i++) {
+  if (hiddenStartPage.value <= showNum - 2) {
+    for (let i = 1; i <= showNum - 2 && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
   }
   else {
     pages.push(1, -1);
-    for (let i = hiddenStartPage.value - (props.showNum - 5); i <= hiddenStartPage.value && i <= props.numberOfPage; i++) {
+    for (let i = hiddenStartPage.value - (showNum - 5); i <= hiddenStartPage.value && i <= props.numberOfPage; i++) {
       pages.push(i);
     }
   }
   pages.push(-2, props.numberOfPage);
   allPages.value = pages;
   hiddenEndPage.value = hiddenStartPage.value + 1;
-  hiddenStartPage.value = Math.max(props.showNum - 2, hiddenStartPage.value - (props.showNum - 3));
+  hiddenStartPage.value = Math.max(showNum - 2, hiddenStartPage.value - (showNum - 3));
 
 }
 const nextNumOfPage = () => {
+  const showNum = Math.max(props.showNum, 5)
   const pages = [];
   pages.push(1, -1);
-  if (hiddenEndPage.value >= props.numberOfPage - (props.showNum - 2)) {
-    for (let i = props.numberOfPage - (props.showNum - 3); i <= props.numberOfPage; i++) {
+  if (hiddenEndPage.value >= props.numberOfPage - (showNum - 2)) {
+    for (let i = props.numberOfPage - (showNum - 3); i <= props.numberOfPage; i++) {
       pages.push(i);
     }
     allPages.value = pages;
-    hiddenStartPage.value = props.numberOfPage - (props.showNum - 2);
+    hiddenStartPage.value = props.numberOfPage - (showNum - 2);
     return;
   }
-  for (let i = hiddenEndPage.value; i <= hiddenEndPage.value + props.showNum - 5 && i <= props.numberOfPage; i++) {
+  for (let i = hiddenEndPage.value; i <= hiddenEndPage.value + showNum - 5 && i <= props.numberOfPage; i++) {
     pages.push(i);
   }
-  if (hiddenEndPage.value + props.showNum - 5 < props.numberOfPage) pages.push(-2, props.numberOfPage);
+  if (hiddenEndPage.value + showNum - 5 < props.numberOfPage) pages.push(-2, props.numberOfPage);
   allPages.value = pages;
-  hiddenStartPage.value = Math.max(props.showNum - 2, hiddenEndPage.value - 1);
-  hiddenEndPage.value = hiddenEndPage.value + props.showNum - 4;
+  hiddenStartPage.value = Math.max(showNum - 2, hiddenEndPage.value - 1);
+  hiddenEndPage.value = hiddenEndPage.value + showNum - 4;
 }
 </script>
 

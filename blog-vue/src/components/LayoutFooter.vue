@@ -21,7 +21,7 @@ setInterval(getTime, 1000);
 <template>
   <div class="layout-footer">
     <div class="title">
-      <RouterLink :to="{ name: 'Home' }">
+      <RouterLink to="/home/page/1">
         <span>{{ globalInfoStore.globalInfo.siteName }}'s blog</span>
       </RouterLink>
     </div>

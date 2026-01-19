@@ -215,17 +215,6 @@ router.beforeEach((to, from, next) => {
           },
         ],
   });
-  if (to.path.includes("home") && !from.path.includes("home")) {
-    const currentPage = sessionStorage.getItem("homeCurrentPage") || "1";
-    console.log(to);
-
-    if (to.params.pageId !== currentPage) {
-      let uri = to.fullPath.includes("page") ? to.fullPath : to.fullPath + "/page/";
-      return next(uri + currentPage);
-    }
-  } else {
-    sessionStorage.setItem("homeCurrentPage", from.params.pageId || "1");
-  }
   next();
 });
 
