@@ -77,6 +77,15 @@ watch(() => route.path, (newPath) => {
 );
 const backgroundUrl = computed(() => `url(${globalInfoStore.globalInfo.backgroundUrl})`);
 
+const dataLoaded = ref(false);
+watch(
+  () => globalInfoStore.globalInfo.siteName,
+  (val) => {
+    if (val) dataLoaded.value = true;
+  },
+  { immediate: true }
+);
+
 
 onMounted(async () => {
   observer.value = new IntersectionObserver(
@@ -133,7 +142,7 @@ onUnmounted(() => {
       <BackToTop class="back-to-top"></BackToTop>
       <NavBall class="nav-ball"></NavBall>
     </div> -->
-    <MusicPlayerStripAsyncComponent class="music" ref="playerRef"></MusicPlayerStripAsyncComponent>
+    <MusicPlayerStripAsyncComponent v-if="dataLoaded" class="music" ref="playerRef"></MusicPlayerStripAsyncComponent>
     <LyricStripAsyncComponent class="music" @toggle-music="toggleMusic" @skip-forward="skipForward"
       @skip-back="skipBack" @turn-off-lrc="trunOffLrc">
     </LyricStripAsyncComponent>
