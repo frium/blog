@@ -1,12 +1,23 @@
 <script setup>
-import { ref } from 'vue'
-import Login from './Login.vue';
+import { ref, defineAsyncComponent } from 'vue'
+const Login = defineAsyncComponent({
+  loader: () => import('./Login.vue'),
+  delay: 200,
+  timeout: 10000,
+});
+const SearchBox = defineAsyncComponent({
+  loader: () => import('./SearchBox.vue'),
+  delay: 100,
+});
+const PersoanalInfo = defineAsyncComponent({
+  loader: () => import('./PersoanalInfo.vue'),
+  delay: 200,
+  timeout: 10000,
+});
 import { useUserStore } from '@/stores/userStore';
-import PersoanalInfo from './PersoanalInfo.vue';
 import { getUserInfoAPI, logoutAPI } from '@/api/user';
 import notificationToast from '@/utils/notificationToast ';
 import { useGlobalInfoStore } from '@/stores/globalInfo';
-import SearchBox from './SearchBox.vue';
 
 const globalInfoStore = useGlobalInfoStore();
 const userStore = useUserStore();

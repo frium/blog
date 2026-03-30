@@ -113,6 +113,7 @@ const handleMusicToggle = () => {
 .lyc-box-avtive {
   background: rgba(21, 23, 28, 0.4);
   border-radius: 6px;
+  border: 1px solid rgba(216, 216, 216, 0.15);
   cursor: grab;
 }
 
@@ -122,9 +123,8 @@ const handleMusicToggle = () => {
   bottom: 8px;
   overflow: hidden;
   width: 666px;
-  height: 90px;
+  height: 96px;
   user-select: none;
-  padding: 2px 0;
   z-index: 1000;
 
   .action-bar {

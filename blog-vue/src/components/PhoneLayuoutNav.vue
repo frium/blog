@@ -1,8 +1,14 @@
 <script setup>
-import { ref } from 'vue';
-import PhonePersonalCard from './PhonePersonalCard.vue';
+import { ref, defineAsyncComponent } from 'vue';
+const PhonePersonalCard = defineAsyncComponent({
+  loader: () => import('./PhonePersonalCard.vue'),
+  delay: 100,
+});
+const SearchBox = defineAsyncComponent({
+  loader: () => import('./SearchBox.vue'),
+  delay: 100,
+});
 import { useGlobalInfoStore } from '@/stores/globalInfo';
-import SearchBox from './SearchBox.vue';
 const globalInfoStore = useGlobalInfoStore();
 const personalCard = ref(false);
 const showPersonalCard = () => {

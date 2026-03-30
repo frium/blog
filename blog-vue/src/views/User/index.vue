@@ -1,19 +1,36 @@
 <script setup>
-import LayoutNav from "@/components/LayoutNav.vue";
-import LayoutFooter from "@/components/LayoutFooter.vue";
-import PersonalCard from "@/components/PersonalCard.vue";
-import MusicPlayerStrip from '@/components/MusicPlayerStrip.vue';
-import LyricStrip from '@/components/LyricStrip.vue';
-import MarkdownCatalogue from '@/views/User/Article/components/MarkdownCatalogue.vue';
 import { useRoute } from 'vue-router'
-import { ref, onMounted, onUnmounted, watch, computed, onBeforeUnmount } from 'vue';
-import PhoneLayoutFooter from "@/components/PhoneLayoutFooter.vue";
-import PhoneLayuoutNav from "@/components/PhoneLayuoutNav.vue";
-import StarSky from "@/components/StarSky.vue";
+import { ref, onMounted, onUnmounted, watch, computed, onBeforeUnmount, defineAsyncComponent } from 'vue';
 import { useGlobalInfoStore } from "@/stores/globalInfo";
-import { defineAsyncComponent } from 'vue';
 
-
+const LayoutNav = defineAsyncComponent({
+  loader: () => import("@/components/LayoutNav.vue"),
+  delay: 100,
+});
+const LayoutFooter = defineAsyncComponent({
+  loader: () => import("@/components/LayoutFooter.vue"),
+  delay: 100,
+});
+const PersonalCard = defineAsyncComponent({
+  loader: () => import("@/components/PersonalCard.vue"),
+  delay: 100,
+});
+const MarkdownCatalogue = defineAsyncComponent({
+  loader: () => import('@/views/User/Article/components/MarkdownCatalogue.vue'),
+  delay: 100,
+});
+const PhoneLayoutFooter = defineAsyncComponent({
+  loader: () => import("@/components/PhoneLayoutFooter.vue"),
+  delay: 100,
+});
+const PhoneLayuoutNav = defineAsyncComponent({
+  loader: () => import("@/components/PhoneLayuoutNav.vue"),
+  delay: 100,
+});
+const StarSky = defineAsyncComponent({
+  loader: () => import("@/components/StarSky.vue"),
+  delay: 100,
+});
 const MusicPlayerStripAsyncComponent = defineAsyncComponent({
   loader: () => import('@/components/MusicPlayerStrip.vue'),
   delay: 200,
@@ -143,7 +160,7 @@ onUnmounted(() => {
       <NavBall class="nav-ball"></NavBall>
     </div> -->
     <MusicPlayerStripAsyncComponent v-if="dataLoaded" class="music" ref="playerRef"></MusicPlayerStripAsyncComponent>
-    <LyricStripAsyncComponent class="music" @toggle-music="toggleMusic" @skip-forward="skipForward"
+    <LyricStripAsyncComponent v-if="dataLoaded" class="music" @toggle-music="toggleMusic" @skip-forward="skipForward"
       @skip-back="skipBack" @turn-off-lrc="trunOffLrc">
     </LyricStripAsyncComponent>
     <LayoutFooter v-if="!isMobile" class="footer"></LayoutFooter>

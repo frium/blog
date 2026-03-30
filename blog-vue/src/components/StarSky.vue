@@ -1,7 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 const starsky = ref(null);
+let animationId = null;
+let meteorInterval = null;
 
 onMounted(() => {
   const canvas = starsky.value;
@@ -39,7 +41,7 @@ onMounted(() => {
   }));
 
   // 定时器控制流星出现
-  setInterval(() => {
+  meteorInterval = setInterval(() => {
     // 随机选择一个未激活的流星
     const inactiveMeteors = meteors.filter(meteor => !meteor.active);
     if (inactiveMeteors.length > 0) {
@@ -131,12 +133,17 @@ onMounted(() => {
       }
     });
 
-    requestAnimationFrame(animate);
+    animationId = requestAnimationFrame(animate);
   }
 
   animate();
 
 
+});
+
+onBeforeUnmount(() => {
+  if (animationId) cancelAnimationFrame(animationId);
+  if (meteorInterval) clearInterval(meteorInterval);
 });
 </script>
 

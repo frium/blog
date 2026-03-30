@@ -49,6 +49,25 @@ export default defineConfig({
           }
           return "assets/[name]-[hash][extname]";
         },
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("element-plus")) {
+              return "vendor-element-plus";
+            }
+            if (id.includes("highlight.js") || id.includes("hljs")) {
+              return "vendor-highlight";
+            }
+            if (id.includes("markdown-it") || id.includes("multimd-table")) {
+              return "vendor-markdown";
+            }
+            if (id.includes("aplayer")) {
+              return "vendor-aplayer";
+            }
+            if (id.includes("vue") || id.includes("pinia") || id.includes("vue-router")) {
+              return "vendor-vue";
+            }
+          }
+        },
       },
     },
   },
