@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import pinia from "./stores";
-
+import "element-plus/dist/index.css";
 import "@/styles/common.scss";
 import App from "./App.vue";
 import router from "./router";
